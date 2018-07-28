@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//stock_data/stock_get_day_data/api.py=utf-8
+encoding//stock_data/stock_get_day_data/day.py=utf-8
+encoding//stock_data/stock_get_day_data/store.py=utf8
+encoding//stock_data/stock_process_day_data/__init__.py=utf-8
+encoding//stock_data/stock_process_day_data/api.py=utf-8
+encoding//stock_data/stock_process_day_data/loadstore.py=utf8
+encoding//stock_data/stock_process_day_data/process_day_data.py=utf8
