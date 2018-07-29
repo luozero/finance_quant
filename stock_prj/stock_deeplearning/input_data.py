@@ -148,14 +148,22 @@ class StockTradeData(object):
       self.add_data_index(data_type)
       
     output_index = list(range(data_index*self.proc_days,data_index*self.proc_days+batch_size))
-    closed_price = pd.DataFrame(data_stocks[train_stock,output_index,'close'])
+    try :
+      closed_price = pd.DataFrame(data_stocks[train_stock,output_index,'close'])
+    except:
+      print("data type is ",data_type,"closed price exceed the data range, the load index is", 
+              output_index[-1],"but the data max index is", y)
     closed_price = closed_price.values
     
     input_data = pd.DataFrame()
     for i in range(0,batch_size):
       input_index = list(range(data_index*self.proc_days+future_day+i,
                                (data_index+1)*self.proc_days+future_day+i))
-      data_select = data_stocks[:,input_index,:]
+      try :
+        data_select = data_stocks[:,input_index,:]
+      except:
+        print("data type is ",data_type,"input data exceed the data range, the load index is", 
+              input_index[-1],"but the data max index is", y)
       data_sel_array = data_select.values
       input_data[i]= data_sel_array.ravel()
     return closed_price, input_data.T

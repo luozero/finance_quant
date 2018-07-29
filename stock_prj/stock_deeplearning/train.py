@@ -162,13 +162,13 @@ def main(_):
       total_accuracy = 0
       #total_conf_matrix = None
       for i in xrange(0, set_size, FLAGS.batch_size):
-        train_stock_input, train_stock_truth = stock_data.input_func(\
-          stock_data.stocks_verify_data, FLAGS.batch_size, FLAGS.future_day,\
+        train_stock_truth, train_stock_input = stock_data.input_func(\
+          FLAGS.train_stock, FLAGS.batch_size, FLAGS.future_day,\
           input_data.ProcessDataType.verify)
         # Run a validation step and capture training summaries for TensorBoard
         # with the `merged` op.
         validation_summary, validation_accuracy, validation_mean_squared_value = sess.run(
-            [merged_summaries, evaluation_step, train_step],
+            [merged_summaries, evaluation_step, mean_squared_error],
             feed_dict={
                 stock_data_input: train_stock_input,
                 stock_data_output: train_stock_truth,
@@ -198,13 +198,13 @@ def main(_):
   total_accuracy = 0
   #total_conf_matrix = None
   for i in xrange(0, set_size, FLAGS.batch_size):
-    train_stock_input, train_stock_truth = stock_data.input_func(\
-          stock_data.stocks_test_data, FLAGS.batch_size, FLAGS.future_day,\
+    train_stock_truth,train_stock_input = stock_data.input_func(\
+          FLAGS.train_stock, FLAGS.batch_size, FLAGS.future_day,\
           input_data.ProcessDataType.test)
         # Run a validation step and capture training summaries for TensorBoard
         # with the `merged` op.
     test_accuracy, test_mean_squared_value = sess.run(
-        [evaluation_step, train_step],
+        [evaluation_step, mean_squared_error],
         feed_dict={
             stock_data_input: train_stock_input,
             stock_data_output: train_stock_truth,
