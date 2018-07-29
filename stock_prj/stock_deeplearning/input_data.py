@@ -46,6 +46,7 @@ def get_data_stocks(load_store, stock_codes, start_date, end_date, verify_days, 
   stocks_test_data = {};
   for stock in stock_codes:
     stock_data = load_store.load_processing_data_with_date(stock, start_date, end_date)
+    stock_data = stock_data.fillna(value=0)
     stock_data = stock_data.iloc[::-1,:]
     stock_data.pop('date')
     stock_data.index = range(stock_data.shape[0])
@@ -171,5 +172,5 @@ class StockTradeData(object):
 if __name__ == "__main__":
   #tf.app.run()
   stock_trade_data = StockTradeData(stock_codes=['000001','000002'],proc_days=15,verify_days=10,test_days=10)
-  stock_trade_data.reset_data_index()
+  stock_trade_data.reset_data_index(ProcessDataType.train)
   inputdata, price = stock_trade_data.input_func('000001', 2, 1, ProcessDataType.train)

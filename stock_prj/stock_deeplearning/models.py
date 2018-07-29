@@ -124,4 +124,8 @@ def create_stock_relu_model(data_inputs, model_setting, is_training):
     biases = tf.Variable(tf.zeros([data_out_number]),
                          name='biases')
     result = tf.matmul(second_dropout, weights) + biases
-  return result
+    
+  if is_training:
+    return result, dropout_prob
+  else:
+    return result

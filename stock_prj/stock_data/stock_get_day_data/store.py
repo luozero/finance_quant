@@ -35,6 +35,7 @@ class CSVStore(Store):
             os.makedirs(self.raw_path)
 
         csv_file_path = os.path.join(self.raw_path, '{}.csv'.format(stock_code))
+        updated_data.pop('code')
         if os.path.exists(csv_file_path):
             try:
                 his = pd.read_csv(csv_file_path)

@@ -28,9 +28,7 @@ def main(_):
   # Start a new TensorFlow session.
   sess = tf.InteractiveSession()
 
-  # Begin by making sure we have the training data we need. If you already have
-  # training data of your own, use `--data_url= ` on the command line to avoid
-  # downloading.
+  #Load trade price data.
   stock_codes = list(FLAGS.stock_codes)
   
   model_settings = models.prepare_model_settings(FLAGS.stock_number,FLAGS.data_out_number,\
@@ -40,13 +38,6 @@ def main(_):
                FLAGS.data_output_dir, FLAGS.start_date,
                 FLAGS.end_date, FLAGS.proc_days,FLAGS.verify_days,FLAGS.test_days)
                            
-  # Figure out the learning rates for each training phase. Since it's often
-  # effective to have high learning rates at the start of training, followed by
-  # lower levels towards the end, the number of steps and learning rates can be
-  # specified as comma-separated lists to define the rate at each stage. For
-  # example --how_many_training_steps=10000,3000 --learning_rate=0.001,0.0001
-  # will run 13,000 training loops in total, with a rate of 0.001 for the first
-  # 10,000, and 0.0001 for the final 3,000.
   training_steps_list = list(map(int, FLAGS.how_many_training_steps.split(',')))
   learning_rates_list = list(map(float, FLAGS.learning_rate.split(',')))
   if len(training_steps_list) != len(learning_rates_list):
@@ -155,7 +146,7 @@ def main(_):
         })
     train_writer.add_summary(train_summary, training_step)
     tf.logging.info('Step #%d: rate %f, accuracy %.1f%%, mean squared value %f' %
-                    (training_step, learning_rate_value, train_accuracy, mean_squared_value))
+                    (training_step, learning_rate_value, train_accuracy*100, mean_squared_value))
     is_last_step = (training_step == training_steps_max)
     if (training_step % FLAGS.eval_step_interval) == 0 or is_last_step:
       set_size = FLAGS.verify_days
@@ -251,7 +242,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--end_date',
       type=str,
-      default='2017-03-16',
+      default='2017-07-29',
       help='end training date.')
   parser.add_argument(
       '--proc_days',
@@ -354,7 +345,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--model_architecture',
       type=str,
-      default='line',
+      default='relu',
       help='What model architecture to use')
   parser.add_argument(
       '--check_nans',
@@ -364,7 +355,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--batch_size',
       type=int,
-      default=10,
+      default=5,
       help='How many items to train with at once',)
   
   FLAGS, unparsed = parser.parse_known_args()
