@@ -136,7 +136,7 @@ class StockTradeData(object):
 
     #data_stocks = data_stocks.iloc[:,::-1,:]
     (x,y,z) = data_stocks.shape
-    data_index = self.data_index 
+    data_index = self.get_data_index(data_type) 
     if ((data_index+1)*self.proc_days+batch_size+future_day)>y:
       if data_index == 0:
         print("need data lenght is",((data_index+1)*self.proc_days+batch_size+future_day),
@@ -148,16 +148,17 @@ class StockTradeData(object):
       self.add_data_index(data_type)
       
     output_index = list(range(data_index*self.proc_days,data_index*self.proc_days+batch_size))
-    closed_price = data_stocks[train_stock,output_index,'close']
+    closed_price = pd.DataFrame(data_stocks[train_stock,output_index,'close'])
+    closed_price = closed_price.values
     
     input_data = pd.DataFrame()
     for i in range(0,batch_size):
       input_index = list(range(data_index*self.proc_days+future_day+i,
-                               (data_index+1)*self.proc_days+batch_size+future_day+i))
+                               (data_index+1)*self.proc_days+future_day+i))
       data_select = data_stocks[:,input_index,:]
       data_sel_array = data_select.values
       input_data[i]= data_sel_array.ravel()
-    return closed_price, input_data
+    return closed_price, input_data.T
 
 if __name__ == "__main__":
   #tf.app.run()

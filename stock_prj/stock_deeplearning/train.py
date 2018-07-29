@@ -10,6 +10,7 @@ import numpy as np
 
 
 
+import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 
@@ -33,6 +34,7 @@ def main(_):
   stock_codes = list(FLAGS.stock_codes)
   
   model_settings = models.prepare_model_settings(FLAGS.stock_number,FLAGS.data_out_number,\
+                                                 FLAGS.proc_days,\
                            FLAGS.hidden1,FLAGS.hidden2)
   stock_data = input_data.StockTradeData(stock_codes, FLAGS.data_input_dir, 
                FLAGS.data_output_dir, FLAGS.start_date,
@@ -52,7 +54,9 @@ def main(_):
         '--how_many_training_steps and --learning_rate must be equal length '
         'lists, but are %d and %d long instead' % (len(training_steps_list),
                                                    len(learning_rates_list)))
-  data_input_number = FLAGS.stock_number * FLAGS.proc_days
+  model_settings['data_in_number']=model_settings['data_in_number']*\
+  stock_data.stocks_test_data.shape[2]
+  data_input_number = model_settings['data_in_number']
 
   stock_data_input = tf.placeholder(
       tf.float32, [None, data_input_number], name='data_input_number')
@@ -65,7 +69,7 @@ def main(_):
 
   # Define loss and optimizer
   stock_data_output = tf.placeholder(
-      tf.float32, [None], name='stock_data_output')
+      tf.float32, [None,1], name='stock_data_output')
 
   # Optionally we can add runtime checks to spot when NaNs or other symptoms of
   # numerical errors start occurring during training.
@@ -77,7 +81,7 @@ def main(_):
   # Create the back propagation and training evaluation machinery in the graph.
   with tf.name_scope('mean_squared'):
     mean_squared_error = tf.losses.mean_squared_error(
-        labels=stock_data_output, logits=logits)
+        labels=stock_data_output, predictions=logits)
   tf.summary.scalar('mean_squared', mean_squared_error)
   with tf.name_scope('train'), tf.control_dependencies(control_dependencies):
     learning_rate_input = tf.placeholder(
@@ -119,7 +123,8 @@ def main(_):
   with gfile.GFile(
       os.path.join(FLAGS.train_dir, FLAGS.model_architecture + '_labels.txt'),
       'w') as f:
-    f.write('\n'.join(stock_data.stocks_train_data ))
+    stock_close_price = stock_data.stocks_test_data.loc[:,:,'close']
+    f.write('\n'.join(str(np.sign(stock_close_price.loc[:,FLAGS.train_stock].values ))))
 
   # Training loop.
   training_steps_max = np.sum(training_steps_list)
@@ -132,8 +137,8 @@ def main(_):
         learning_rate_value = learning_rates_list[i]
         break
     # Pull the audio samples we'll use for training.
-    train_stock_input, train_stock_truth = stock_data.input_func(\
-        stock_data.train_stock, FLAGS.batch_size, FLAGS.future_day,\
+    train_stock_truth, train_stock_input = stock_data.input_func(\
+        FLAGS.train_stock, FLAGS.batch_size, FLAGS.future_day,\
         input_data.ProcessDataType.train)
 
     # Run the graph with this batch of training data.
@@ -158,7 +163,7 @@ def main(_):
       #total_conf_matrix = None
       for i in xrange(0, set_size, FLAGS.batch_size):
         train_stock_input, train_stock_truth = stock_data.input_func(\
-          stock_data.verify_stock, FLAGS.batch_size, FLAGS.future_day,\
+          stock_data.stocks_verify_data, FLAGS.batch_size, FLAGS.future_day,\
           input_data.ProcessDataType.verify)
         # Run a validation step and capture training summaries for TensorBoard
         # with the `merged` op.
@@ -194,7 +199,7 @@ def main(_):
   #total_conf_matrix = None
   for i in xrange(0, set_size, FLAGS.batch_size):
     train_stock_input, train_stock_truth = stock_data.input_func(\
-          stock_data.verify_stock, FLAGS.batch_size, FLAGS.future_day,\
+          stock_data.stocks_test_data, FLAGS.batch_size, FLAGS.future_day,\
           input_data.ProcessDataType.test)
         # Run a validation step and capture training summaries for TensorBoard
         # with the `merged` op.
@@ -225,6 +230,20 @@ if __name__ == '__main__':
       # pylint: enable=line-too-long
       help='stock codes.')
   parser.add_argument(
+      '--stock_number',
+      type=int,
+      # pylint: disable=line-too-long
+      default='6',
+      # pylint: enable=line-too-long
+      help='number of input stocks.')
+  parser.add_argument(
+      '--train_stock',
+      type=str,
+      # pylint: disable=line-too-long
+      default='000001',
+      # pylint: enable=line-too-long
+      help='train stock codes.')
+  parser.add_argument(
       '--start_date',
       type=str,
       default='2014-01-01',
@@ -232,7 +251,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--end_date',
       type=str,
-      default='2014-03-16',
+      default='2017-03-16',
       help='end training date.')
   parser.add_argument(
       '--proc_days',
@@ -261,15 +280,7 @@ if __name__ == '__main__':
       # pylint: disable=line-too-long
       default='1',
       # pylint: enable=line-too-long
-      help='future days.')
-  parser.add_argument(
-      '--data_in_number',
-      type=int,
-      # pylint: disable=line-too-long
-      default='6',
-      # pylint: enable=line-too-long
-      help='number of input stocks.')
-  
+      help='future days.')  
   parser.add_argument(
       '--data_out_number',
       type=int,
@@ -343,7 +354,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--model_architecture',
       type=str,
-      default='conv',
+      default='line',
       help='What model architecture to use')
   parser.add_argument(
       '--check_nans',
@@ -353,13 +364,8 @@ if __name__ == '__main__':
   parser.add_argument(
       '--batch_size',
       type=int,
-      default=100,
+      default=10,
       help='How many items to train with at once',)
-  parser.add_argument(
-      '--summaries_dir',
-      type=str,
-      default='/tmp/retrain_logs',
-      help='Where to save summary logs for TensorBoard.')
   
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
