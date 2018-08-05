@@ -12,7 +12,7 @@ from _tracemalloc import start
 start_date = '2014-01-09'
 end_date = '2018-07-29'
 
-path='../../../stockdata/download/'
+path='../../stockdata/download/'
 stockcode = ['000001','000002','000018','600000','600005','600007']
 basic_data = ts.get_stock_basics()
 stockcode = list(basic_data.index)

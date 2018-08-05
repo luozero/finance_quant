@@ -12,7 +12,8 @@ from _tracemalloc import start
 start_date = '2014-01-09'
 end_date = '2018-07-29'
 
-path='../../../stockdata/download/'
+path='../../stockdata/download/'
+path_result='../../stockdata/pctdata'
 stockcode = ['000001','000002','000018','600000','600005','600007']
 basic_data = ts.get_stock_basics()
 stockcode = list(basic_data.index)
@@ -29,6 +30,6 @@ stock_get_day_data.updateWithDate(path=path, export='csv',\
                                   dateStart=start_date,dateEnd=end_date,stock_codes=stockcode)
 
 stock_process_day_data.stock_trade_preprocess(export='csv',path_data=path, \
-                                              path_result='../../../stockdata/pctdata',dtype='D',\
+                                              path_result=path_result,dtype='D',\
                            start_date=start_date,end_date=end_date, stocks=stockcode)
 print("finished to get and process data")
