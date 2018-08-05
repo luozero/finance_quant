@@ -22,7 +22,7 @@ class analysisVPwithdate:
         config = dict(confpara[suite])
         self.volume_bottom_coeff = float(config['volumebottomcoeff'])
         self.price_bottom_coeff = float(config['pricebottomcoeff'])
-        self.duration_bottom = int(config['durationbottom'])
+        #self.duration_bottom = int(config['durationbottom'])
         self.volume_top_coeff = float(config['volumetopcoeff'])
         self.price_top_coeff = float(config['pricetopcoeff'])
         self.duration_top = int(config['durationtop'])
@@ -35,11 +35,13 @@ class analysisVPwithdate:
         self.edge_days = int(config['edgedays'])
         self.edge_coeffvol = float(config['edgecoeffvol'])
         self.edge_coeffpri = float(config['edgecoeffpri'])
+        self.stock_codes = config['stock_codes'].split(',')
         #load strategy
         self.strategy = strategyVP.use(data=False)
         
     def volume_price_thread(self):
-        stock_codes = self.load.update_stock_codes
+        #stock_codes = self.load.update_stock_codes
+        stock_codes = self.stock_codes
        # date_start = self.date_start
        # date_end = self.date_end
         #stock_codes = {'159942','600000', '002379','600519'}
