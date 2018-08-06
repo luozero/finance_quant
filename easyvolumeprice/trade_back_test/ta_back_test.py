@@ -8,6 +8,7 @@ from . import conf
 
 import time
 from multiprocessing.pool import ThreadPool
+import matplotlib.pyplot as plt
 #from . import conf
 #from . import strategyVP
 
@@ -55,7 +56,9 @@ class ta_back_test_withdate:
         boll_data['lowerband'] = data_temp[2]
         boll_data.index = data['date']
         
-        k_data, d_data= talib.STOCHF(data['high'], data['low'], data['close'], fastk_period=9, fastd_period=3, fastd_matype=0)
+        #k_data, d_data= talib.STOCHF(data['high'], data['low'], data['close'], fastk_period=9, fastd_period=3, fastd_matype=0)
+        k_data, d_data = talib.STOCH(data['high'], data['low'], data['close'], fastk_period=5, slowk_period=3, slowk_matype=0, 
+                                     slowd_period=3, slowd_matype=0)
         kd_data = pd.DataFrame()
         kd_data['K'] = k_data
         kd_data['D'] = d_data
@@ -84,16 +87,16 @@ class ta_back_test_withdate:
         
         state = 'BOTTOM'
         cnt = 0.000001
-        for i in range(start_time,length):
+        for i in range(start_time,length-1):
             if state == 'BOTTOM':
                 #buy_rate_flag = self.strategy.process_daily_limit(price, i, self.daily_limit_rate)
 
-                if macd_data['MACD'][date[i]]>0:
+                if macd_data['MACD'][date[i]]<0 and macd_data['MACD'][date[i+1]]>0:
                     state = 'HOLD'
                     buy_price = price[i]
                     buy_date = date[i]
             elif state == 'HOLD':
-                if kdj_data['K'][i]<kdj_data['D'][date[i]]:
+                if kdj_data['K'][date[i]]<kdj_data['D'][date[i]]:
                     state = 'BOTTOM'
                     sell_price = price[i]
                     income = (sell_price - buy_price)/buy_price * 100
