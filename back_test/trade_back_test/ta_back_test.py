@@ -57,7 +57,7 @@ class ta_back_test_withdate:
         boll_data.index = data['date']
         
         #k_data, d_data= talib.STOCHF(data['high'], data['low'], data['close'], fastk_period=9, fastd_period=3, fastd_matype=0)
-        k_data, d_data = talib.STOCH(data['high'], data['low'], data['close'], fastk_period=5, slowk_period=3, slowk_matype=0, 
+        k_data, d_data = talib.STOCH(data['high'], data['low'], data['close'], fastk_period=9, slowk_period=3, slowk_matype=0, 
                                      slowd_period=3, slowd_matype=0)
         kd_data = pd.DataFrame()
         kd_data['K'] = k_data

@@ -13,6 +13,13 @@ run step,
 3) cd easyvolumeprice
 4) python easyvolumeprice (run volum and price trade strategy)
 
+# technical analysis back test
+
+1) cd stock_process_day_data
+2) python getdata.py (get all the A stock day trade data)
+3) cd easyvolumeprice
+4) python trade_ta_back_test (run macd buy and kdj sell strategy)
+
 # deep learning price predict
 
 simple user guide, without any modification, you can training 000001 stock price rate with stock('000001','000002','000018', '600000','600005','600007')
