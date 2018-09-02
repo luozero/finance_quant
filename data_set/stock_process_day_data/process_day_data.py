@@ -74,7 +74,7 @@ class process_day_data(object):
             self.load_data.write(stock,stock_price_rate)
 
 if __name__ == '__main__':
-    #stock_get_day_data.update_single_code(dtype='D', '000001', path_data='../stockdata/stocktradedata', export='csv')
-    load_data1 = loadstore.use(export='csv',path_data='../stockdata/stocktradedata', path_result='../stockdata/pctdata',dtype='D')
+    #stock_get_day_data.update_single_code(dtype='D', '000001', path_data='../data/stocktradedata', export='csv')
+    load_data1 = loadstore.use(export='csv',path_data='../data/data', path_result='../data/pctdata',dtype='D')
     process_day_data(load_data=load_data1,start_date='2014-01-01',end_date='2014-03-16').preprocessing_api(['000002'])
     

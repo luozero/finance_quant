@@ -2,8 +2,8 @@
 
 import trade_back_test
 
-path_in='../../stockdata/download/'
-path_out='../../stockdata/vp/'
+path_in='../../data/download/'
+path_out='../../data/vp/'
 
 #easyvolumeprice.analysiswithdate(path='../easyhistory/history/', path_income='./incomewithdate/STRATEGYBOTTOMTOP2/', suite='STRATEGYBOTTOMTOP2')
 #easyvolumeprice.analysis(path='../easyhistory/history/', path_income='./income/', suite='STRATEGYBOTTOMTOP1')

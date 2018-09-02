@@ -83,8 +83,8 @@ def get_data_stocks(load_store, stock_codes, start_date, end_date, verify_days, 
     pd.Panel(stocks_train_data)
 
 class StockTradeData(object):
-  def __init__(self, stock_codes, path_data='../stock_data/stockdata/stocktradedata', 
-               path_result='../stock_data/stockdata/pctdata', start_date='2014-01-01',
+  def __init__(self, stock_codes, path_data='../stock_data/data/stocktradedata', 
+               path_result='../stock_data/data/pctdata', start_date='2014-01-01',
                 end_date='2014-03-16', proc_days=15,verify_days=20,test_days=20):
     self.stock_codes = stock_codes
     self.path = path
