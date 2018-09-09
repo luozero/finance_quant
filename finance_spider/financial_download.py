@@ -61,12 +61,6 @@ def fetch_stock_finance_data(path,stock):
 def ts_stock_codes():
   basic_data = ts.get_stock_basics()
   stockcode = list(basic_data.index)
-  stockcode.remove('603657')
-  stockcode.remove('300724')
-  stockcode.remove('603192')
-  stockcode.remove('601068')
-  stockcode.remove('601069')
-  stockcode.remove('601606')
   stockcode.sort()
   return stockcode
 
