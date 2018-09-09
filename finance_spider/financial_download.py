@@ -2,6 +2,7 @@
 from urllib import request
 import os
 import tushare as ts
+import pandas as pd
 
 MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
 ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
@@ -49,16 +50,38 @@ def ts_stock_codes():
   stockcode.sort()
   return stockcode
 
+def read_stock_index(download_stock_file):
+  stocks_index = 0
+  if os.path.exists(download_stock_file):
+    try:
+        his = pd.read_csv(download_stock_file)
+        stocks_index = int(his.columns[1])
+    except ValueError:
+        return
+  return stocks_index
+
+def store_stock_index(download_stock_file, stock_index):
+  his = pd.Series(stock_index)
+  his.to_csv(download_stock_file)
+
 if __name__ == '__main__':
   stock_codes=ts_stock_codes()
   
-  path = '../../data/finance'
+  path_root = '../../data/'
+  
+  path = os.path.join('../../data/','finance')
   if not os.path.exists(path):
             os.makedirs(path)
+            
+  download_stock_file = os.path.join(path_root,'stock_index.csv')
+  stock_index = read_stock_index(download_stock_file)
+  stock_codes = stock_codes[stock_index:]
   
   for stock in (stock_codes):
     print("fetching stock",stock)
     fetch_stock_finance_data(path,stock)
+    store_stock_index(download_stock_file, stock_index)
+    stock_index = stock_index + 1
     print("fetched stock",stock)
   
 
