@@ -82,9 +82,9 @@ if __name__ == '__main__':
   
   stock_codes=ts_stock_codes()
   
-  path_root = '../../data/'
+  path_root = '../../../data/'
   
-  path = os.path.join('../../data/','finance')
+  path = os.path.join(path_root,'finance')
   if not os.path.exists(path):
             os.makedirs(path)
             
