@@ -2,6 +2,8 @@
 import pandas as pd
 import numpy as np
 import os
+import tushare as ts
+import financial_download
 
 '{}_main.csv','{}_abstract.csv','{}_profit.csv','{}_cash.csv','{}_loans.csv'
 
@@ -16,7 +18,7 @@ def load_financical_data(path, stock_code):
     ite = ite.format(stock_code)
     csv_file_path = os.path.join(path, ite)
     if os.path.exists(csv_file_path):
-      data = pd.read_csv(csv_file_path, encoding='ANSI')
+      data = pd.read_csv(csv_file_path, encoding='ANSI',error_bad_lines=False)
       if(data.shape[1]<min_column):
           min_column = data.shape[1]
       data = data.replace('--', 0)
@@ -26,13 +28,12 @@ def load_financical_data(path, stock_code):
       exit(-1)
     data_file.append(data)
     
-  for ite in range(0,4):
-    data_file[ite] = data_file[ite].iloc[:,:min_column]
+  for ite in range(0,5):
+    data_file[ite] = data_file[ite].iloc[:, : min_column]
   return data_file
 def store_process_financical_data(path, data, stock_code):
   if not os.path.exists(path):
-    print('this folder not exist!!!')
-    exec(-1)
+    os.makedirs(path)
   file_list = '{}_processed_finance.csv'.format(stock_code)
   csv_file_path = os.path.join(path, file_list)
   data.to_csv(csv_file_path, encoding='ANSI')
@@ -132,19 +133,19 @@ def earning_quality_calc(data):
   debt_asset_ratio = debt_asset_ratio/100
   pd_data = pd.concat([pd_data, debt_asset_ratio], axis=1)
   #debt_equality_ratio
-  debt_equality_ratio = ab_ratio_calc(debt,equality,'debt_asset_ratio')
+  debt_equality_ratio = ab_ratio_calc(debt,equality,'debt_equality_ratio')
   debt_equality_ratio = debt_equality_ratio/100
   pd_data = pd.concat([pd_data, debt_equality_ratio], axis=1)
   #debt_net_asset_ratio
   debt_net_asset_ratio = abc_ratio_calc(debt,equality,intangible_asset,'debt_net_asset_ratio','sub')
-  pd_data = pd.concat([pd_data, debt_equality_ratio], axis=1)
+  pd_data = pd.concat([pd_data, debt_net_asset_ratio], axis=1)
   #revenue_asset_ratio
   revenue_asset_ratio = ab_ratio_calc(revenue,asset,'revenue_asset_ratio')
-  revenue_asset_ratio = revenue_asset_ratio/100
+  revenue_asset_ratio = revenue_asset_ratio
   pd_data = pd.concat([pd_data, revenue_asset_ratio], axis=1)
   #goodwell_equality_ratio
   goodwell_equality_ratio = ab_ratio_calc(goodwell,equality,'goodwell_equality_ratio')
-  pd_data = pd.concat([pd_data, revenue_asset_ratio], axis=1)
+  pd_data = pd.concat([pd_data, goodwell_equality_ratio], axis=1)
   
   ###extra index
   dev_rev_ratio = ab_ratio_calc(dev_cost,revenue,'dev_rev_ratio')
@@ -155,11 +156,14 @@ def earning_quality_calc(data):
 
 
 if __name__ == '__main__':
-  stock_codes = ['000001','000002','000004']
+  #stock_codes = ['000001','000002','000004']
+  stock_codes = financial_download.ts_stock_codes()
   path = '../../../data/finance'
   path_res = '../../../data/finance_processed'
   
+ # stock_codes = ['000166']
   for stock_code in stock_codes:
+    print("stock:",stock_code)
     data_finance = load_financical_data(path, stock_code)
     data_processed = earning_quality_calc(data_finance)
     store_process_financical_data(path_res, data_processed, stock_code)
