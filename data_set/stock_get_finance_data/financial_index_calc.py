@@ -41,7 +41,7 @@ def earning_quality_calc(data_main, data_profit):
   profit_revenue = div_calc(earning,revenue)
   profit_cost = div_calc(earning,cost)
   
-  return roe
+  return pd.DataFrame([roe roa profit_revenue profit_cost])
 
 
 if __name__ == '__main__':
