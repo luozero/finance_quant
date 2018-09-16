@@ -44,6 +44,7 @@ def ab_ratio_calc(a,b,str):
   data2 = np.float32(data2[1:])
   data = data1/data2
   data[np.isinf(data)]=0
+  data[np.isnan(data)]=0
   data = data.dot(100)
   dict_data = {str:data}
   pd_data = pd.DataFrame(dict_data)
@@ -72,7 +73,7 @@ def abc_ratio_calc(a,b,c,str,op):
   pd_data = pd.DataFrame(dict_data)
   return pd_data
 
-def earning_quality_calc(data):
+def financial_index_calc(data):
   data_main = data[0]
   data_abstract = data[1]
   data_profit = data[2]
@@ -161,11 +162,11 @@ if __name__ == '__main__':
   path = '../../../data/finance'
   path_res = '../../../data/finance_processed'
   
- # stock_codes = ['000166']
+ # stock_codes = ['000719']
   for stock_code in stock_codes:
     print("stock:",stock_code)
     data_finance = load_financical_data(path, stock_code)
-    data_processed = earning_quality_calc(data_finance)
+    data_processed = financial_index_calc(data_finance)
     store_process_financical_data(path_res, data_processed, stock_code)
   print("processed successfully!!!")
  # data_main = data[0]
