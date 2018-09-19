@@ -5,7 +5,16 @@ import os
 import tushare as ts
 import financial_download
 
-'{}_main.csv','{}_abstract.csv','{}_profit.csv','{}_cash.csv','{}_loans.csv'
+finance_index_dic = {
+  #####earning capacity
+  'roe':'roe','roa':'roa','profit_revenue':'profit_revenue','profit_cost':'profit_cost','equlity_incr_rate':'equlity_incr_rate',
+  ###grow capacity
+  'revenue_incr_rate':'revenue_incr_rate','profit_incr_rate':'profit_incr_rate',
+  'cash_incr_rate':'cash_incr_rate','asset_incr_rate':'asset_incr_rate','debt_incr_rate':'debt_incr_rate',
+  ###asset struct
+  'debt_asset_ratio':'debt_asset_ratio','debt_equality_ratio':'debt_equality_ratio','debt_net_asset_ratio':'debt_net_asset_ratio',
+  'revenue_asset_ratio':'revenue_asset_ratio','goodwell_equality_ratio':'goodwell_equality_ratio','dev_rev_ratio':'dev_rev_ratio'
+  }
 
 def load_financical_data(path, stock_code):
   if not os.path.exists(path):
@@ -37,6 +46,16 @@ def store_process_financical_data(path, data, stock_code):
   file_list = '{}_processed_finance.csv'.format(stock_code)
   csv_file_path = os.path.join(path, file_list)
   data.to_csv(csv_file_path, encoding='ANSI')
+def load_process_financical_data(path, stock_code):
+  if not os.path.exists(path):
+    os.makedirs(path)
+  file_list = '{}_processed_finance.csv'.format(stock_code)
+  csv_file_path = os.path.join(path, file_list)
+  if os.path.exists(csv_file_path):
+    data_pd = pd.read_csv(csv_file_path, encoding='ANSI')
+  else:
+    return pd.DataFrame()
+  return data_pd
 def ab_ratio_calc(a,b,str):
   data1 = a.values.squeeze()
   data1 = np.float32(data1[1:])
@@ -92,8 +111,7 @@ def financial_index_calc(data):
   intangible_asset = data_loan[data_loan['报告日期'].isin(['无形资产(万元)'])]
   dev_cost = data_loan[data_loan['报告日期'].isin(['开发支出(万元)'])]
   goodwell = data_loan[data_loan['报告日期'].isin(['商誉(万元)'])]
-  
-  
+ 
   #####earning capacity
   #roe
   roe = ab_ratio_calc(earning,equlity,'roe')
@@ -102,72 +120,74 @@ def financial_index_calc(data):
   roa = ab_ratio_calc(earning,asset,'roa')
   pd_data = pd.concat([pd_data, roa], axis=1)
   #profit_revenue
-  profit_revenue = ab_ratio_calc(earning,revenue,'profit_revenue')
+  profit_revenue = ab_ratio_calc(earning,revenue,finance_index_dic['profit_revenue'])
   pd_data = pd.concat([pd_data, profit_revenue], axis=1)
   #profit_cost
-  profit_cost = ab_ratio_calc(earning,cost,'profit_cost')
+  profit_cost = ab_ratio_calc(earning,cost,finance_index_dic['profit_cost'])
   pd_data = pd.concat([pd_data, profit_cost], axis=1)
   #stackholder equality increase
-  equlity_incr_rate = qoq_rate_calc(equality,'equlity_incr_rate')
+  equlity_incr_rate = qoq_rate_calc(equality,finance_index_dic['equlity_incr_rate'])
   pd_data = pd.concat([pd_data, equlity_incr_rate], axis=1)
 
   ###grow capacity
   #revenue
-  revenue_incr_rate = qoq_rate_calc(revenue,'revenue_incr_rate')
+  revenue_incr_rate = qoq_rate_calc(revenue,finance_index_dic['revenue_incr_rate'])
   pd_data = pd.concat([pd_data, revenue_incr_rate], axis=1)
   #profit
-  profit_incr_rate = qoq_rate_calc(earning,'profit_incr_rate')
+  profit_incr_rate = qoq_rate_calc(earning,finance_index_dic['profit_incr_rate'])
   pd_data = pd.concat([pd_data, profit_incr_rate], axis=1)
   #cash
-  cash_incr_rate = qoq_rate_calc(cash,'cash_incr_rate')
+  cash_incr_rate = qoq_rate_calc(cash,finance_index_dic['cash_incr_rate'])
   pd_data = pd.concat([pd_data, cash_incr_rate], axis=1)
   #asset
-  asset_incr_rate = qoq_rate_calc(asset,'asset_incr_rate')
+  asset_incr_rate = qoq_rate_calc(asset,finance_index_dic['asset_incr_rate'])
   pd_data = pd.concat([pd_data, asset_incr_rate], axis=1)
   #debt
-  debt_incr_rate = qoq_rate_calc(debt,'debt_incr_rate')
+  debt_incr_rate = qoq_rate_calc(debt,finance_index_dic['debt_incr_rate'])
   pd_data = pd.concat([pd_data, debt_incr_rate], axis=1)
   
   ###asset struct
   #debt_asset_ratio
-  debt_asset_ratio = ab_ratio_calc(debt,asset,'debt_asset_ratio')
+  debt_asset_ratio = ab_ratio_calc(debt,asset,finance_index_dic['debt_asset_ratio'])
   debt_asset_ratio = debt_asset_ratio/100
   pd_data = pd.concat([pd_data, debt_asset_ratio], axis=1)
   #debt_equality_ratio
-  debt_equality_ratio = ab_ratio_calc(debt,equality,'debt_equality_ratio')
+  debt_equality_ratio = ab_ratio_calc(debt,equality,finance_index_dic['debt_equality_ratio'])
   debt_equality_ratio = debt_equality_ratio/100
   pd_data = pd.concat([pd_data, debt_equality_ratio], axis=1)
   #debt_net_asset_ratio
-  debt_net_asset_ratio = abc_ratio_calc(debt,equality,intangible_asset,'debt_net_asset_ratio','sub')
+  debt_net_asset_ratio = abc_ratio_calc(debt,equality,intangible_asset,finance_index_dic['debt_net_asset_ratio'],'sub')
   pd_data = pd.concat([pd_data, debt_net_asset_ratio], axis=1)
   #revenue_asset_ratio
-  revenue_asset_ratio = ab_ratio_calc(revenue,asset,'revenue_asset_ratio')
+  revenue_asset_ratio = ab_ratio_calc(revenue,asset,finance_index_dic['revenue_asset_ratio'])
   revenue_asset_ratio = revenue_asset_ratio
   pd_data = pd.concat([pd_data, revenue_asset_ratio], axis=1)
   #goodwell_equality_ratio
-  goodwell_equality_ratio = ab_ratio_calc(goodwell,equality,'goodwell_equality_ratio')
+  goodwell_equality_ratio = ab_ratio_calc(goodwell,equality,finance_index_dic['goodwell_equality_ratio'])
   pd_data = pd.concat([pd_data, goodwell_equality_ratio], axis=1)
   
   ###extra index
-  dev_rev_ratio = ab_ratio_calc(dev_cost,revenue,'dev_rev_ratio')
+  dev_rev_ratio = ab_ratio_calc(dev_cost,revenue,finance_index_dic['dev_rev_ratio'])
   pd_data = pd.concat([pd_data, dev_rev_ratio], axis=1)
   
   pd_data.index = data_main.iloc[0,:].index[1:]
   return pd_data #pd.DataFrame([roe roa profit_revenue profit_cost])
 
-
-if __name__ == '__main__':
-  #stock_codes = ['000001','000002','000004']
+def main_financial_data_process(path, path_res):
   stock_codes = financial_download.ts_stock_codes()
-  path = '../../../data/finance'
-  path_res = '../../../data/finance_processed'
-  
  # stock_codes = ['000719']
   for stock_code in stock_codes:
     print("stock:",stock_code)
     data_finance = load_financical_data(path, stock_code)
     data_processed = financial_index_calc(data_finance)
     store_process_financical_data(path_res, data_processed, stock_code)
+  
+if __name__ == '__main__':
+  #stock_codes = ['000001','000002','000004']
+  
+  path = '../../../data/finance'
+  path_res = '../../../data/finance_processed'
+  main_financial_data_process(path, path_res)
   print("processed successfully!!!")
  # data_main = data[0]
 
