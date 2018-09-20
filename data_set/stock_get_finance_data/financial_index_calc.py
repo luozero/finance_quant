@@ -53,6 +53,7 @@ def load_process_financical_data(path, stock_code):
   csv_file_path = os.path.join(path, file_list)
   if os.path.exists(csv_file_path):
     data_pd = pd.read_csv(csv_file_path, encoding='ANSI')
+    data_pd.index = data_pd.iloc[:,0]
   else:
     return pd.DataFrame()
   return data_pd

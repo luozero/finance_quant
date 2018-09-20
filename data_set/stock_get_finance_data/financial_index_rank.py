@@ -10,8 +10,8 @@ import pandas as pd
 import os
 
 class financial_index_rank:
-  def __init__(self,path = '../../../data/finance_processed',path_rs = '../../../data/score'):
-    self.stock_codes = financial_download.ts_stock_codes()
+  def __init__(self,path = '../../../data/finance_processed',path_rs = '../../../data/score', stocks = '000001'):
+    self.stock_codes = stocks
     self.path = path
     if not os.path.exists(path_rs):
             os.makedirs(path_rs)
@@ -32,23 +32,23 @@ class financial_index_rank:
     return data_dict
   
   def assess_one_financial_index(self, index, dates, stocks):
-    index_dict = {}
-    score_dict = {}
+    index_series = pd.Series()
+    score_series = pd.Series()
     len_dates = len(dates)
     for stock_code in stocks:
-      index_dict[stock_code] = 0
+      index_series[stock_code] = 0
       for date in dates:
-        index_dict[stock_code] = index_dict[stock_code] + \
+        index_series[stock_code] = index_series[stock_code] + \
         self.financial_index_data[stock_code].loc[date,index]
-      index_dict[stock_code]  = index_dict[stock_code] / len_dates;
-    index_dict_sorted = sorted(index_dict.items(), key = lambda d:d[1],reverse = True)
-    stock_len = len(index_dict_sorted)
+      index_series[stock_code]  = index_series[stock_code] / len_dates;
+    index_series_sorted = index_series.sort_values(axis=0,ascending=False) #sorted(index_series.items(), key = lambda d:d[1],reverse = True)
+    stock_len = len(index_series_sorted)
     rank_index=0
-    for key, val in index_dict_sorted:
-      score_dict[key] = (stock_len-rank_index)/stock_len * 100
+    for stock in index_series_sorted.index:
+      score_series[stock] = (stock_len-rank_index)/stock_len * 100
       rank_index = rank_index + 1
-    score_dict = sorted(score_dict.items(), key = lambda d:d[0],reverse = True)
-    return [pd.DataFrame.from_dict(index_dict), pd.DataFrame.from_dict(score_dict)]
+    score_series = score_series.sort_index(axis=0,ascending=False)#sorted(score_series.items(), key = lambda d:d[0],reverse = True)
+    return [pd.DataFrame(index_series), pd.DataFrame(score_series)]
   
   def assess_selected_financial_index(self,indexs,dates,stocks):
     pd_indexs = pd.DataFrame()
@@ -69,10 +69,12 @@ if __name__ == '__main__':
   path = '../../../data/finance_processed'
   path_rs = '../../../data/score'
   print(financial_index_calc.finance_index_dic['roe'])
-  fir = financial_index_rank(path=path, path_rs=path_rs)
-  indexs = financial_index_calc.finance_index_dic['roe']
-  dates = '2018/6/30'
+  #stocks = financial_download.ts_stock_codes()
   stocks = ['000001','000002']
+  fir = financial_index_rank(path=path, path_rs=path_rs, stocks = stocks)
+  indexs = [financial_index_calc.finance_index_dic['roe']]
+  dates = ['2018-06-30']
+  
   fir.assess_selected_financial_index(indexs, dates, stocks)
   #data_dict = load_all_financial_processed_data(path)
 
