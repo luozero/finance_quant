@@ -71,6 +71,7 @@ def read_stock_index(download_stock_file):
         his = pd.read_csv(download_stock_file)
         stocks_index = int(his.columns[1])
     except ValueError:
+        print('ERR load', download_stock_file)
         return
   return stocks_index
 
