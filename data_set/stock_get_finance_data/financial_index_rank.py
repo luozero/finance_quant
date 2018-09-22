@@ -5,6 +5,7 @@ Created on 2018��9��17��
 @author: ll
 '''
 import financial_index_calc as fic
+from financial_index_calc import finance_index_dic as fid
 import financial_download
 import pandas as pd
 import os
@@ -80,8 +81,30 @@ if __name__ == '__main__':
   #stocks = ['000001','000002','000004','000005','000006']
   dates = ['2018-06-30','2017-12-31']
   fir = financial_index_rank(path=path, path_rs=path_rs, stocks = stocks, dates = dates)
-  indexs = [fic.finance_index_dic['roe'],fic.finance_index_dic['roa'],fic.finance_index_dic['profit_revenue'],fic.finance_index_dic['profit_cost'],\
-            fic.finance_index_dic['equlity_incr_rate']]
+  indexs = [
+    #earning capacity
+    fid['roe'],\
+    fid['roa'],\
+    fid['profit_revenue'],\
+    fid['profit_cost'],\
+    fid['equlity_incr_rate'],\
+    ###grow capacity
+    fid['revenue_incr_rate'],\
+    fid['profit_incr_rate'],\
+    fid['cash_incr_rate'],\
+    fid['asset_incr_rate'],\
+  ]
+  """ 
+  fid['debt_incr_rate'],\
+  ###asset struct
+  fid['debt_asset_ratio'],\
+  fid['debt_equality_ratio'],\
+  fid['debt_net_asset_ratio'],\
+  fid['revenue_asset_ratio'],\
+  fid['goodwell_equality_ratio'],\
+  fid['dev_rev_ratio']\
+  """
+ 
   
   
   fir.assess_selected_financial_index(indexs, dates)
