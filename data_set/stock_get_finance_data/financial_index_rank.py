@@ -14,6 +14,7 @@ class financial_index_rank:
   def __init__(self,path = '../../../data/finance_processed',path_rs = '../../../data/score', stocks = '000001', dates=['2018-06-30']):
     self.stock_codes = []
     self.path = path
+    self.path_rs = path_rs
     if not os.path.exists(path_rs):
             os.makedirs(path_rs)
     self.path_overview_scores = os.path.join(path_rs,'overview_scores_{}.csv'.format(dates[-1]))
@@ -55,6 +56,20 @@ class financial_index_rank:
       rank_index = rank_index + 1
     score_series = score_series.sort_index(axis=0,ascending=True)#sorted(score_series.items(), key = lambda d:d[0],reverse = True)
     return [pd.DataFrame({index:index_series}), pd.DataFrame({index:score_series})]
+  
+  def fetch_selected_financial_indexs(self, indexs, dates):
+    fecth_indexs = pd.Series(dtype=float)
+    for date in dates:
+      pd_indexs = pd.DataFrame(dtype=float)
+      print('fecthing date', date)
+      for index in indexs:
+        print('processing index is', index)
+        [pd_index, pd_score] = self.assess_one_financial_index(index, [date])
+        pd_indexs = pd.concat([pd_indexs, pd_index], axis=1)
+      pd_indexs_path = os.path.join(self.path_rs,'fecthing_finance_index_{}.csv'.format(date))
+      pd_indexs.to_csv(pd_indexs_path, encoding='ANSI')
+      fecth_indexs[date] = pd_indexs
+    return fecth_indexs
   
   def assess_selected_financial_index(self,indexs,dates):
     pd_indexs = pd.DataFrame()
