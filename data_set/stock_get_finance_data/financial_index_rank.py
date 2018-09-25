@@ -57,10 +57,10 @@ class financial_index_rank:
     score_series = score_series.sort_index(axis=0,ascending=True)#sorted(score_series.items(), key = lambda d:d[0],reverse = True)
     return [pd.DataFrame({index:index_series}), pd.DataFrame({index:score_series})]
   
-  def fetch_selected_financial_indexs(self, indexs, dates):
+  def fetch_selected_financial_indexs(self, indexs, dates,path_kmean):
     fecth_indexs = pd.Series(dtype=float)
     for date in dates:
-      pd_indexs_path = os.path.join(self.path_score,'fecthing_finance_index_{}.csv'.format(date))
+      pd_indexs_path = os.path.join(path_kmean,'fecthing_finance_index_{}.csv'.format(date))
       if not os.path.exists(pd_indexs_path):
         pd_indexs = pd.DataFrame(dtype=float)
         print('fecthing date', date)
@@ -70,7 +70,7 @@ class financial_index_rank:
           pd_indexs = pd.concat([pd_indexs, pd_index], axis=1)
         pd_indexs.to_csv(pd_indexs_path, encoding='ANSI')
       else:
-        pd_indexs = pd.read_csv(pd_indexs_path)
+        pd_indexs = pd.read_csv(pd_indexs_path,index_col=0)
       fecth_indexs[date] = pd_indexs
     return fecth_indexs
   
