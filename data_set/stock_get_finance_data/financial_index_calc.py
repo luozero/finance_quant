@@ -13,7 +13,15 @@ finance_index_dic = {
   'cash_incr_rate':'cash_incr_rate','asset_incr_rate':'asset_incr_rate','debt_incr_rate':'debt_incr_rate',
   ###asset struct
   'debt_asset_ratio':'debt_asset_ratio','debt_equality_ratio':'debt_equality_ratio','debt_net_asset_ratio':'debt_net_asset_ratio',
-  'revenue_asset_ratio':'revenue_asset_ratio','goodwell_equality_ratio':'goodwell_equality_ratio','dev_rev_ratio':'dev_rev_ratio'
+  'revenue_asset_ratio':'revenue_asset_ratio','goodwell_equality_ratio':'goodwell_equality_ratio','dev_rev_ratio':'dev_rev_ratio',
+  ##enterprise value
+  'CFO2EV':'CFO2EV','EDITDA2EV':'EDITDA2EV',
+  'E2PFY0':'E2PFY0','E2PFY1':'E2PFY1',
+  'BB2P':'BB2P','BB2EV':'BB2EV',
+  'B2P':'B2P','S2EV':'S2EV',
+  ##quality
+  'RNOA':'RNOA','CFROI':'CFROI','OL':'OL','OLinc':'OLinc','WCinc':'WCinc','NCOinc':'NCOinc',
+  'icapx':'icapx','capxG':'capxG','XF':'XF','shareInc':'shareInc',
   }
 
 def load_financical_data(path, stock_code):
@@ -22,7 +30,7 @@ def load_financical_data(path, stock_code):
     exec(-1)
   file_list = ['{}_main.csv','{}_abstract.csv','{}_profit.csv','{}_cash.csv','{}_loans.csv']
   data_file = []
-  min_column = 3000;
+  min_column = 3000
   for ite in file_list:
     ite = ite.format(stock_code)
     csv_file_path = os.path.join(path, ite)
@@ -40,6 +48,7 @@ def load_financical_data(path, stock_code):
   for ite in range(0,5):
     data_file[ite] = data_file[ite].iloc[:, : min_column]
   return data_file
+
 def store_process_financical_data(path, data, stock_code):
   if not os.path.exists(path):
     os.makedirs(path)
@@ -167,8 +176,8 @@ def financial_index_calc(data):
   goodwell_equality_ratio = ab_ratio_calc(goodwell,equality,finance_index_dic['goodwell_equality_ratio'])
   pd_data = pd.concat([pd_data, goodwell_equality_ratio], axis=1)
   
-  ###extra index
-  dev_rev_ratio = ab_ratio_calc(dev_cost,revenue,finance_index_dic['dev_rev_ratio'])
+  ###CFO2EV
+  dev_rev_ratio = ab_ratio_calc(cash,revenue,finance_index_dic['CFO2EV'])
   pd_data = pd.concat([pd_data, dev_rev_ratio], axis=1)
   
   pd_data.index = data_main.iloc[0,:].index[1:]
