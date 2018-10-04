@@ -4,7 +4,7 @@ import numpy as np
 import os
 import tushare as ts
 FILE_LIST = {'main':'{}_main.csv','abstract':'{}_abstract.csv','profit':'{}_profit.csv','cash':'{}_cash.csv','loans':'{}_loans.csv'}
-
+TAIL_MARGIN = 1
 class financial_load_store:
   def __init__(self, path='../../../data/', stock_codes=['000001']):
     self.path = path
@@ -34,6 +34,7 @@ class financial_load_store:
         if(data.shape[1]<min_column):
             min_column = data.shape[1]
         data = data.replace('--', 0)
+        data = data.replace('_', 0)
         data = data.fillna(0)
       else:
         print('this file is not exist',FILE_LIST[ite])
@@ -41,7 +42,7 @@ class financial_load_store:
       data_file[ite]=(data)
     self.min_column = min_column
     for ite in file_list:
-      data_file[ite] = data_file[ite].iloc[:, : min_column]
+      data_file[ite] = data_file[ite].iloc[:, : self.min_column-TAIL_MARGIN]
     return data_file
   def load_all_financial_one_stock(self, stock_code):
     file_list = ['main','abstract','profit','cash','loans']
@@ -53,7 +54,10 @@ class financial_load_store:
     return data
   def fetch_one_financial_factor_in_stock(self,table,factor):
     data = self.all_financial_one_stock[table]
-    data1 = data[data['报告日期'].isin([factor])]
+    try:
+      data1 = data[data['报告日期'].isin([factor])]
+    except:
+      data1 = data[data[' 报告日期'].isin([factor])]
     data1 = data1.values.squeeze()
     data1 = np.float32(data1[1:])
     return data1
@@ -87,7 +91,7 @@ class financial_load_store:
     data = self.stock_basic[stock]
     data = data.T
     data1 = data.loc[factor].values.squeeze()
-    data1 = np.float32(data1)
+    data1 = np.float32(data1[:-TAIL_MARGIN])
     return data1
   
 if __name__ == '__main__':

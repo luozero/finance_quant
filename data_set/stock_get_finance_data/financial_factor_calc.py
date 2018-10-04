@@ -60,14 +60,26 @@ class financail_factor_calc:
     debt = self.FLS.fetch_one_financial_factor_in_stock('main','总负债(万元)')
     
     earning = self.FLS.fetch_one_financial_factor_in_stock('profit','净利润(万元)')
+    interest = self.FLS.fetch_one_financial_factor_in_stock('profit','利息支出(万元)')
+    tax0 = self.FLS.fetch_one_financial_factor_in_stock('profit','所得税费用(万元)')
+    tax1 = self.FLS.fetch_one_financial_factor_in_stock('profit','营业税金及附加(万元)')
     cost = self.FLS.fetch_one_financial_factor_in_stock('profit','营业总成本(万元)')
+    EBIT = earning + interest + tax0 + tax1
    
     equality = self.FLS.fetch_one_financial_factor_in_stock('loans','所有者权益(或股东权益)合计(万元)')
     intangible_asset = self.FLS.fetch_one_financial_factor_in_stock('loans','无形资产(万元)')
     dev_cost = self.FLS.fetch_one_financial_factor_in_stock('loans','开发支出(万元)')
     goodwell = self.FLS.fetch_one_financial_factor_in_stock('loans','商誉(万元)')
-   
-    EV = self.FLS.fecth_one_stock_basic_in_stock(stock_code,'total_mv')
+    
+    
+    depreciation = self.FLS.fetch_one_financial_factor_in_stock('cash',' 固定资产折旧、油气资产折耗、生产性物资折旧(万元)')
+    amortize0 = self.FLS.fetch_one_financial_factor_in_stock('cash',' 无形资产摊销(万元)')
+    amortize1 = self.FLS.fetch_one_financial_factor_in_stock('cash',' 长期待摊费用摊销(万元)')
+    excess_cash = self.FLS.fetch_one_financial_factor_in_stock('cash',' 现金的期末余额(万元)')
+    EBITDA = EBIT + depreciation +amortize0 + amortize1
+ 
+    BV = self.FLS.fecth_one_stock_basic_in_stock(stock_code,'total_mv')
+    EV = BV + debt - excess_cash
     #####earning capacity
     #roe
     roe = self.ab_ratio_calc(earning,equlity,'roe')
@@ -123,8 +135,12 @@ class financail_factor_calc:
     pd_data = pd.concat([pd_data, goodwell_equality_ratio], axis=1)
     
     ###CFO2EV
-    dev_rev_ratio = self.ab_ratio_calc(cash,EV,finance_index_dic['CFO2EV'])
-    pd_data = pd.concat([pd_data, dev_rev_ratio], axis=1)
+    CFO_EV_ratio = self.ab_ratio_calc(cash,EV,finance_index_dic['CFO2EV'])
+    pd_data = pd.concat([pd_data, CFO_EV_ratio], axis=1)
+    ####EBITDA2ev
+    EBITDA_EV_ratio = self.ab_ratio_calc(EBIT,EV,finance_index_dic['EDITDA2EV'])
+    pd_data = pd.concat([pd_data, EBITDA_EV_ratio], axis=1)
+    
     
     pd_data.index = self.FLS.all_financial_one_stock['main'].iloc[0,:].index[1:]
     return pd_data #pd.DataFrame([roe roa profit_revenue profit_cost])

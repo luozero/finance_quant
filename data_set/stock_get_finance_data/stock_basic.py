@@ -131,6 +131,6 @@ def processed_all_stocks():
   SB.processed_stocks_basic()
   print('processed successfully')
 if __name__ == '__main__':
-  download_all_stocks()
-  #processed_all_stocks()
+  #download_all_stocks()
+  processed_all_stocks()
   pass
