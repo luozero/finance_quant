@@ -43,7 +43,7 @@ class stock_basic:
     return continue_download_this_stock, stock_basic
   
   def get_all_stocks_basic(self): 
-    process_index = SB.DR.read_index()
+    process_index = self.DR.read_index()
     print('process_index',process_index)
     for stock in self.stock_codes[process_index:]:
       print('stock', stock, 'is downloading','process_index',process_index)
@@ -61,7 +61,7 @@ class stock_basic:
           print('stock', stock, 'try times', try_cnt)
         if try_cnt == MAX_DOWNLOAD_TIMES:
           print('skip this stock', stock, 'try times', try_cnt)
-          SB.DR.write_skip_stock(stock)
+          self.DR.write_skip_stock(stock)
           break
         if not stock_basic.empty:
           break
@@ -69,7 +69,7 @@ class stock_basic:
       stock_basic.to_csv(path_csv)
       print('this stock',stock, 'successfully downloaded')
       process_index = process_index + 1
-      SB.DR.write_index(process_index)
+      self.DR.write_index(process_index)
     
   def processed_daily_basic(self,stock_basic_datas,get_date):
     try:
@@ -131,6 +131,6 @@ def processed_all_stocks():
   SB.processed_stocks_basic()
   print('processed successfully')
 if __name__ == '__main__':
-  #download_all_stocks()
-  processed_all_stocks()
+  download_all_stocks()
+  #processed_all_stocks()
   pass
