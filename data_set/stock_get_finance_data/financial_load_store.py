@@ -10,7 +10,11 @@ class financial_load_store:
     self.path = path
     self.path_finance = os.path.join(path,'finance')
     self.path_finance_processed = os.path.join(path,'finance_processed')
+    if not os.path.exists(self.path_finance_processed):
+      os.makedirs(self.path_finance_processed)
+    self.path_finance_processed = os.path.join(self.path_finance_processed,'{}_processed_finance.csv')
     self.path_stock_basic = os.path.join(path,'stock_basic')
+    self.path_processed_stock_basic = os.path.join(path,'processed_stock_basic','{}_basic.csv')
     
     self.stock_codes = stock_codes
     #self.load_stock_basic()
@@ -56,17 +60,13 @@ class financial_load_store:
   
   '''processed financial data'''
   def store_process_financical_data(self, data, stock_code):
-    if not os.path.exists(self.path_finance_processed):
-      os.makedirs(self.path_finance_processed)
-    file_list = '{}_processed_finance.csv'.format(stock_code)
-    csv_file_path = os.path.join(self.path_finance_processed, file_list)
+    csv_file_path = self.path_finance_processed.format(stock_code)
     data.to_csv(csv_file_path, encoding='ANSI')
   def load_process_financical_data(self, stock_code):
-    if not os.path.exists(self.path_finance_processed):
+    csv_file_path = self.path_finance_processed.format(stock_code)
+    if not os.path.exists(csv_file_path):
       print('load_process_financical_data not exsit this file', stock_code)
       exit(-1)
-    file_list = '{}_processed_finance.csv'.format(stock_code)
-    csv_file_path = os.path.join(self.path_finance_processed, file_list)
     if os.path.exists(csv_file_path):
       data_pd = pd.read_csv(csv_file_path, encoding='ANSI')
       data_pd.index = data_pd.iloc[:,0]
@@ -77,8 +77,8 @@ class financial_load_store:
   '''basic stock data'''
   def load_all_stock_basic_one_stock(self,stock_codes):
     data_basic = {}
-    for stock in [stock_codes]:
-      path_csv = os.path.join(self.path_stock_basic,stock+'_basic.csv')
+    for stock in stock_codes:
+      path_csv = os.path.join(self.path_processed_stock_basic.format(stock))
       pd_basic = pd.read_csv(path_csv,index_col=0)
       data_basic[stock] = pd_basic
     self.stock_basic = data_basic

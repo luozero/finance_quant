@@ -11,6 +11,7 @@ import os
 import financial_download as FD
 from financial_load_store import financial_load_store as FLD
 from download_record import download_record as DR
+from stock_codes_utility import stock_codes_utility as SCU
 MAX_DOWNLOAD_TIMES = 50
 
 class stock_basic:
@@ -20,7 +21,13 @@ class stock_basic:
     path = os.path.join(path_root,'stock_basic')
     if not os.path.exists(path):
               os.makedirs(path)
-    self.path = path
+    #self.path = path
+    self.stock_basic_path = os.path.join(path,'{}_basic.csv')
+    path = os.path.join(path_root,'processed_stock_basic')
+    if not os.path.exists(path):
+              os.makedirs(path)
+    #self.path = path
+    self.stock_processed_basic_path = os.path.join(path,'{}_basic.csv')
     self.stock_codes = stock_codes
     self.FLD = FLD(path=path_root)
     self.DR = DR(path_root,'stock_basic.json')
@@ -58,77 +65,51 @@ class stock_basic:
           break
         if not stock_basic.empty:
           break
-      path_csv = os.path.join(self.path,stock_store+'_basic.csv')
+      path_csv = self.stock_basic_path.format(stock_store)
       stock_basic.to_csv(path_csv)
       print('this stock',stock, 'successfully downloaded')
       process_index = process_index + 1
       SB.DR.write_index(process_index)
     
-  
-  def get_daily_basic(self,ts_code,get_date,must_download_flag): 
-    
-    get_timestamp = pd.Timestamp(get_date)
+  def processed_daily_basic(self,stock_basic_datas,get_date):
+    try:
+      get_timestamp = pd.Timestamp(get_date)
+    except:
+      stock_basic = stock_basic_datas.tail(1)
+      return stock_basic
+    stock_basic_dates = stock_basic_datas.loc[:,'trade_date']
     try_cnt = 0
     while True:
-      str = get_timestamp.strftime('%Y%m%d')
-      #stock_basic = pro.daily_basic(ts_code=ts_code, trade_date=str)
-      continue_download_this_stock = True
-      while continue_download_this_stock:
-        continue_download_this_stock,stock_basic = self.try_download_csv(ts_code, str)
-
-      if try_cnt<10:
-        get_timestamp = get_timestamp -datetime.timedelta(days=1)
-      else:
-        get_timestamp = get_timestamp -datetime.timedelta(days=30)
-      if must_download_flag:
-        if not stock_basic.empty:
+      date_str = get_timestamp.strftime('%Y%m%d')
+      date_int = int(date_str)
+      if date_int > stock_basic_dates.values[-1]:
+        if date_int in stock_basic_dates.values:
+          stock_basic = stock_basic_datas[stock_basic_dates==date_int]
           break
-      else:
-        if not stock_basic.empty:
-          break
-        if try_cnt==MAX_DOWNLOAD_TIMES:
-          break
-      try_cnt = try_cnt + 1
-    return stock_basic,try_cnt
-  
-  def get_stocks_basic(self):
-    pd_skipstock = []
-    for stock in self.stock_codes:
-      stock_store = stock
-      if int(stock)<600000:
-        stock = stock + '.SZ'
-      else:
-        stock = stock + '.SH'
-      data_main = self.FLD.load_all_financial_one_stock(stock_store)
-      dates = data_main['main'].columns[1:self.FLD.min_column]
-      #download_dates=[]
-      pre_stock_basic,try_cnt = self.get_daily_basic(stock,dates[0],True)
-      if pre_stock_basic.empty:
-        pd_skipstock.append(stock)
-        print('skip this stock', stock,'try_cnt',try_cnt)
-        continue
-      for get_date in dates:
-        print('get_date',get_date)
-        stock_basic,try_cnt = self.get_daily_basic(stock,get_date,False)
-        print('stock is', stock, 'date is', get_date)
-        if try_cnt==MAX_DOWNLOAD_TIMES:
-          #download_dates.append(get_date)
-          stock_basic = pre_stock_basic
-        if get_date == dates[0]:
-          pd_stock = stock_basic
         else:
-          pd_stock = pd_stock.append(stock_basic)
-        pre_stock_basic = stock_basic
-        print('stock',stock,'try_cnt',try_cnt,'finished download')
+          get_timestamp = get_timestamp - datetime.timedelta(days=1)
+      else:
+        stock_basic = stock_basic_datas.tail(1)
+        break
+    return stock_basic
+  
+  def processed_stocks_basic(self):
+    for stock in self.stock_codes:
+      data_main = self.FLD.load_all_financial_one_stock(stock)
+      dates = data_main['main'].columns[1:self.FLD.min_column]
+      stock_basic_datas = self.FLD.load_all_stock_basic_one_stock([stock])
+      stock_basic_datas = stock_basic_datas[stock]
+      pd_stock = pd.DataFrame(columns=stock_basic_datas.columns)
+      for get_date in dates:
+        print('stock is', stock, 'date is', get_date)
+        stock_basic = self.processed_daily_basic(stock_basic_datas,get_date)
+        pd_stock = pd_stock.append(stock_basic)
       pd_stock.index = dates
-      path_csv = os.path.join(self.path,stock_store+'_basic.csv')
+      path_csv = self.stock_processed_basic_path.format(stock)
       pd_stock.to_csv(path_csv)
       print('this stock',stock, 'successfully downloaded')
-    path_csv = os.path.join(self.path,'skip_stock_basic.csv')
-    pd_skipstock = pd.Series(pd_skipstock)
-    pd_skipstock.to_csv(path_csv)
     
-if __name__ == '__main__':
+def download_all_stocks():
   path_root = '../../../data/'
   #stock_codes = ['000001']
   stock_codes = FD.ts_stock_codes()
@@ -136,4 +117,20 @@ if __name__ == '__main__':
   SB = stock_basic(stock_codes, path_root)
     #SB.get_stocks_basic()
   SB.get_all_stocks_basic()
+  print('downloaded successfully')
+
+def processed_all_stocks():
+  path_root = '../../../data/'
+  scu = SCU(path=path_root)
+  
+  stock_codes = scu.stock_codes_remove_no_stock_basic()
+  #stock_codes = ['001965']
+  #get_dates = ['2018/6/30']
+  SB = stock_basic(stock_codes, path_root)
+    #SB.get_stocks_basic()
+  SB.processed_stocks_basic()
+  print('processed successfully')
+if __name__ == '__main__':
+  #download_all_stocks()
+  processed_all_stocks()
   pass

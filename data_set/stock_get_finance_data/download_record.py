@@ -35,5 +35,5 @@ class download_record:
     
   def read_skip_stock(self):
     data = pd.read_csv(self.path_skip_file)
-    return data
+    return data.loc[:,'stock']
     
