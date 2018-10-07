@@ -30,6 +30,8 @@ finance_index_dic = {
 class financail_factor_calc:
   def __init__(self, path='../../../data/'):
     self.path = path
+    if not os.path.exists(path):
+      os.makedirs(path)
     self.FLS = FLS(path)
   def ab_ratio_calc(self, a,b,str):
     data = a/b
@@ -65,11 +67,12 @@ class financail_factor_calc:
     earning = self.FLS.fetch_one_financial_factor_in_stock('profit','净利润(万元)')
     interest = self.FLS.fetch_one_financial_factor_in_stock('profit','利息支出(万元)')
     tax0 = self.FLS.fetch_one_financial_factor_in_stock('profit','所得税费用(万元)')
-    tax1 = self.FLS.fetch_one_financial_factor_in_stock('profit','营业税金及附加(万元)')
+    #tax1 = self.FLS.fetch_one_financial_factor_in_stock('profit','营业税金及附加(万元)')
     cost = self.FLS.fetch_one_financial_factor_in_stock('profit','营业总成本(万元)')
-    EBIT = earning + interest + tax0 + tax1
+    EBIT = earning + interest + tax0
    
     equity = self.FLS.fetch_one_financial_factor_in_stock('loans','所有者权益(或股东权益)合计(万元)')
+    debt_total = self.FLS.fetch_one_financial_factor_in_stock('loans','负债合计(万元)')
     intangible_asset = self.FLS.fetch_one_financial_factor_in_stock('loans','无形资产(万元)')
     dev_cost = self.FLS.fetch_one_financial_factor_in_stock('loans','开发支出(万元)')
     goodwell = self.FLS.fetch_one_financial_factor_in_stock('loans','商誉(万元)')
@@ -81,6 +84,9 @@ class financail_factor_calc:
     amortize0 = self.FLS.fetch_one_financial_factor_in_stock('cash',' 无形资产摊销(万元)')
     amortize1 = self.FLS.fetch_one_financial_factor_in_stock('cash',' 长期待摊费用摊销(万元)')
     excess_cash = self.FLS.fetch_one_financial_factor_in_stock('cash',' 现金的期末余额(万元)')
+    #cash_quivalent = self.FLS.fetch_one_financial_factor_in_stock('cash',' 期末现金及现金等价物余额(万元)')
+    cash_quivalent = self.FLS.fetch_one_financial_factor_in_stock('cash',' 加:期初现金及现金等价物余额(万元)')
+    
     divedends = self.FLS.fetch_one_financial_factor_in_stock('cash',' 分配股利、利润或偿付利息所支付的现金(万元)')
     EBITDA = EBIT + depreciation +amortize0 + amortize1
  
@@ -94,7 +100,7 @@ class financail_factor_calc:
     roa = self.ab_ratio_calc(earning,asset,'roa')
     pd_data = pd.concat([pd_data, roa], axis=1)
     #roi
-    roi = self.abc_ratio_calc(earning,asset,excess_cash,finance_index_dic['roi'],'sub')*100
+    roi = self.ab_ratio_calc(EBIT-tax0,equity+debt_total-cash_quivalent,'roi')
     pd_data = pd.concat([pd_data, roi], axis=1)
     #profit_revenue
     profit_revenue = self.ab_ratio_calc(earning,revenue,finance_index_dic['profit_revenue'])
@@ -168,8 +174,8 @@ class financail_factor_calc:
     NCO2A = self.ab_ratio_calc(noncurrent_asset,asset,finance_index_dic['NCO2A'])
     pd_data = pd.concat([pd_data, NCO2A], axis=1)
     #E2EV
-    NCO2A = self.ab_ratio_calc(earning,EV,finance_index_dic['E2EV'])
-    pd_data = pd.concat([pd_data, NCO2A], axis=1)
+    E2EV = self.ab_ratio_calc(earning,EV,finance_index_dic['E2EV'])
+    pd_data = pd.concat([pd_data, E2EV], axis=1)
     
     
     pd_data.index = self.FLS.all_financial_one_stock['main'].iloc[0,:].index[1:]
