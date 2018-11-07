@@ -71,7 +71,7 @@ if __name__ == '__main__':
     elif opt in ("-d", "--date"):
         date = arg
     elif opt in ("-a", "--algorithm"):
-        alg = arg
+        alg = int(arg)
   path = '../../../data/finance_processed'
   path_score = '../../../data/score'
   path_score_cluster = outputfile
