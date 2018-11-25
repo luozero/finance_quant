@@ -100,8 +100,10 @@ class stock_basic:
       stock_basic_datas = self.FLD.load_all_stock_basic_one_stock([stock])
       stock_basic_datas = stock_basic_datas[stock]
       pd_stock = pd.DataFrame(columns=stock_basic_datas.columns)
+      times = 0
       for get_date in dates:
-        print('stock is', stock, 'date is', get_date)
+        times = times + 1
+        print('stock is', stock, 'date is', get_date, 'fetch time', times)
         stock_basic = self.processed_daily_basic(stock_basic_datas,get_date)
         pd_stock = pd_stock.append(stock_basic)
       pd_stock.index = dates

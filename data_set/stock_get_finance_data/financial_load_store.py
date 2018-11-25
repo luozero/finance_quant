@@ -13,7 +13,7 @@ class financial_load_store:
     if not os.path.exists(self.path_finance_processed):
       os.makedirs(self.path_finance_processed)
     self.path_finance_processed = os.path.join(self.path_finance_processed,'{}_processed_finance.csv')
-    self.path_stock_basic = os.path.join(path,'stock_basic')
+    self.path_stock_basic = os.path.join(path,'stock_basic','{}_basic.csv')
     self.path_processed_stock_basic = os.path.join(path,'processed_stock_basic','{}_basic.csv')
     
     self.stock_codes = stock_codes
@@ -82,6 +82,14 @@ class financial_load_store:
   def load_all_stock_basic_one_stock(self,stock_codes):
     data_basic = {}
     for stock in stock_codes:
+      path_csv = os.path.join(self.path_stock_basic.format(stock))
+      pd_basic = pd.read_csv(path_csv,index_col=0)
+      data_basic[stock] = pd_basic
+    self.stock_basic = data_basic
+    return data_basic
+  def load_all_processed_stock_basic_one_stock(self,stock_codes):
+    data_basic = {}
+    for stock in stock_codes:
       path_csv = os.path.join(self.path_processed_stock_basic.format(stock))
       pd_basic = pd.read_csv(path_csv,index_col=0)
       data_basic[stock] = pd_basic
@@ -91,7 +99,7 @@ class financial_load_store:
     data = self.stock_basic[stock]
     data = data.T
     data1 = data.loc[factor].values.squeeze()
-    data1 = np.float32(data1[:-TAIL_MARGIN])
+    data1 = np.float32(data1)
     return data1
   
 if __name__ == '__main__':

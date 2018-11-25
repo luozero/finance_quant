@@ -11,6 +11,8 @@ Created on 2018��10��4��
 '''
 class stock_codes_utility:
   def __init__(self,path='../../../data/'):
+    ts.set_token('857448afe8a838163de2ea7e3555468ca0f314a424ad47da078c9265')
+    self.pro = ts.pro_api()
     self.DR = DR(path=path,skip = 'skip_stock.csv')
     self.processing_DR = DR(path=path,skip = 'process_stock.csv')
   

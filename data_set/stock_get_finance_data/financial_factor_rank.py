@@ -70,6 +70,7 @@ class financial_factor_rank:
     pd_indexs['rank'] = pd_mean_scores.values
     pd_indexs = pd_indexs.sort_values("rank",axis=0,ascending=False)
     pd_indexs.to_csv(self.path_cluster, encoding='ANSI')
+    print(self.path_cluster)
     
       
 #python financial_factor_rank.py -f rank_output
@@ -110,7 +111,8 @@ if __name__ == '__main__':
     #FID['cash_incr_rate'],\
     #FID['asset_incr_rate'],\
   ]
-  dates = ['2018-06-30','2017-12-31','2016-12-31']#,'2017-12-31'
+  dates = ['2018-09-30','2018-06-30','2017-12-31','2016-12-31','2015-12-31','2014-12-31']#,'2017-12-31'
+  dates = ['2018-09-30','2018-06-30','2018-03-31','2017-12-31','2017-09-30','2017-06-30','2017-03-31']#,'2017-12-31'
   ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster = path_rank, stocks = stocks, dates = dates, indexs = indexs, file_name = filename)
   """ 
   FID['debt_incr_rate'],\

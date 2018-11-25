@@ -189,7 +189,7 @@ def main_financial_data_process(path):
   for stock_code in stock_codes:
     print("stock:",stock_code)
     FFC.FLS.load_all_financial_one_stock(stock_code)
-    FFC.FLS.load_all_stock_basic_one_stock([stock_code])
+    FFC.FLS.load_all_processed_stock_basic_one_stock([stock_code])
     data_processed = FFC.financial_index_calc(stock_code)
     FFC.FLS.store_process_financical_data(data_processed, stock_code)
     
