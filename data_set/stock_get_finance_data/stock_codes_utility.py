@@ -26,8 +26,9 @@ class stock_codes_utility:
     if not os.path.exists(self.processing_DR.path_stock_rec):
       stock_codes = self.stock_codes()
       skip_stocks = self.DR.read_skip_stock()
-      for stock in skip_stocks:
-        stock_codes.remove(stock[:-3])
+      if skip_stocks != False:
+        for stock in skip_stocks:
+          stock_codes.remove(stock[:-3])
       stock_codes_store = self.add_allstock_sh_sz(stock_codes)
       self.processing_DR.write_stock(stock_codes_store)
     else:
