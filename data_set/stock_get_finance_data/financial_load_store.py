@@ -30,7 +30,7 @@ class financial_load_store:
       ite = ite.format(stock_code)
       csv_file_path = os.path.join(self.path_finance, FILE_LIST[ite].format(stock_code))
       if os.path.exists(csv_file_path):
-        data = pd.read_csv(csv_file_path, encoding='ANSI',error_bad_lines=False)
+        data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
         if(data.shape[1]<min_column):
             min_column = data.shape[1]
         data = data.replace('--', 0)
@@ -65,14 +65,14 @@ class financial_load_store:
   '''processed financial data'''
   def store_process_financical_data(self, data, stock_code):
     csv_file_path = self.path_finance_processed.format(stock_code)
-    data.to_csv(csv_file_path, encoding='ANSI')
+    data.to_csv(csv_file_path, encoding='gbk')
   def load_process_financical_data(self, stock_code):
     csv_file_path = self.path_finance_processed.format(stock_code)
     if not os.path.exists(csv_file_path):
       print('load_process_financical_data not exsit this file', stock_code)
       exit(-1)
     if os.path.exists(csv_file_path):
-      data_pd = pd.read_csv(csv_file_path, encoding='ANSI')
+      data_pd = pd.read_csv(csv_file_path, encoding='gbk')
       data_pd.index = data_pd.iloc[:,0]
     else:
       return pd.DataFrame()

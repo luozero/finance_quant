@@ -18,7 +18,7 @@ class WorldIndexDownload(object):
   def __init__(self, path = '../../../data/world_index',start='2015-01-01',end='2015-01-05'):
     if not os.path.exists(path):
             os.makedirs(path)
-    self.index_dic = pd.read_csv('./parameter world index.csv', encoding='ANSI')
+    self.index_dic = pd.read_csv('./parameter world index.csv', encoding='gbk')
     self.date_start = start
     self.date_end = end
     self.path = os.path.join(path,'{}.csv')

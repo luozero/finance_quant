@@ -56,6 +56,27 @@ class stock_codes_utility:
       stock_rm_shsz.append(self.rm_stock_sh_sz(stock))
     return stock_rm_shsz
   
+  def add_stock_xshg_xshe(self,stock):
+    if int(stock)<600000:
+      stock = stock + '.XSHE'
+    else:
+      stock = stock + '.XSHG'
+    return stock
+  
+  def rm_stock_xshg_xshe(self,stock):
+    stock = stock[:-5]
+    return stock
+  def add_allstock_xshg_xshe(self,stocks):
+    add_stock_xshg_xshe = []
+    for stock in stocks:
+      add_stock_xshg_xshe.append(self.add_stock_xshg_xshe(stock))
+    return add_stock_xshg_xshe
+  def rm_allstock_xshg_xshe(self,stocks):
+    rm_stock_xshg_xshe = []
+    for stock in stocks:
+      rm_stock_xshg_xshe.append(self.rm_stock_xshg_xshe(stock))
+    return rm_stock_xshg_xshe
+  
 if __name__ == '__main__':
   SCU = stock_codes_utility(path='../../../data/')
   stock_codes = SCU.stock_codes_remove_no_stock_basic()

@@ -3,6 +3,7 @@ from urllib import request
 import os
 import tushare as ts
 import pandas as pd
+from download_record import download_record as DR
 
 MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
 ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
@@ -89,8 +90,11 @@ if __name__ == '__main__':
   if not os.path.exists(path):
             os.makedirs(path)
             
-  download_stock_file = os.path.join(path_root,'stock_index.csv')
-  stock_index = read_stock_index(download_stock_file)
+ # download_stock_file = os.path.join(path_root,'stock_index.csv')
+  #stock_index = read_stock_index(download_stock_file)
+  
+  dr = DR(path_root,'finance_download_record.json')
+  stock_index = dr.read_index()
   stock_codes = stock_codes[stock_index:]
   
   for stock in (stock_codes):
@@ -98,7 +102,8 @@ if __name__ == '__main__':
     continue_download_this_stock = 1
     while continue_download_this_stock == 1:
         continue_download_this_stock = fetch_stock_finance_data(path,stock)
-    store_stock_index(download_stock_file, stock_index)
+   # store_stock_index(download_stock_file, stock_index)
+    dr.write_index(stock_index)
     stock_index = stock_index + 1
     print("fetched stock",stock)
   

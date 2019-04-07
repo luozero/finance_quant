@@ -20,7 +20,7 @@ class WorldIndexProcess(object):
   classdocs
   '''
   def __init__(self, path = '../../../data/',days=1):
-    self.index_dic = pd.read_csv('./parameter world index.csv', encoding='ANSI')
+    self.index_dic = pd.read_csv('./parameter world index.csv', encoding='gbk')
     self.date_start = start
     self.date_end = end
     self.path_load = os.path.join(path,'world_index','{}.csv')
@@ -86,7 +86,7 @@ class WorldIndexProcess(object):
   def world_index_load_align(self,start,end):
     if not os.path.exists(self.path_return):
       self.world_index_raw_log_return()
-    index_dic = pd.read_csv(self.path_select, encoding='ANSI')
+    index_dic = pd.read_csv(self.path_select, encoding='gbk')
     index_name = index_dic.iloc[0]
     pd_data_merge = self.world_index_get(index_name[0], index_name[1],start,end)
     for index_name in  index_dic.iloc[1:].iterrows():
@@ -108,7 +108,7 @@ class WorldIndexProcess(object):
   def world_index_plot(self):
     if not os.path.exists(self.path_return):
       self.world_index_raw_log_return()
-    index_dic = pd.read_csv(self.path_return, encoding='ANSI')
+    index_dic = pd.read_csv(self.path_return, encoding='gbk')
     for index_name in  index_dic.iterrows():
       index = index_name[1].loc['index']
       name = index_name[1].loc['name']

@@ -69,7 +69,7 @@ class financial_factor_rank:
     #pd_mean_scores = pd_mean_scores.sort_values(axis=0,ascending=False)
     pd_indexs['rank'] = pd_mean_scores.values
     pd_indexs = pd_indexs.sort_values("rank",axis=0,ascending=False)
-    pd_indexs.to_csv(self.path_cluster, encoding='ANSI')
+    pd_indexs.to_csv(self.path_cluster, encoding='gbk')
     print(self.path_cluster)
     
       

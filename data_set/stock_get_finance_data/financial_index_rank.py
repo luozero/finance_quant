@@ -68,7 +68,7 @@ class financial_index_rank:
           print('processing index is', index)
           [pd_index, pd_score] = self.assess_one_financial_index(index, [date])
           pd_indexs = pd.concat([pd_indexs, pd_index], axis=1)
-        pd_indexs.to_csv(pd_indexs_path, encoding='ANSI')
+        pd_indexs.to_csv(pd_indexs_path, encoding='gbk')
       else:
         pd_indexs = pd.read_csv(pd_indexs_path,index_col=0)
       fecth_indexs[date] = pd_indexs
@@ -85,9 +85,9 @@ class financial_index_rank:
     
     pd_mean_scores = pd_scores.mean(axis=1)
     pd_mean_scores = pd_mean_scores.sort_values(axis=0,ascending=False)
-    pd_mean_scores.to_csv(self.path_overview_scores, encoding='ANSI')
-    pd_scores.to_csv(self.path_index_score, encoding='ANSI')
-    pd_indexs.to_csv(self.path_index, encoding='ANSI')
+    pd_mean_scores.to_csv(self.path_overview_scores, encoding='gbk')
+    pd_scores.to_csv(self.path_index_score, encoding='gbk')
+    pd_indexs.to_csv(self.path_index, encoding='gbk')
     
       
     
