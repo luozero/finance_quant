@@ -111,8 +111,8 @@ class stock_basic:
       pd_stock.to_csv(path_csv)
       print('this stock',stock, 'successfully downloaded')
     
-def download_all_stocks():
-  path_root = '../../../data/'
+def download_all_stocks_basic(path_root = '../../../data/'):
+
   #stock_codes = ['000001']
   stock_codes = FD.ts_stock_codes()
   #get_dates = ['2018/6/30']
@@ -121,8 +121,8 @@ def download_all_stocks():
   SB.get_all_stocks_basic()
   print('downloaded successfully')
 
-def processed_all_stocks():
-  path_root = '../../../data/'
+def processed_all_stocks_basic(path_root = '../../../data/'):
+
   scu = SCU(path=path_root)
   
   stock_codes = scu.stock_codes_remove_no_stock_basic()
@@ -132,7 +132,8 @@ def processed_all_stocks():
     #SB.get_stocks_basic()
   SB.processed_stocks_basic()
   print('processed successfully')
+
 if __name__ == '__main__':
-  #download_all_stocks()
-  processed_all_stocks()
+  download_all_stocks_basic()
+  processed_all_stocks_basic()
   pass

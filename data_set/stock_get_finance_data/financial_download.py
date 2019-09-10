@@ -80,32 +80,30 @@ def store_stock_index(download_stock_file, stock_index):
   his = pd.Series(stock_index)
   his.to_csv(download_stock_file)
 
-if __name__ == '__main__':
-  
-  stock_codes=ts_stock_codes()
-  
-  path_root = '../../../data/'
-  
-  path = os.path.join(path_root,'finance')
+def download_finance(path_root = '../../../data/'):
+
+  stock_codes = ts_stock_codes()
+
+  path = os.path.join(path_root, 'finance')
   if not os.path.exists(path):
-            os.makedirs(path)
-            
- # download_stock_file = os.path.join(path_root,'stock_index.csv')
-  #stock_index = read_stock_index(download_stock_file)
-  
-  dr = DR(path_root,'finance_download_record.json')
+    os.makedirs(path)
+
+  dr = DR(path_root, 'finance_download_record.json')
   stock_index = dr.read_index()
   stock_codes = stock_codes[stock_index:]
-  
+
   for stock in (stock_codes):
-    print("fetching stock",stock)
+    print("fetching stock", stock)
     continue_download_this_stock = 1
     while continue_download_this_stock == 1:
-        continue_download_this_stock = fetch_stock_finance_data(path,stock)
-   # store_stock_index(download_stock_file, stock_index)
+      continue_download_this_stock = fetch_stock_finance_data(path, stock)
+    # store_stock_index(download_stock_file, stock_index)
     dr.write_index(stock_index)
     stock_index = stock_index + 1
-    print("fetched stock",stock)
+    print("fetched stock", stock)
+
+if __name__ == '__main__':
+  download_finance()
   
 
 

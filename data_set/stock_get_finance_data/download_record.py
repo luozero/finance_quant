@@ -34,7 +34,7 @@ class download_record:
     pd_skip.to_csv(self.path_stock_rec, index = False)
     
   def read_skip_stock(self):
-    if os.path.exists(self.path_stock_re):
+    if os.path.exists(self.path_stock_rec):
       data = pd.read_csv(self.path_stock_rec)
       return data.loc[:,'stock']
     else:
@@ -47,4 +47,3 @@ class download_record:
   def read_stock(self):
     data = pd.read_csv(self.path_stock_rec)
     return data.loc[:,'stock']
-    
