@@ -4,6 +4,8 @@ import numpy as np
 import os
 import tushare as ts
 from download_record import download_record as DR
+
+KECHUANG_CODE = "688000"
 '''
 Created on 2018��10��4��
 
@@ -19,6 +21,11 @@ class stock_codes_utility:
   def stock_codes(self):
     basic_data = ts.get_stock_basics()
     stock_codes = list(basic_data.index)
+
+    for i,v in enumerate(stock_codes):
+      if v > KECHUANG_CODE:
+        del stock_codes[i]
+
     stock_codes.sort()
     return stock_codes
     

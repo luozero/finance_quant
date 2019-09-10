@@ -4,6 +4,7 @@ import os
 import tushare as ts
 import pandas as pd
 from download_record import download_record as DR
+from stock_codes_utility import stock_codes_utility as SCU
 
 MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
 ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
@@ -82,7 +83,9 @@ def store_stock_index(download_stock_file, stock_index):
 
 def download_finance(path_root = '../../../data/'):
 
-  stock_codes = ts_stock_codes()
+  scu = SCU(path_root)
+  stock_codes = scu.stock_codes()
+  #stock_codes = ts_stock_codes()
 
   path = os.path.join(path_root, 'finance')
   if not os.path.exists(path):
