@@ -1,5 +1,4 @@
 import financial_download as FD
-from stock_codes_utility import stock_codes_utility as SCU
 from stock_basic import *
 
 def stock_basic_finance_download(path_root='../../../data/'):

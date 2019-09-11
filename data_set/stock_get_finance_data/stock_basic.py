@@ -44,6 +44,11 @@ class stock_basic:
   
   def get_all_stocks_basic(self): 
     process_index = self.DR.read_index()
+
+    if(process_index >= len(self.stock_codes)):
+      print("finished to download all the stock, number is ", len(self.stock_codes))
+      return
+
     print('process_index',process_index)
     for stock in self.stock_codes[process_index:]:
       print('stock', stock, 'is downloading','process_index',process_index)
@@ -114,7 +119,8 @@ class stock_basic:
 def download_all_stocks_basic(path_root = '../../../data/'):
 
   #stock_codes = ['000001']
-  stock_codes = FD.ts_stock_codes()
+  scu = SCU(path_root)
+  stock_codes = scu.stock_codes()
   #get_dates = ['2018/6/30']
   SB = stock_basic(stock_codes, path_root)
     #SB.get_stocks_basic()
@@ -123,7 +129,7 @@ def download_all_stocks_basic(path_root = '../../../data/'):
 
 def processed_all_stocks_basic(path_root = '../../../data/'):
 
-  scu = SCU(path=path_root)
+  scu = SCU(path_root)
   
   stock_codes = scu.stock_codes_remove_no_stock_basic()
   #stock_codes = ['001965']

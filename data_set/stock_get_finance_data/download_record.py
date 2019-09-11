@@ -37,8 +37,7 @@ class download_record:
     if os.path.exists(self.path_stock_rec):
       data = pd.read_csv(self.path_stock_rec)
       return data.loc[:,'stock']
-    else:
-      return False
+    return pd.DataFrame()
   
   def write_stock(self,stock):
     pd_skip = pd.DataFrame(stock,columns=['stock'])
