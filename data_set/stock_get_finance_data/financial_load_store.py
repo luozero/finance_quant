@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import os
+from download_record import download_record as DR
 import tushare as ts
 FILE_LIST = {'main':'{}_main.csv','abstract':'{}_abstract.csv','profit':'{}_profit.csv','cash':'{}_cash.csv','loans':'{}_loans.csv'}
 TAIL_MARGIN = 1
@@ -17,6 +18,8 @@ class financial_load_store:
     self.path_processed_stock_basic = os.path.join(path,'processed_stock_basic','{}_basic.csv')
     
     self.stock_codes = stock_codes
+
+    self.dr = DR(path);
     #self.load_stock_basic()
   '''financial data'''
   def load_financical_data(self, stock_code,file_list):
@@ -107,7 +110,7 @@ if __name__ == '__main__':
   stock_codes = '000001'
   FLS = financial_load_store(path_root)
 
-  data = FLS.load_one_financial_one_stock('000001', ['main'])
+  data = FLS.load_one_financial_one_stock('300789', ['main'])
   
   #data = FLS.load_all_financial_one_stock('000001')
   
