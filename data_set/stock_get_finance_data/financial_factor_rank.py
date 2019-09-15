@@ -4,9 +4,9 @@ Created on 2018��9��17��
 
 @author: ll
 '''
-import financial_factor_calc as FFC
-from financial_factor_calc import finance_index_dic as FID
-from financial_factor_io import financial_factor_io as FIO
+import stock_deeplearning.data_set.stock_get_finance_data.financial_factor_calc as FFC
+from stock_deeplearning.data_set.stock_get_finance_data.financial_factor_calc import finance_index_dic as FID
+from stock_deeplearning.data_set.stock_get_finance_data.financial_factor_io import financial_factor_io as FIO
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 import pandas as pd
 import os
@@ -44,7 +44,7 @@ class financial_factor_rank:
   
   def assess_one_financial_factor(self, index):
     score_series = pd.Series(dtype=float)
-    len_dates = len(dates)
+    #len_dates = len(dates)
     factor_series = self.fetch_factors.loc[:,index]
     factor_series_sorted = factor_series.sort_values(axis=0,ascending=False) #sorted(factor_series.items(), key = lambda d:d[1],reverse = True)
     stock_len = len(factor_series_sorted)
@@ -70,7 +70,33 @@ class financial_factor_rank:
     pd_indexs = pd_indexs.sort_values("rank",axis=0,ascending=False)
     pd_indexs.to_csv(self.path_cluster, encoding='gbk')
     print(self.path_cluster)
-    
+
+
+def financial_factors_rank(path_root, filename = 'rank_result',
+                           dates = ['2018-09-30'], factors = [FID['roe'], FID['roa']]):
+  path = os.path.join(path_root)
+  path_score = os.path.join(path_root, 'score')
+  path_rank = os.path.join(path_root, 'rank')
+  path_factor = os.path.join(path_root, 'factor_io')
+
+  scu = SCU(path=path_root)
+  stocks = scu.stock_codes_remove_no_stock_basic()
+
+  ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster=path_rank, stocks=stocks, dates=dates,
+                              indexs=factors, file_name=filename)
+  """ 
+  FID['debt_incr_rate'],\
+  ###asset struct
+  FID['debt_asset_ratio'],\
+  FID['debt_equality_ratio'],\
+  FID['debt_net_asset_ratio'],\
+  FID['revenue_asset_ratio'],\
+  FID['goodwell_equality_ratio'],\
+  FID['dev_rev_ratio']\
+  """
+
+  ffr.assess_selected_financial_factor(dates)
+  print('rank all the stock successfully');
       
 #python financial_factor_rank.py -f rank_output
 if __name__ == '__main__':

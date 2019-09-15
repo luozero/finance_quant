@@ -2,8 +2,9 @@
 import pandas as pd
 import numpy as np
 import os
-from financial_load_store import financial_load_store as FLS
+from stock_deeplearning.data_set.stock_get_finance_data.financial_load_store import financial_load_store as FLS
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
+from stock_deeplearning.ultility.download_record import download_record as DR
 
 finance_index_dic = {
   #####earning capacity
@@ -183,13 +184,20 @@ def main_financial_data_process(path):
   scu = SCU(path=path)
   stock_codes = scu.stock_codes_remove_no_stock_basic()
   FFC =financail_factor_calc(path=path)
+  dr = DR(path, 'stock_finance_factor_calc.json')
   #stock_codes = ['000001']
+  proc_id = dr.read_index()
+  stock_codes = stock_codes[proc_id:]
+
   for stock_code in stock_codes:
     print("stock:",stock_code)
     FFC.FLS.load_all_financial_one_stock(stock_code)
     FFC.FLS.load_all_processed_stock_basic_one_stock([stock_code])
     data_processed = FFC.financial_index_calc(stock_code)
     FFC.FLS.store_process_financical_data(data_processed, stock_code)
+
+    proc_id = proc_id + 1
+    dr.write_index(proc_id)
     
 if __name__ == '__main__':
   #stock_codes = ['000001','000002','000004']

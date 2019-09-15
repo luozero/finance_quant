@@ -50,7 +50,7 @@ class financial_load_store:
     self.min_column = min_column
     for ite in file_list:
       if data_file[ite].empty == False:
-        data_file[ite] = data.iloc[:, : self.min_column-TAIL_MARGIN]
+        data_file[ite] = data_file[ite].iloc[:, : self.min_column-TAIL_MARGIN]
       else:
         data_file[ite] = pd.DataFrame()
     return data_file
