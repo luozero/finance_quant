@@ -2,10 +2,8 @@
 import pandas as pd
 import numpy as np
 import os
-import tushare as ts
-import financial_download
 from financial_load_store import financial_load_store as FLS
-from stock_codes_utility import stock_codes_utility as SCU
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
 finance_index_dic = {
   #####earning capacity

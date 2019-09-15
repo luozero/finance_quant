@@ -2,8 +2,9 @@
 import pandas as pd
 import numpy as np
 import os
-from download_record import download_record as DR
-import tushare as ts
+from stock_deeplearning.ultility.download_record import download_record as DR
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
+
 FILE_LIST = {'main':'{}_main.csv','abstract':'{}_abstract.csv','profit':'{}_profit.csv','cash':'{}_cash.csv','loans':'{}_loans.csv'}
 TAIL_MARGIN = 1
 class financial_load_store:
@@ -19,7 +20,8 @@ class financial_load_store:
     
     self.stock_codes = stock_codes
 
-    self.dr = DR(path);
+    self.dr = DR(path)
+    self.scu = SCU(path)
     #self.load_stock_basic()
   '''financial data'''
   def load_financical_data(self, stock_code,file_list):
@@ -40,13 +42,19 @@ class financial_load_store:
         data = data.replace('_', 0)
         data = data.fillna(0)
       else:
-        print('this file is not exist',FILE_LIST[ite])
-        exit(-1)
+        print('stock :', stock_code, 'this file is not exist', FILE_LIST[ite])
+        self.dr.write_skip_stock(self.scu.add_stock_sh_sz(stock_code))
+        data = pd.DataFrame()
+        #exit(-1)
       data_file[ite]=(data)
     self.min_column = min_column
     for ite in file_list:
-      data_file[ite] = data_file[ite].iloc[:, : self.min_column-TAIL_MARGIN]
+      if data_file[ite].empty == False:
+        data_file[ite] = data.iloc[:, : self.min_column-TAIL_MARGIN]
+      else:
+        data_file[ite] = pd.DataFrame()
     return data_file
+
   def load_all_financial_one_stock(self, stock_code):
     file_list = ['main','abstract','profit','cash','loans']
     data = self.load_financical_data(stock_code, file_list)

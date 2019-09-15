@@ -8,10 +8,10 @@ import tushare as ts
 import pandas as pd
 import datetime
 import os
-import financial_download as FD
-from financial_load_store import financial_load_store as FLD
-from download_record import download_record as DR
-from stock_codes_utility import stock_codes_utility as SCU
+
+from stock_deeplearning.data_set.stock_get_finance_data.financial_load_store import financial_load_store as FLD
+from stock_deeplearning.ultility.download_record import download_record as DR
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 MAX_DOWNLOAD_TIMES = 50
 
 class stock_basic:
@@ -30,7 +30,8 @@ class stock_basic:
     self.stock_processed_basic_path = os.path.join(path,'{}_basic.csv')
     self.stock_codes = stock_codes
     self.FLD = FLD(path=path_root)
-    self.DR = DR(path_root,'stock_basic.json')
+    self.download_dr = DR(path_root,'stock_basic.json')
+    self.proc_dr = DR(path_root, 'stock_basic_proc.json')
     
   def try_download_csv(self,ts_code,date):
     stock_basic = pd.DataFrame()
@@ -43,7 +44,7 @@ class stock_basic:
     return continue_download_this_stock, stock_basic
   
   def get_all_stocks_basic(self): 
-    process_index = self.DR.read_index()
+    process_index = self.download_dr.read_index()
 
     if(process_index >= len(self.stock_codes)):
       print("finished to download all the stock, number is ", len(self.stock_codes))
@@ -66,7 +67,7 @@ class stock_basic:
           print('stock', stock, 'try times', try_cnt)
         if try_cnt == MAX_DOWNLOAD_TIMES:
           print('skip this stock', stock, 'try times', try_cnt)
-          self.DR.write_skip_stock(stock)
+          self.download_dr.write_skip_stock(stock)
           break
         if not stock_basic.empty:
           break
@@ -74,7 +75,7 @@ class stock_basic:
       stock_basic.to_csv(path_csv)
       print('this stock',stock, 'successfully downloaded')
       process_index = process_index + 1
-      self.DR.write_index(process_index)
+      self.download_dr.write_index(process_index)
     
   def processed_daily_basic(self,stock_basic_datas,get_date):
     try:
@@ -99,22 +100,30 @@ class stock_basic:
     return stock_basic
   
   def processed_stocks_basic(self):
+
+    proc_id = self.proc_dr.read_index();
+
     for stock in self.stock_codes:
       data_main = self.FLD.load_all_financial_one_stock(stock)
-      dates = data_main['main'].columns[1:self.FLD.min_column]
-      stock_basic_datas = self.FLD.load_all_stock_basic_one_stock([stock])
-      stock_basic_datas = stock_basic_datas[stock]
-      pd_stock = pd.DataFrame(columns=stock_basic_datas.columns)
-      times = 0
-      for get_date in dates:
-        times = times + 1
-        print('stock is', stock, 'date is', get_date, 'fetch time', times)
-        stock_basic = self.processed_daily_basic(stock_basic_datas,get_date)
-        pd_stock = pd_stock.append(stock_basic)
-      pd_stock.index = dates
-      path_csv = self.stock_processed_basic_path.format(stock)
-      pd_stock.to_csv(path_csv)
-      print('this stock',stock, 'successfully downloaded')
+
+      if data_main['main'].empty == False:
+        dates = data_main['main'].columns[1:self.FLD.min_column]
+        stock_basic_datas = self.FLD.load_all_stock_basic_one_stock([stock])
+        stock_basic_datas = stock_basic_datas[stock]
+        pd_stock = pd.DataFrame(columns=stock_basic_datas.columns)
+        times = 0
+        for get_date in dates:
+          times = times + 1
+          print('stock is', stock, 'date is', get_date, 'fetch time', times)
+          stock_basic = self.processed_daily_basic(stock_basic_datas,get_date)
+          pd_stock = pd_stock.append(stock_basic)
+        pd_stock.index = dates
+        path_csv = self.stock_processed_basic_path.format(stock)
+        pd_stock.to_csv(path_csv)
+
+        self.proc_dr.write_index(proc_id)
+        proc_id = proc_id + 1;
+        print('this stock',stock, 'successfully downloaded')
     
 def download_all_stocks_basic(path_root = '../../../data/'):
 
@@ -132,12 +141,15 @@ def processed_all_stocks_basic(path_root = '../../../data/'):
   scu = SCU(path_root)
   
   stock_codes = scu.stock_codes_remove_no_stock_basic()
-  #stock_codes = ['001965']
-  #get_dates = ['2018/6/30']
-  SB = stock_basic(stock_codes, path_root)
-    #SB.get_stocks_basic()
-  SB.processed_stocks_basic()
-  print('processed successfully')
+  proc_dr = DR(path_root, 'stock_basic_proc.json')
+  proc_id = proc_dr.read_index();
+  if (proc_id >= len(stock_codes)):
+    print("finished to proc all the stock, number is ", len(stock_codes))
+  else:
+    stock_codes = stock_codes[proc_id:]
+    sb = stock_basic(stock_codes, path_root)
+    sb.processed_stocks_basic()
+    print('processed successfully')
 
 if __name__ == '__main__':
   download_all_stocks_basic()

@@ -12,8 +12,7 @@ from sklearn.cluster import AffinityPropagation
 from sklearn.cluster import Birch
 from financial_factor_calc import finance_index_dic as FID
 from financial_factor_io import financial_factor_io as FIO
-from stock_codes_utility import stock_codes_utility as SCU
-import financial_download
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 import os
 import sys, getopt
 

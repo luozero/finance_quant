@@ -5,8 +5,7 @@ import pandas as pd
 from datetime import datetime
 sys.path.append('C:/Users/ll/Desktop/rqalpha')
 sys.path.append('../stock_get_finance_data')
-import rqalpha as rqa
-from stock_codes_utility import stock_codes_utility as SCU
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 from rqalpha.data.base_data_source import BaseDataSource
 from rqalpha.data.instrument_mixin import InstrumentMixin
 #from rqalpha.data.instrument_store import instrument_store

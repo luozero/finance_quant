@@ -8,7 +8,7 @@ from financial_load_store import financial_load_store as FLS
 from financial_factor_calc import finance_index_dic as FID
 import pandas as pd
 import os
-from stock_codes_utility import stock_codes_utility as SCU
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
 class financial_factor_io:
   def __init__(self,path = '../../../data/',path_factor = '../../../data/factor_io', \

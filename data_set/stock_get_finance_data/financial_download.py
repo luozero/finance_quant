@@ -3,8 +3,9 @@ from urllib import request
 import os
 import tushare as ts
 import pandas as pd
-from download_record import download_record as DR
-from stock_codes_utility import stock_codes_utility as SCU
+
+from stock_deeplearning.ultility.download_record import download_record as DR
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
 MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
 ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
