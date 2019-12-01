@@ -17,7 +17,7 @@ class ohlcvt_factor:
   def __init__(self, path_data='~/', path_factor='../../../data/',
                date_time = date(2019, 9, 5), count=100):
     path_factor = os.path.join(path_factor, 'ohlcvt_factor')
-    if not os.path.exists(path_factor):
+    if not os.path.isdir(path_factor):
       os.makedirs(path_factor)
     self.path_factor_ = path_factor
 

@@ -1,6 +1,8 @@
 # coding: utf8
-import os
 import sys
+sys.path.append('../../rqalpha')
+import os
+
 import pandas as pd
 from datetime import datetime
 from datetime import date
@@ -12,7 +14,7 @@ class ohlcvt_data:
   def __init__(self, path = '~/'):
     data_path = os.path.join(path, ".rqalpha")
     data_bundle_path = os.path.join(os.path.expanduser(data_path), "bundle")
-    if not exit(os.path.expanduser(data_bundle_path )):
+    if not os.path.isdir(data_bundle_path ):
       print("not exist this file", data_bundle_path)
       exit(-1)
     data_source = BaseDataSource(data_bundle_path)
@@ -32,29 +34,9 @@ class ohlcvt_data:
   #data_type = [close     high     low     open         total_turnover     volume]
   def load_all_data(self, inst_sym = '603032.XSHG',
                 date_time = date(2019, 9, 5), bar_count=100):
-    close = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
-                                                frequency='1d', fields="close", dt=date_time,
+    data = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count = bar_count,
+                                                frequency='1d', fields=["datetime", "close", "high", "low", "open", "total_turnover", "volume"], dt=date_time,
                                                 skip_suspended=False, adjust_orig=date_time)
-    data = close
-    high = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
-                                                frequency='1d', fields="high", dt=date_time,
-                                                skip_suspended=False, adjust_orig=date_time)
-    data = pd.concat([data, high], axis=1)
-    low = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
-                                                frequency='1d', fields="low", dt=date_time,
-                                                skip_suspended=False, adjust_orig=date_time)
-    data = pd.concat([data, low], axis=1)
-    open = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
-                                                frequency='1d', fields="open", dt=date_time,
-                                                skip_suspended=False, adjust_orig=date_time)
-    data = pd.concat([data, open], axis=1)
-    total_turnover = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
-                                                          frequency='1d', fields="total_turnover", dt=date_time,
-                                                          skip_suspended=False, adjust_orig=date_time)
-    data = pd.concat([data, total_turnover], axis=1)
-    volume = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
-                                                  frequency='1d', fields="volume", dt=date_time,
-                                                  skip_suspended=False, adjust_orig=date_time)
-    data = pd.concat([data, volume], axis=1)
-    data.column = ["close", "high", "low", "open", "turnover", "volume"]
+    #data = pd.DataFrame(data)
+    #data.columns = ["close", "high", "low", "open", "turnover", "volume"]
     return data

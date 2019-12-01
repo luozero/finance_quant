@@ -4,7 +4,7 @@ import sys
 import pandas as pd
 from datetime import datetime
 from datetime import date
-sys.path.append('C:/Users/ll/Desktop/rqalpha')
+sys.path.append('../../rqalpha')
 sys.path.append(r'../../../')
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 from rqalpha.data.base_data_source import BaseDataSource
@@ -26,8 +26,11 @@ stocks = scu.stock_codes_remove_no_stock_basic()
 stocks = scu.add_allstock_xshg_xshe(stocks)
 
 #rqa.update_bundle()
-rqalpha_path = "~/.rqalpha"
+rqalpha_path = r"~/.rqalpha"
 data_bundle_path = os.path.join(os.path.expanduser(rqalpha_path), "bundle")
+if not os.path.isdir(data_bundle_path):
+  print("not exist this file", data_bundle_path)
+  exit(-1)
 data_source = BaseDataSource(data_bundle_path)
 
 Instru = InstrumentMixin(data_source._instruments._instruments)

@@ -115,8 +115,8 @@ def main_financial_statistic_process(path):
   for stock_code in stock_codes[1:]:
     sum_data = sum_data + statistic_stock_data[stock_code].iloc[-statistic_stock_min_len:,:]
   pct_data = sum_data.pct_change(periods=4)
-  pct_data.to_csv(store_path+'statistic_pct.csv');
-  sum_data.to_csv(store_path+'statistic_sum.csv');
+  pct_data.to_csv(store_path+'statistic_pct.csv')
+  sum_data.to_csv(store_path+'statistic_sum.csv')
   #pct_data.plot.bar(pct_data.index)
   #plt.figure()
   #sum_data.plot.bar(sum_data.index)
