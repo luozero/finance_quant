@@ -1,14 +1,12 @@
 # coding: utf8
-import sys
-sys.path.append('../../rqalpha')
 import os
 
 import pandas as pd
 from datetime import datetime
 from datetime import date
 
-from stock_deeplearning.rqalpha.rqalpha.data.base_data_source import BaseDataSource
-from stock_deeplearning.rqalpha.rqalpha.data.instrument_mixin import InstrumentMixin
+from rqalpha.data.base_data_source import BaseDataSource
+from rqalpha.data.instrument_mixin import InstrumentMixin
 
 class ohlcvt_data:
   def __init__(self, path = '~/'):
@@ -21,12 +19,14 @@ class ohlcvt_data:
     self.data_source_ = data_source
 
     Instru = InstrumentMixin(data_source._instruments._instruments)
-    self.instruments_ = Instru
+    self.sym_inst_ = Instru
+    self.insts_ = data_source._instruments._instruments
+
 
   #data_type = [close     high     low     open         total_turnover     volume]
   def load_data(self, data_type = "close",
                 date_time = date(2019, 9, 5), bar_count=100):
-    data = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count=100,
+    data = self.data_source_.history_bars(instrument=self.sym_inst_.instruments(inst_sym), bar_count=100,
                                     frequency='1d', fields=data_type, dt=date_time,
                                     skip_suspended=False, adjust_orig=date_time)
     return data
@@ -34,7 +34,7 @@ class ohlcvt_data:
   #data_type = [close     high     low     open         total_turnover     volume]
   def load_all_data(self, inst_sym = '603032.XSHG',
                 date_time = date(2019, 9, 5), bar_count=100):
-    data = self.data_source_.history_bars(instrument=self.instruments_.instruments(inst_sym), bar_count = bar_count,
+    data = self.data_source_.history_bars(instrument=self.sym_inst_.instruments(inst_sym), bar_count = bar_count,
                                                 frequency='1d', fields=["datetime", "close", "high", "low", "open", "total_turnover", "volume"], dt=date_time,
                                                 skip_suspended=False, adjust_orig=date_time)
     #data = pd.DataFrame(data)

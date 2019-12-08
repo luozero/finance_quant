@@ -24,6 +24,21 @@ class download_record:
       )
       json.dump(summary, f)
 
+  def read_date(self):
+    if not os.path.exists(self.path_file):
+      return 0
+    with open(self.path_file) as f:
+        summary = json.load(f)
+    index = summary['date']
+    return index
+
+  def write_date(self, date):
+    with open(self.path_file, 'w') as f:
+      summary = dict(
+              date = date
+      )
+      json.dump(summary, f)
+
   def write_skip_stock(self,stock):
     if os.path.exists(self.path_stock_rec):
       pd_skip = pd.read_csv(self.path_stock_rec)
