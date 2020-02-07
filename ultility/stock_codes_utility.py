@@ -1,7 +1,7 @@
 # coding: utf8
 import os
 import tushare as ts
-from ultility.download_record import download_record as DR
+from stock_deeplearning.ultility.download_record import download_record as DR
 KECHUANG_CODE = "688000"
 '''
 Created on 2018��10��4��

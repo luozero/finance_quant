@@ -5,9 +5,11 @@ from datetime import date
 import pandas as pd
 import numpy as np
 sys.path.append(r'../../../')
+sys.path.append(r'../../rqalpha')
 from stock_deeplearning.data_set.rqalpha_data.ohlcvt_data import ohlcvt_data
+from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
-sys.path.append('../../rqalpha')
+
 
 class talib_factor:
   def __init__(self, path_data='~/', path_factor='../../../data/',
@@ -24,8 +26,16 @@ class talib_factor:
   def factor_calc(self, inst_sym = '603032.XSHG',
                 date_time = date(2019, 9, 5), timeperiod=14,
                   fastperiod=12, slowperiod=26, signalperiod=9):
-    factor_csv = os.path.join(self.path_factor_, inst_sym[:6] + ".csv")
+    factor_csv = os.path.join(self.path_factor_, inst_sym + ".csv")
+
     ohlcvt = self.ohlcvt_data_.load_all_data(inst_sym, date_time, self.count_)
+    try:
+        data_len = len(ohlcvt)
+    except TypeError:
+        return
+
+    if data_len < slowperiod :
+      return
     datetime = ohlcvt["datetime"]
     high = ohlcvt["high"]
     close = ohlcvt["close"]
@@ -139,7 +149,28 @@ class talib_factor:
 
     data.to_csv(factor_csv, index = False)
 
-if __name__ == '__main__':
-  talib_f = talib_factor('~/', '../../../data/', date(2019, 9, 5), 1000)
+  def is_number(self, s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+    return False
 
-  talib_f.factor_calc();
+if __name__ == '__main__':
+  scu = SCU('../../../data/');
+  talib_f = talib_factor('~/', '../../../data/', date(2019, 9, 5), 1000)
+  stock_codes = scu.stock_codes()
+  stock_codes = scu.add_allstock_xshg_xshe(stock_codes)
+
+  # stock_codes= ['002975.XSHE', '000002.XSHE']
+  for stock_code in stock_codes:
+    print("calculated stock:", stock_code);
+    talib_f.factor_calc(stock_code);
+
