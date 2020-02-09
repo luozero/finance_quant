@@ -1,12 +1,16 @@
 # stock_deeplearning
 
-this project is developing to used deep-learning to train stock base on tensorflow
+this project is developing to used deep-learning to train stock base on tensorflow and pytorch
+good material for quant stock study.
 
 env requirements,
 1, tushare
 2, tensorflow
+3, ricequant
+4, talib
 
-# volme and price trade rule
+##################################################
+# volme and price trade rule(for learning)
 run step,
 1) cd stock_process_day_data
 2) python getdata.py (get all the A stock day trade data)
@@ -30,9 +34,15 @@ close, open, high, low, volum data.
 3). cd /stock_deeplearning
 4). python train.py
 
+##################################################
+for momentum investment
 # dataset
 used to get finance data and trading data, processing them into different factor
 
 # training(developing)
 used dataset to do AI detect momentum
+
+##################################################
+financial_stock_basic_proc.py
+run this python to generate company finance rank to get the better foundmental company.
 
