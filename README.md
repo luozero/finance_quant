@@ -29,3 +29,10 @@ close, open, high, low, volum data.
 2) python getdata.py (get all the A stock day trade data)
 3). cd /stock_deeplearning
 4). python train.py
+
+# dataset
+used to get finance data and trading data, processing them into different factor
+
+# training(developing)
+used dataset to do AI detect momentum
+
