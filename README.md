@@ -10,6 +10,7 @@ env requirements,
 4, talib
 
 ##################################################
+
 # volme and price trade rule(for learning)
 run step,
 1) cd stock_process_day_data
@@ -35,6 +36,7 @@ close, open, high, low, volum data.
 4). python train.py
 
 ##################################################
+
 for momentum investment
 # dataset
 used to get finance data and trading data, processing them into different factor
@@ -43,6 +45,7 @@ used to get finance data and trading data, processing them into different factor
 used dataset to do AI detect momentum
 
 ##################################################
+
 financial_stock_basic_proc.py
 run this python to generate company finance rank to get the better foundmental company.
 
