@@ -8,6 +8,7 @@ env requirements,
 2, tensorflow
 3, ricequant
 4, talib
+5, pytorch(recommand use this framework)
 
 ##################################################
 
@@ -25,7 +26,7 @@ run step,
 3) cd easyvolumeprice
 4) python trade_ta_back_test (run macd buy and kdj sell strategy)
 
-# deep learning price predict
+# deep learning price predict(basd on tensorflow)
 
 simple user guide, without any modification, you can training 000001 stock price rate with stock('000001','000002','000018', '600000','600005','600007')
 close, open, high, low, volum data.
@@ -41,7 +42,7 @@ for momentum investment
 # dataset(folder)
 used to get finance data and trading data, processing them into different factor
 
-# training
+# training(based on pytorch)
 1) use mom_factor.py(data_set/mom_factor) to generate momentum factor
 2) use mom_training.py(training) to training and inference stock, you can only modify run folder to test 000002.XSHE.csv
 
