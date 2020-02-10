@@ -25,9 +25,9 @@ class StockLoader:
     train_input = train_input.iloc[self.train_index: self.train_num, :]
     train_data = [];
     index = 0
-    for output in train_output:
+    for label, output in train_output.iterrows():
       input = train_input.iloc[index, :]
-      train_data.append(tuple([torch.Tensor(input.values), output]))
+      train_data.append(tuple([torch.Tensor(input.values), torch.Tensor(output)]))
       index +=1
     return train_data
 
@@ -40,9 +40,9 @@ class StockLoader:
     test_input = test_input.iloc[self.test_index: self.test_num, :]
     test_data = [];
     index = 0
-    for output in test_output:
+    for label, output in test_output.iterrows():
       input = test_input.iloc[index, :]
-      test_data.append(tuple([torch.Tensor(input.values), output]))
+      test_data.append(tuple([torch.Tensor(input.values), torch.Tensor(output)]))
       index +=1
     return test_data
 

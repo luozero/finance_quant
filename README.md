@@ -38,11 +38,12 @@ close, open, high, low, volum data.
 ##################################################
 
 for momentum investment
-# dataset
+# dataset(folder)
 used to get finance data and trading data, processing them into different factor
 
-# training(developing)
-used dataset to do AI detect momentum
+# training
+1) use mom_factor.py(data_set/mom_factor) to generate momentum factor
+2) use mom_training.py(training) to training and inference stock
 
 ##################################################
 
