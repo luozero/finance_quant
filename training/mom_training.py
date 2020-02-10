@@ -93,8 +93,8 @@ def inferencing():
       print("test_output", test_output, "output", output)
       # print("total", total, "correct", correct)
 
-  print('Accuracy of the network on the ', total, 'test inputs: %d %%' % (
-      100 * correct / total))
+  # print('Accuracy of the network on the ', total, 'test inputs: %d %%' % (
+  #     100 * correct / total))
 
 PATH = '../../data/momentum_net.pth'
 stock_loader = SL("000002.XSHE", "../../data/talib_factor", 0.9, ["1day", "2day","3day","4day","5day"])
