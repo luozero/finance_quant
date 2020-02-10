@@ -43,7 +43,8 @@ used to get finance data and trading data, processing them into different factor
 
 # training
 1) use mom_factor.py(data_set/mom_factor) to generate momentum factor
-2) use mom_training.py(training) to training and inference stock
+2) use mom_training.py(training) to training and inference stock, you can only modify run folder to test 000002.XSHE.csv
+
 
 ##################################################
 
