@@ -5,10 +5,11 @@ import torch
 proc_days = 5
 
 class StockLoader:
-  def __init__(self, stock_code = "000001.XSHE", path="../../../data", t_vs_t = 0.1, train_day = "5day"):
+  def __init__(self, stock_code = "000001.XSHE", path="../../../data", t_vs_t = 0.1, train_day = "5day", train_opt = ["ADX", "ADXR"]):
     factor_csv = os.path.join(path, stock_code + ".csv")
     self.data = pd.read_csv(factor_csv, index_col=0)
     self.train_day = train_day
+    self.train_opt = train_opt
     row, col = self.data.shape
     self.train_num = int(row * t_vs_t)
     self.test_num = row
@@ -21,7 +22,7 @@ class StockLoader:
       return
     train_output = self.data.loc[:, self.train_day]
     train_output =  train_output.iloc[self.train_index: self.train_num]
-    train_input = self.data.iloc[:, 0:-proc_days]
+    train_input = self.data.loc[:, self.train_opt]
     train_input = train_input.iloc[self.train_index: self.train_num, :]
     train_data = [];
     index = 0
@@ -36,7 +37,7 @@ class StockLoader:
       return
     test_output = self.data.loc[:, self.train_day]
     test_output =  test_output.iloc[self.test_index: self.test_num]
-    test_input = self.data.iloc[:, 0:-proc_days]
+    test_input = self.data.loc[:, self.train_opt]
     test_input = test_input.iloc[self.test_index: self.test_num, :]
     test_data = [];
     index = 0

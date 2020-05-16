@@ -42,6 +42,9 @@ class talib_factor:
     low = ohlcvt["low"]
     open = ohlcvt["open"]
     volumn = ohlcvt["volume"]
+    #total_turnover
+    dataframe_ohlcvt = pd.DataFrame(ohlcvt)
+    dataframe_ohlcvt = dataframe_ohlcvt.drop(["datetime"], axis=1)
 
     factor = talib.ADX(high, low, close, timeperiod)
     factor[np.isnan(factor)] = 0
@@ -121,7 +124,7 @@ class talib_factor:
 
     factor = talib.ULTOSC(high, low, close, timeperiod1=7, timeperiod2=14, timeperiod3=28)
     factor[np.isnan(factor)] = 0
-    data = pd.concat([data, pd.DataFrame({"TRIX": factor})], axis=1)
+    data = pd.concat([data, pd.DataFrame({"ULTOSC": factor})], axis=1)
 
     price = pd.DataFrame(close)
     day1 = price.pct_change(periods=1)
@@ -146,6 +149,8 @@ class talib_factor:
     date_index = pd.DataFrame(datetime).applymap(lambda x: pd.to_datetime(str(x), format = "%Y%m%d%H%M%S"))
     date_index.columns = ["datetime"]
     data = pd.concat([date_index, data], axis=1)
+
+    data = pd.concat([data, dataframe_ohlcvt], axis=1)
 
     data.to_csv(factor_csv, index = False)
 

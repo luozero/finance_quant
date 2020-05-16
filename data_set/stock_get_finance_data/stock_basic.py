@@ -16,7 +16,7 @@ MAX_DOWNLOAD_TIMES = 50
 
 class stock_basic:
   def __init__(self, stock_codes=['000001'], path_root='../../../data/'):
-    ts.set_token('9006fc1126610a1ca69c4b1c8a91d8b5112af8d5ec1a5ba0f17a4a0b')
+    ts.set_token('ddd82cf225ed602f13bfcde56ef943643d79634125e3449dc9dce182')
     self.pro = ts.pro_api()
     path = os.path.join(path_root,'stock_basic')
     if not os.path.exists(path):
