@@ -10,14 +10,17 @@ Created on 2018��10��4��
 '''
 class stock_codes_utility:
   def __init__(self,path='../../../data/'):
-    ts.set_token('857448afe8a838163de2ea7e3555468ca0f314a424ad47da078c9265')
+    ts.set_token('ddd82cf225ed602f13bfcde56ef943643d79634125e3449dc9dce182')
     self.pro = ts.pro_api()
     self.DR = DR(path=path,skip = 'skip_stock.csv')
     self.processing_DR = DR(path=path,skip = 'process_stock.csv')
   
   def stock_codes(self):
-    basic_data = ts.get_stock_basics()
-    stock_codes = list(basic_data.index)
+    # basic_data = ts.get_stock_basics()
+    basic_data = self.pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
+    # print(basic_data['ts_code'])
+    print(list(basic_data['ts_code']))
+    stock_codes = self.rm_allstock_sh_sz(list(basic_data['ts_code']))
 
     for i,v in enumerate(stock_codes):
       if v > KECHUANG_CODE:
