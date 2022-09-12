@@ -44,6 +44,7 @@ class download_record:
       pd_skip = pd.read_csv(self.path_stock_rec)
       pd_skip1 = pd.DataFrame([stock],columns=['stock'])
       pd_skip = pd_skip.append(pd_skip1,ignore_index=True)
+      # pd_skip = pd_skip.concat(pd_skip1,ignore_index=True)
     else:
       pd_skip = pd.DataFrame([stock],columns=['stock'])
     pd_skip.to_csv(self.path_stock_rec, index = False)

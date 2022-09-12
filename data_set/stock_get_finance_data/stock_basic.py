@@ -59,23 +59,24 @@ class stock_basic:
         stock = stock + '.SZ'
       else:
         stock = stock + '.SH'
-      while True:
+      # while True:
+      continue_download_this_stock = True
+      while continue_download_this_stock:
+        continue_download_this_stock,stock_basic = self.try_download_csv(stock, '')
         try_cnt = try_cnt + 1
-        continue_download_this_stock = True
-        while continue_download_this_stock:
-          continue_download_this_stock,stock_basic = self.try_download_csv(stock, '')
-          print('stock', stock, 'try times', try_cnt)
-        if try_cnt == MAX_DOWNLOAD_TIMES:
+        print('stock', stock, 'try times', try_cnt)
+        if try_cnt > MAX_DOWNLOAD_TIMES:
           print('skip this stock', stock, 'try times', try_cnt)
           self.download_dr.write_skip_stock(stock)
           break
-        if not stock_basic.empty:
-          break
-      path_csv = self.stock_basic_path.format(stock_store)
-      stock_basic.to_csv(path_csv)
-      print('this stock',stock, 'successfully downloaded')
-      process_index = process_index + 1
-      self.download_dr.write_index(process_index)
+        # if not stock_basic.empty:
+        #   break
+      if not stock_basic.empty:
+        path_csv = self.stock_basic_path.format(stock_store)
+        stock_basic.to_csv(path_csv)
+        print('this stock',stock, 'successfully downloaded')
+        process_index = process_index + 1
+        self.download_dr.write_index(process_index)
     
   def processed_daily_basic(self,stock_basic_datas,get_date):
     try:

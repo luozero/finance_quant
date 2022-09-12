@@ -24,7 +24,7 @@ def try_download_csv(url,local,Schedule,stock, download_count):
     request.urlretrieve(url,local,Schedule)
     continue_download_this_stock = 0
   except :
-    print('fail to download stock ',stock, 'download count ', download_count, 'one times, and try it again!!!');
+    print('fail to download stock ',stock, 'download count ', download_count, 'one times, and try it again!!!')
     print(url)
     continue_download_this_stock = 1
   return continue_download_this_stock
@@ -97,7 +97,7 @@ def download_finance(path_root = '../../../data/'):
   stock_index = dr.read_index()
   stock_codes = stock_codes[stock_index:]
 
-  DOWNLOAD_THR = 100
+  DOWNLOAD_THR = 20
   for stock in (stock_codes):
     print("fetching stock", stock)
     continue_download_this_stock = 1
@@ -110,9 +110,11 @@ def download_finance(path_root = '../../../data/'):
     
     if download_count < DOWNLOAD_THR:
       # store_stock_index(download_stock_file, stock_index)
-      dr.write_index(stock_index)
-      stock_index = stock_index + 1
       print("download finance data successfully stock", stock)
+    else:
+      print("failed to download staock", stock)
+    dr.write_index(stock_index)
+    stock_index = stock_index + 1
 
 if __name__ == '__main__':
   download_finance()
