@@ -7,11 +7,19 @@ import pandas as pd
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
-MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
-ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
-PROFIT_FINANCE = 'http://quotes.money.163.com/service/lrb_{}.html'
-CASH_FINANCE = 'http://quotes.money.163.com/service/xjllb_{}.html'
-LOANS_FINANCE = 'http://quotes.money.163.com/service/zcfzb_{}.html'
+LINK_MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
+LINK_ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
+LINK_PROFIT_FINANCE = 'http://quotes.money.163.com/service/lrb_{}.html'
+LINK_CASH_FINANCE = 'http://quotes.money.163.com/service/xjllb_{}.html'
+LINK_LOANS_FINANCE = 'http://quotes.money.163.com/service/zcfzb_{}.html'
+LINK_STOCK_DAILY_TRADE = 'https://quotes.money.163.com/service/chddata.html?code=0{}&start=19960827&end=20220913&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
+
+FILE_MAIN = '{}_main.csv'
+FILE_ABSTRACT = '{}_abstract.csv'
+FILE_PROFIT = '{}_profit.csv'
+FILE_CASH = '{}_cash.csv'
+FILE_LOANS = '{}_loans.csv'
+FILE_DAILY_TRADE = '{}_daily_trade.csv'
 
 def Schedule(a,b,c):
     per = 100.0 * a * b / c
@@ -19,46 +27,45 @@ def Schedule(a,b,c):
         per = 100
     print('%.2f%%' % per)
     
-def try_download_csv(url,local,Schedule,stock, download_count):
+def try_download_csv(path, filename, url, Schedule,stock, download_count):
+  url = url.format(stock)
+  filename = os.path.join(path,filename.format(stock))
   try:
-    request.urlretrieve(url,local,Schedule)
+    request.urlretrieve(url,filename,Schedule)
     continue_download_this_stock = 0
   except :
-    print('fail to download stock ',stock, 'download count ', download_count, 'one times, and try it again!!!')
+    print('fail to download stock ', url, 'download count ', download_count, 'one times, and try it again!!!')
     print(url)
     continue_download_this_stock = 1
   return continue_download_this_stock
 
 def fetch_stock_finance_data(path,stock, download_count):
   #main finance
-  url = MAIN_FINANCE.format(stock)
-  local = os.path.join(path,'{}_main.csv'.format(stock))
-  continue_download_this_stock = try_download_csv(url,local,Schedule,stock, download_count)
+
+  continue_download_this_stock = try_download_csv(path, FILE_MAIN, LINK_MAIN_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
   
   #abstract
-  url = ADBSTRACT_FINANCE.format(stock)
-  local = os.path.join(path,'{}_abstract.csv'.format(stock))
-  continue_download_this_stock = try_download_csv(url,local,Schedule,stock, download_count)
+  continue_download_this_stock = try_download_csv(path, FILE_ABSTRACT, LINK_ADBSTRACT_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
   #profit
-  url = PROFIT_FINANCE.format(stock)
-  local = os.path.join(path,'{}_profit.csv'.format(stock))
-  continue_download_this_stock = try_download_csv(url,local,Schedule,stock, download_count)
+
+  continue_download_this_stock = try_download_csv(path, FILE_PROFIT, LINK_PROFIT_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
   #cash
-  url = CASH_FINANCE.format(stock)
-  local = os.path.join(path,'{}_cash.csv'.format(stock))
-  continue_download_this_stock = try_download_csv(url,local,Schedule,stock, download_count)
+  continue_download_this_stock = try_download_csv(path, FILE_CASH, LINK_CASH_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
   #loans
-  url = LOANS_FINANCE.format(stock)
-  local = os.path.join(path,'{}_loans.csv'.format(stock))
-  continue_download_this_stock = try_download_csv(url,local,Schedule,stock, download_count)
+  continue_download_this_stock = try_download_csv(path, FILE_LOANS, LINK_LOANS_FINANCE, Schedule, stock, download_count)
+  if continue_download_this_stock==1:
+    return continue_download_this_stock
+  
+  #daily trade
+  continue_download_this_stock = try_download_csv(path, FILE_DAILY_TRADE, LINK_STOCK_DAILY_TRADE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
 
