@@ -7,19 +7,8 @@ import pandas as pd
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
-LINK_MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
-LINK_ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
-LINK_PROFIT_FINANCE = 'http://quotes.money.163.com/service/lrb_{}.html'
-LINK_CASH_FINANCE = 'http://quotes.money.163.com/service/xjllb_{}.html'
-LINK_LOANS_FINANCE = 'http://quotes.money.163.com/service/zcfzb_{}.html'
-LINK_STOCK_DAILY_TRADE = 'https://quotes.money.163.com/service/chddata.html?code=0{}&start=19960827&end=20220913&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-
-FILE_MAIN = '{}_main.csv'
-FILE_ABSTRACT = '{}_abstract.csv'
-FILE_PROFIT = '{}_profit.csv'
-FILE_CASH = '{}_cash.csv'
-FILE_LOANS = '{}_loans.csv'
-FILE_DAILY_TRADE = '{}_daily_trade.csv'
+from stock_deeplearning.data_set.stock_get_finance_data.financial_def import LINK_MAIN_FINANCE, LINK_ADBSTRACT_FINANCE, LINK_PROFIT_FINANCE, LINK_CASH_FINANCE, LINK_LOANS_FINANCE, LINK_STOCK_DAILY_TRADE_SH, \
+  LINK_STOCK_DAILY_TRADE_SZ, FILE_MAIN, FILE_ABSTRACT, FILE_PROFIT, FILE_CASH, FILE_LOANS, FILE_DAILY_TRADE, DATA_DOWNLOAD_FOLDER
 
 def Schedule(a,b,c):
     per = 100.0 * a * b / c
@@ -65,7 +54,11 @@ def fetch_stock_finance_data(path,stock, download_count):
     return continue_download_this_stock
   
   #daily trade
-  continue_download_this_stock = try_download_csv(path, FILE_DAILY_TRADE, LINK_STOCK_DAILY_TRADE, Schedule, stock, download_count)
+  if int(stock)<600000:
+    url = LINK_STOCK_DAILY_TRADE_SZ
+  else:
+    url = LINK_STOCK_DAILY_TRADE_SH
+  continue_download_this_stock = try_download_csv(path, FILE_DAILY_TRADE, url, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
 
@@ -96,7 +89,7 @@ def download_finance(path_root = '../../../data/'):
   stock_codes = scu.stock_codes()
   #stock_codes = ts_stock_codes()
 
-  path = os.path.join(path_root, 'finance')
+  path = os.path.join(path_root, DATA_DOWNLOAD_FOLDER)
   if not os.path.exists(path):
     os.makedirs(path)
 

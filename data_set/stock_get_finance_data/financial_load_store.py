@@ -4,17 +4,19 @@ import numpy as np
 import os
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
+from stock_deeplearning.data_set.stock_get_finance_data.financial_def import FILE_MAIN, FILE_ABSTRACT, FILE_PROFIT, FILE_CASH, FILE_LOANS, FILE_DAILY_TRADE, DATA_DOWNLOAD_FOLDER, FACTOR_FOLDER
 
-FILE_LIST = {'main':'{}_main.csv','abstract':'{}_abstract.csv','profit':'{}_profit.csv','cash':'{}_cash.csv','loans':'{}_loans.csv'}
+FILE_LIST = {'main': FILE_MAIN, 'abstract': FILE_ABSTRACT,'profit': FILE_PROFIT, 'cash': FILE_CASH, 'loans': FILE_LOANS}
 TAIL_MARGIN = 1
 class financial_load_store:
   def __init__(self, path='../../../data/', stock_codes=['000001']):
     self.path = path
-    self.path_finance = os.path.join(path,'finance')
-    self.path_finance_processed = os.path.join(path,'finance_processed')
-    if not os.path.exists(self.path_finance_processed):
-      os.makedirs(self.path_finance_processed)
-    self.path_finance_processed = os.path.join(self.path_finance_processed,'{}_processed_finance.csv')
+    self.data_download_folder = os.path.join(path, DATA_DOWNLOAD_FOLDER)
+    self.data_dofactor = os.path.join(path, FACTOR_FOLDER)
+    if not os.path.exists(self.factor_folder):
+      os.makedirs(self.factor_folder)
+    self.factor_folder = os.path.join(self.factor_folder,'{}_processed_finance.csv')
+
     self.path_stock_basic = os.path.join(path,'stock_basic','{}_basic.csv')
     self.path_processed_stock_basic = os.path.join(path,'processed_stock_basic','{}_basic.csv')
     
@@ -25,7 +27,7 @@ class financial_load_store:
     #self.load_stock_basic()
   '''financial data'''
   def load_financical_data(self, stock_code,file_list):
-    if not os.path.exists(self.path_finance):
+    if not os.path.exists(self.data_download_folder):
       print('this folder not exist!!!')
       exec(-1)
     #file_list = ['{}_main.csv','{}_abstract.csv','{}_profit.csv','{}_cash.csv','{}_loans.csv']
@@ -33,7 +35,7 @@ class financial_load_store:
     min_column = 3000
     for ite in file_list:
       ite = ite.format(stock_code)
-      csv_file_path = os.path.join(self.path_finance, FILE_LIST[ite].format(stock_code))
+      csv_file_path = os.path.join(self.data_download_folder, FILE_LIST[ite].format(stock_code))
       if os.path.exists(csv_file_path):
         data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
         if(data.shape[1]<min_column):
@@ -75,10 +77,10 @@ class financial_load_store:
   
   '''processed financial data'''
   def store_process_financical_data(self, data, stock_code):
-    csv_file_path = self.path_finance_processed.format(stock_code)
+    csv_file_path = self.factor_folder.format(stock_code)
     data.to_csv(csv_file_path, encoding='gbk')
   def load_process_financical_data(self, stock_code):
-    csv_file_path = self.path_finance_processed.format(stock_code)
+    csv_file_path = self.factor_folder.format(stock_code)
     if not os.path.exists(csv_file_path):
       print('load_process_financical_data not exsit this file', stock_code)
       exit(-1)
