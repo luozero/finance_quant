@@ -9,7 +9,7 @@ import pandas as pd
 import datetime
 import os
 
-from stock_deeplearning.data_set.stock_get_finance_data.financial_load_store import financial_load_store as FLD
+from stock_deeplearning.data_set.finance_data.financial_load_store import financial_load_store as FLD
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 MAX_DOWNLOAD_TIMES = 50

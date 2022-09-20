@@ -39,6 +39,27 @@ class download_record:
       )
       json.dump(summary, f)
 
+  def write_data(self, date_dict):
+
+    with open(self.path_file, 'w') as f:
+      json_data = date_dict
+      json.dump(json_data, f)
+  
+  def read_data(self, key1, key2):
+
+    if not os.path.exists(self.path_file):
+      print(self.path_file + "is not exist!!!")
+      return 0
+    with open(self.path_file) as f:
+        json_data = json.load(f)
+    
+    try:
+      data = json_data[key1][key2]
+    except:
+      data = 0
+
+    return data
+
   def write_skip_stock(self,stock):
     if os.path.exists(self.path_stock_rec):
       pd_skip = pd.read_csv(self.path_stock_rec)

@@ -7,8 +7,8 @@ import pandas as pd
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
-from stock_deeplearning.data_set.stock_get_finance_data.financial_def import LINK_MAIN_FINANCE, LINK_ADBSTRACT_FINANCE, LINK_PROFIT_FINANCE, LINK_CASH_FINANCE, LINK_LOANS_FINANCE, LINK_STOCK_DAILY_TRADE_SH, \
-  LINK_STOCK_DAILY_TRADE_SZ, FILE_MAIN, FILE_ABSTRACT, FILE_PROFIT, FILE_CASH, FILE_LOANS, FILE_DAILY_TRADE, DATA_DOWNLOAD_FOLDER
+from stock_deeplearning.ultility.common_def import LINK_MAIN_FINANCE, LINK_ADBSTRACT_FINANCE, LINK_PROFIT_FINANCE, LINK_CASH_FINANCE, LINK_LOANS_FINANCE, LINK_STOCK_DAILY_TRADE_SH, \
+  LINK_STOCK_DAILY_TRADE_SZ, FILE_MAIN, FILE_ABSTRACT, FILE_PROFIT, FILE_CASH, FILE_LOANS, FILE_DAILY_TRADE, FOLDER_DATA_DOWNLOAD
 
 def Schedule(a,b,c):
     per = 100.0 * a * b / c
@@ -83,13 +83,9 @@ def store_stock_index(download_stock_file, stock_index):
   his = pd.Series(stock_index)
   his.to_csv(download_stock_file)
 
-def download_finance(path_root = '../../../data/'):
+def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
 
-  scu = SCU(path_root)
-  stock_codes = scu.stock_codes()
-  #stock_codes = ts_stock_codes()
-
-  path = os.path.join(path_root, DATA_DOWNLOAD_FOLDER)
+  path = os.path.join(path_root, FOLDER_DATA_DOWNLOAD)
   if not os.path.exists(path):
     os.makedirs(path)
 

@@ -4,9 +4,9 @@ Created on 2018��9��17��
 
 @author: ll
 '''
-import stock_deeplearning.data_set.stock_get_finance_data.financial_factor_calc as FFC
-from stock_deeplearning.data_set.stock_get_finance_data.financial_factor_calc import finance_index_dic as FID
-from stock_deeplearning.data_set.stock_get_finance_data.financial_factor_io import financial_factor_io as FIO
+import stock_deeplearning.data_set.finance_data.financial_factor_calc as FFC
+from stock_deeplearning.data_set.finance_data.financial_factor_calc import finance_index_dic as FID
+from stock_deeplearning.data_set.finance_data.financial_factor_io import financial_factor_io as FIO
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 import pandas as pd
 import os
@@ -66,23 +66,25 @@ class financial_factor_rank:
     
     pd_mean_scores = pd_scores.mean(axis=1)
     #pd_mean_scores = pd_mean_scores.sort_values(axis=0,ascending=False)
-    pd_indexs['rank'] = pd_mean_scores.values
+    # pd_indexs['rank'] = pd_mean_scores.values
+    pd_rank = pd.DataFrame(pd_mean_scores.values, columns=['rank'], index = pd_indexs.index)
+    pd_indexs = pd.concat([pd_indexs, pd_rank], axis=1)
+
+    print(pd_indexs)
+
     pd_indexs = pd_indexs.sort_values("rank",axis=0,ascending=False)
     pd_indexs.to_csv(self.path_cluster, encoding='gbk')
     print(self.path_cluster)
 
 
-def financial_factors_rank(path_root, filename = 'rank_result',
+def financial_factors_rank(path_root, filename = 'rank_result', stock_codes = ['000001'],
                            dates = ['2018-09-30'], factors = [FID['roe'], FID['roa']]):
   path = os.path.join(path_root)
   path_score = os.path.join(path_root, 'score')
   path_rank = os.path.join(path_root, 'rank')
   path_factor = os.path.join(path_root, 'factor_io')
 
-  scu = SCU(path=path_root)
-  stocks = scu.stock_codes_remove_no_stock_basic()
-
-  ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster=path_rank, stocks=stocks, dates=dates,
+  ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster=path_rank, stocks=stock_codes, dates=dates,
                               indexs=factors, file_name=filename)
   """ 
   FID['debt_incr_rate'],\

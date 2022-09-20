@@ -8,7 +8,7 @@ import os
 import sys, getopt
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
-sys.path.append("./stock_get_finance_data")
+sys.path.append("./finance_data")
 from financial_index_calc import finance_index_dic as FID
 from financial_index_rank import financial_index_rank
 import  financial_download

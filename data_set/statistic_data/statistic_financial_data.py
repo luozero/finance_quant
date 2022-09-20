@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import tushare as ts
 import sys
-sys.path.append('../stock_get_finance_data')
+sys.path.append('../finance_data')
 from financial_load_store import financial_load_store as FLS
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
