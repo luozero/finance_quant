@@ -5,8 +5,7 @@ import os
 from stock_deeplearning.data_set.finance_data.financial_load_store import financial_load_store as FLS
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 from stock_deeplearning.ultility.download_record import download_record as DR
-from stock_deeplearning.ultility.common_def import KEY_PROCESS_STOCK_FACTOR_CALC_INDEX, FILE_JSON_PROCESS_RECORD,\
-   FILE_MAIN, FILE_ABSTRACT, FILE_PROFIT, FILE_CASH, FILE_LOANS, FILE_DAILY_TRADE_QUARTER
+from stock_deeplearning.ultility.common_def import * 
 
 finance_index_dic = {
   #####earning capacity
@@ -192,8 +191,7 @@ def main_financial_data_process(path, stock_codes):
 
   dr = DR(path, FILE_JSON_PROCESS_RECORD)
   
-  #stock_codes = ['000001']
-  proc_id = dr.read_data(KEY_PROCESS_STOCK_FACTOR_CALC_INDEX)
+  proc_id = dr.read_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX)
   stock_codes = stock_codes[proc_id:]
 
   for stock_code in stock_codes:
@@ -208,7 +206,7 @@ def main_financial_data_process(path, stock_codes):
 
     proc_id = proc_id + 1
 
-    dr.write_data(dict(KEY_PROCESS_STOCK_FACTOR_CALC_INDEX = proc_id))
+    dr.write_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX, proc_id)
 
     print("stock ", stock_code, " finished!!!")
     

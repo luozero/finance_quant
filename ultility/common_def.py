@@ -30,10 +30,10 @@ FILE_JSON_PROCESS_RECORD = "process_record.json"
 
 KEY_DOWNLOAD = 'download'
 KEY_DOWNLOAD_DAILY_TRADE_DATA_INDEX = 'download_daily_trade_data_index'
-KEY_DOWNLOAD_FINANCE_DATA_INDEX = 'download_FINANCE_data_index'
+KEY_DOWNLOAD_FINANCE_DATA_INDEX = 'download_finance_data_index'
 KEY_PROCESS = 'process'
 KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX = "daily_trade_quarter_index"
-KEY_PROCESS_STOCK_FACTOR_CALC_INDEX = "stock_factor_calc_index"
+KEY_PROCESS_FINANCE_FACTOR_INDEX = "stock_factor_calc_index"
 
 process_record_dict = {KEY_DOWNLOAD: {}, KEY_PROCESS: {}}
 

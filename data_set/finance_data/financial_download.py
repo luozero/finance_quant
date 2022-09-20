@@ -7,8 +7,7 @@ import pandas as pd
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 
-from stock_deeplearning.ultility.common_def import LINK_MAIN_FINANCE, LINK_ADBSTRACT_FINANCE, LINK_PROFIT_FINANCE, LINK_CASH_FINANCE, LINK_LOANS_FINANCE, LINK_STOCK_DAILY_TRADE_SH, \
-  LINK_STOCK_DAILY_TRADE_SZ, FILE_MAIN, FILE_ABSTRACT, FILE_PROFIT, FILE_CASH, FILE_LOANS, FILE_DAILY_TRADE, FOLDER_DATA_DOWNLOAD
+from stock_deeplearning.ultility.common_def import * 
 
 def Schedule(a,b,c):
     per = 100.0 * a * b / c
@@ -89,8 +88,8 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
   if not os.path.exists(path):
     os.makedirs(path)
 
-  dr = DR(path_root, 'finance_download_record.json')
-  stock_index = dr.read_index()
+  dr = DR(path, FILE_JSON_PROCESS_RECORD)
+  stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
   stock_codes = stock_codes[stock_index:]
 
   DOWNLOAD_THR = 20
@@ -109,8 +108,8 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
       print("download finance data successfully stock", stock)
     else:
       print("failed to download staock", stock)
-    dr.write_index(stock_index)
     stock_index = stock_index + 1
+    dr.write_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX, stock_index)
 
 if __name__ == '__main__':
   download_finance()

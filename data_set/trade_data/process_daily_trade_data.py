@@ -6,8 +6,7 @@ import os
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
 from stock_deeplearning.ultility.download_record import download_record as DR
 from stock_deeplearning.ultility.common_func import nearest_date
-from stock_deeplearning.ultility.common_def import FOLDER_DAILY_TRADE_PROCESSED, FOLDER_DATA_DOWNLOAD, FILE_DAILY_TRADE, FILE_DAILY_TRADE_QUARTER, FILE_JSON_PROCESS_RECORD,\
-  KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, CSV_PROCESS_DAILY_TRADE_SKIP_STOCK, FILE_MAIN
+from stock_deeplearning.ultility.common_def import * 
 from stock_deeplearning.data_set.finance_data.financial_load_store import financial_load_store as FLD
 
 class process_daily_trade_data(object):
@@ -30,7 +29,7 @@ class process_daily_trade_data(object):
     print("path stock trade data", path)
     self.FLD = FLD(path=path_root)
 
-    self.proc_id = self.DR.read_data(KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX)
+    self.proc_id = self.DR.read_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX)
     self.stock_codes = stock_codes[self.proc_id:]
 
   
@@ -74,6 +73,6 @@ class process_daily_trade_data(object):
         trade_data_quarter.to_csv(file_csv, encoding='gbk')
         print("store to ", file_csv)
 
-        self.DR.write_data(dict(KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX = self.proc_id))
+        self.DR.write_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, self.proc_id)
         self.proc_id = self.proc_id + 1
         print('this stock',stock_code, 'successfully downloaded')

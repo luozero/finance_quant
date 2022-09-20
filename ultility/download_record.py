@@ -2,6 +2,8 @@
 import pandas as pd
 import os
 import json
+from stock_deeplearning.ultility.common_def import * 
+
 class download_record:
   def __init__(self,path='../../../data/',record='rec.json', skip = 'skip_stock.csv'):
     self.path_file = os.path.join(path,record)
@@ -39,10 +41,12 @@ class download_record:
       )
       json.dump(summary, f)
 
-  def write_data(self, date_dict):
+  def write_data(self, key1, key2, value):
+
+    process_record_dict[key1].update({key2: value})
 
     with open(self.path_file, 'w') as f:
-      json_data = date_dict
+      json_data = process_record_dict
       json.dump(json_data, f)
   
   def read_data(self, key1, key2):
