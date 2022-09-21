@@ -52,9 +52,9 @@ class process_daily_trade_data(object):
         # print(daily_trade_data)
         daily_trade_dates = daily_trade_data.loc[:,'日期']
         if (daily_trade_dates.size == 0):
-          print("no this stock", stock, "data")
-          self.DR.write_skip_stock(stock)
-          return
+          print("no this stock", stock_code, "data")
+          self.DR.write_skip_stock(stock_code)
+          continue 
 
         trade_data_quarter = pd.DataFrame(columns=daily_trade_data.columns)
         # print('trade_data_quarter ', daily_trade_data.columns)
