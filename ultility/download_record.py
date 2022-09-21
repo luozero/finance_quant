@@ -43,7 +43,12 @@ class download_record:
 
   def write_data(self, key1, key2, value):
 
-    process_record_dict[key1].update({key2: value})
+    process_record_dict = {}
+    if os.path.exists(self.path_file):
+      with open(self.path_file) as f:
+          process_record_dict = json.load(f)
+    
+    process_record_dict.update({key1: {key2: value}})
 
     with open(self.path_file, 'w') as f:
       json_data = process_record_dict

@@ -2,7 +2,7 @@
 import os
 import tushare as ts
 from stock_deeplearning.ultility.download_record import download_record as DR
-KECHUANG_CODE = "688000"
+KECHUANG_CODE = 688000
 '''
 Created on 2018��10��4��
 
@@ -19,14 +19,15 @@ class stock_codes_utility:
     # basic_data = ts.get_stock_basics()
     basic_data = self.pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
     # print(basic_data['ts_code'])
-    print(list(basic_data['ts_code']))
-    stock_codes = self.rm_allstock_sh_sz(list(basic_data['ts_code']))
+    stock_codes_tmp = self.rm_allstock_sh_sz(list(basic_data['ts_code']))
 
-    for i,v in enumerate(stock_codes):
-      if v > KECHUANG_CODE:
-        del stock_codes[i]
+    stock_codes = []
+    for i, v in enumerate(stock_codes_tmp):
+      if int(v) < KECHUANG_CODE:
+        stock_codes.append(v)
 
     stock_codes.sort()
+    print(stock_codes)
     return stock_codes
     
   def stock_codes_remove_no_stock_basic(self):

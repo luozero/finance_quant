@@ -1,5 +1,9 @@
 # coding: utf8
 LINK_MAIN_FINANCE = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report'
+LINK_EARNING_CAPACITY = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report&part=ylnl'
+LINK_RETURN_DEBIT_CAPACITY = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report&part=chnl'
+LINK_GROWTH_CAPACITY = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report&part=cznl'
+LINK_OPERATION_CAPACITY = 'http://quotes.money.163.com/service/zycwzb_{}.html?type=report&part=yynl'
 LINK_ADBSTRACT_FINANCE = 'http://quotes.money.163.com/service/cwbbzy_{}.html'
 LINK_PROFIT_FINANCE = 'http://quotes.money.163.com/service/lrb_{}.html'
 LINK_CASH_FINANCE = 'http://quotes.money.163.com/service/xjllb_{}.html'
@@ -9,6 +13,10 @@ LINK_STOCK_DAILY_TRADE_SZ = 'http://quotes.money.163.com/service/chddata.html?co
 
 # download file name
 FILE_MAIN = '{}_main.csv'
+FILE_EARNING = '{}_earning.csv'
+FILE_RETURN_DEBIT = '{}_return_debit.csv'
+FILE_GROWTH = '{}_growth.csv'
+FILE_OPERATION = '{}_operation.csv'
 FILE_ABSTRACT = '{}_abstract.csv'
 FILE_PROFIT = '{}_profit.csv'
 FILE_CASH = '{}_cash.csv'

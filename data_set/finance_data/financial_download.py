@@ -29,11 +29,30 @@ def try_download_csv(path, filename, url, Schedule,stock, download_count):
 
 def fetch_stock_finance_data(path,stock, download_count):
   #main finance
-
   continue_download_this_stock = try_download_csv(path, FILE_MAIN, LINK_MAIN_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
-  
+
+  # earning
+  continue_download_this_stock = try_download_csv(path, FILE_EARNING, LINK_EARNING_CAPACITY, Schedule, stock, download_count)
+  if continue_download_this_stock==1:
+    return continue_download_this_stock
+
+  # return debit
+  continue_download_this_stock = try_download_csv(path, FILE_RETURN_DEBIT, LINK_RETURN_DEBIT_CAPACITY, Schedule, stock, download_count)
+  if continue_download_this_stock==1:
+    return continue_download_this_stock
+
+  # growth
+  continue_download_this_stock = try_download_csv(path, FILE_GROWTH, LINK_GROWTH_CAPACITY, Schedule, stock, download_count)
+  if continue_download_this_stock==1:
+    return continue_download_this_stock
+
+  # operation
+  continue_download_this_stock = try_download_csv(path, FILE_OPERATION, LINK_OPERATION_CAPACITY, Schedule, stock, download_count)
+  if continue_download_this_stock==1:
+    return continue_download_this_stock
+
   #abstract
   continue_download_this_stock = try_download_csv(path, FILE_ABSTRACT, LINK_ADBSTRACT_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
@@ -88,7 +107,7 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
   if not os.path.exists(path):
     os.makedirs(path)
 
-  dr = DR(path, FILE_JSON_PROCESS_RECORD)
+  dr = DR(path_root, FILE_JSON_PROCESS_RECORD)
   stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
   stock_codes = stock_codes[stock_index:]
 

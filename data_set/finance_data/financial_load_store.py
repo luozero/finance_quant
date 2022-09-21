@@ -37,7 +37,7 @@ class financial_load_store:
     for ite in file_list:
       csv_file_path = os.path.join(self.data_download_folder, ite)
       if os.path.exists(csv_file_path):
-        # print("load file ", csv_file_path)
+        print("load file ", csv_file_path)
 
         data = pd.read_csv(csv_file_path, encoding='gbk')
         # data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
