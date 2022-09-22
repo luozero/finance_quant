@@ -39,7 +39,10 @@ class financial_load_store:
       if os.path.exists(csv_file_path):
         print("load file ", csv_file_path)
 
-        data = pd.read_csv(csv_file_path, encoding='gbk')
+        # fetch data according to date align
+        columns = pd.read_csv(csv_file_path, encoding='gbk', nrows = 0)
+        columns = list(columns.columns[:-1])
+        data = pd.read_csv(csv_file_path, encoding='gbk', usecols=columns)
         # data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
         # find min_column for non trade data
         if (ite.find(FILE_DAILY_TRADE[2:]) == -1):

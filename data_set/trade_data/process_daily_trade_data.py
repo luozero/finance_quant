@@ -24,7 +24,7 @@ class process_daily_trade_data(object):
     #self.path = path
     self.stock_file_daily_trade_quarter = os.path.join(path, FILE_DAILY_TRADE_QUARTER)
 
-    self.DR = DR(path_root, FILE_JSON_PROCESS_RECORD, CSV_PROCESS_DAILY_TRADE_SKIP_STOCK)
+    self.DR = DR(path_root, JSON_FILE_PROCESS_RECORD, CSV_PROCESS_DAILY_TRADE_SKIP_STOCK)
 
     print("path stock trade data", path)
     self.FLD = FLD(path=path_root)
@@ -40,7 +40,11 @@ class process_daily_trade_data(object):
       data_main = self.FLD.load_all_financial_one_stock(stock_code)
       finance_main = FILE_MAIN.format(stock_code)
 
-      if data_main[finance_main].empty == False:
+      if data_main[finance_main].empty == True:
+
+          print("no this stock", stock_code, "data")
+          self.DR.write_skip_stock(stock_code)
+      else:
 
         file_name = FILE_DAILY_TRADE.format(stock_code)
 

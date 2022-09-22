@@ -189,7 +189,7 @@ def main_financial_data_process(path, stock_codes):
 
   FFC =financail_factor_calc(path=path)
 
-  dr = DR(path, FILE_JSON_PROCESS_RECORD)
+  dr = DR(path, JSON_FILE_PROCESS_RECORD)
   
   proc_id = dr.read_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX)
   stock_codes = stock_codes[proc_id:]

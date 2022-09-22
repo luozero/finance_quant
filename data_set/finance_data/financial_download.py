@@ -107,7 +107,7 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
   if not os.path.exists(path):
     os.makedirs(path)
 
-  dr = DR(path_root, FILE_JSON_PROCESS_RECORD)
+  dr = DR(path_root, JSON_FILE_PROCESS_RECORD)
   stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
   stock_codes = stock_codes[stock_index:]
 

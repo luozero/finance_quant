@@ -34,7 +34,7 @@ FOLDER_DAILY_TRADE_PROCESSED = "daily_trade_processed"
 FILE_DAILY_TRADE_QUARTER = "{}_daily_trade_quarter.csv"
 
 # json process config
-FILE_JSON_PROCESS_RECORD = "process_record.json"
+JSON_FILE_PROCESS_RECORD = "process_record.json"
 
 KEY_DOWNLOAD = 'download'
 KEY_DOWNLOAD_DAILY_TRADE_DATA_INDEX = 'download_daily_trade_data_index'
@@ -46,4 +46,5 @@ KEY_PROCESS_FINANCE_FACTOR_INDEX = "stock_factor_calc_index"
 process_record_dict = {KEY_DOWNLOAD: {}, KEY_PROCESS: {}}
 
 # csv file
-CSV_PROCESS_DAILY_TRADE_SKIP_STOCK = "skip_stocks.csv"
+CSV_PROCESS_DAILY_TRADE_SKIP_STOCK = "daily_trade_skip_stocks.csv"
+CSV_PROCESS_FINANCE_SKIP_STOCK = "finance_skip_stocks.csv"

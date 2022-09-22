@@ -2,6 +2,9 @@ import sys
 import json
 sys.path.append(r'../')
 
+# import ptvsd
+# ptvsd.settrace(None, ('0.0.0.0', 12345))
+
 from stock_deeplearning.data_set.finance_data.financial_download import download_finance
 from stock_deeplearning.data_set.finance_data.stock_basic import *
 from stock_deeplearning.data_set.finance_data.financial_factor_calc import *
