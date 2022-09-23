@@ -54,18 +54,18 @@ class process_daily_trade_data(object):
 
         # no trade data skip this stock 
         # print(daily_trade_data)
-        daily_trade_dates = daily_trade_data.loc[:,'日期']
-        if (daily_trade_dates.size == 0):
+        if (daily_trade_data.shape[0] == 0):
           print("no this stock", stock_code, "data")
           self.DR.write_skip_stock(stock_code)
           continue 
 
+        daily_trade_dates = daily_trade_data.loc[:,'日期']
         trade_data_quarter = pd.DataFrame(columns=daily_trade_data.columns)
         # print('trade_data_quarter ', daily_trade_data.columns)
         times = 0
         for get_date in dates:
           times = times + 1
-          print(file_name, 'date is', get_date, 'fetch time', times)
+          # print(file_name, 'date is', get_date, 'fetch time', times)
 
           date_in_daily_trade_dates = nearest_date(daily_trade_dates, get_date)
           # print(daily_trade_data[date_in_daily_trade_dates == daily_trade_dates])
