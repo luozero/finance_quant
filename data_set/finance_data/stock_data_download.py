@@ -37,7 +37,7 @@ def download_daily_trade(stock):
   if continue_download_this_stock==1:
     return continue_download_this_stock
 
-def fetch_stock_finance_data(path,stock, download_count):
+def download_finance_data(path,stock, download_count):
   #main finance
   continue_download_this_stock = try_download_csv(path, FILE_MAIN, LINK_MAIN_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
@@ -84,29 +84,6 @@ def fetch_stock_finance_data(path,stock, download_count):
   continue_download_this_stock = download_daily_trade(stock)
   return continue_download_this_stock
 
-
-
-def ts_stock_codes():
-  basic_data = ts.get_stock_basics()
-  stockcode = list(basic_data.index)
-  stockcode.sort()
-  return stockcode
-
-def read_stock_index(download_stock_file):
-  stocks_index = 0
-  if os.path.exists(download_stock_file):
-    try:
-        his = pd.read_csv(download_stock_file)
-        stocks_index = int(his.columns[1])
-    except ValueError:
-        print('ERR load', download_stock_file)
-        return
-  return stocks_index
-
-def store_stock_index(download_stock_file, stock_index):
-  his = pd.Series(stock_index)
-  his.to_csv(download_stock_file)
-
 def download_finance(path_root = '../../../data/', stock_codes = ['000001'], download_all = True):
 
   path = os.path.join(path_root, FOLDER_DATA_DOWNLOAD)
@@ -124,7 +101,7 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001'], dow
     download_count = 0
     while continue_download_this_stock == 1:
       if download_all:
-        continue_download_this_stock = fetch_stock_finance_data(path, stock, download_count)
+        continue_download_this_stock = download_finance_data(path, stock, download_count)
       else:
         continue_download_this_stock = download_daily_trade(stock)
 
