@@ -46,5 +46,5 @@ KEY_PROCESS_FINANCE_FACTOR_INDEX = "stock_factor_calc_index"
 process_record_dict = {KEY_DOWNLOAD: {}, KEY_PROCESS: {}}
 
 # csv file
-CSV_PROCESS_DAILY_TRADE_SKIP_STOCK = "daily_trade_skip_stocks.csv"
+CSV_SKIP_STOCK = "skip_stocks.csv"
 CSV_PROCESS_FINANCE_SKIP_STOCK = "finance_skip_stocks.csv"

@@ -185,7 +185,7 @@ class financail_factor_calc:
     pd_data.index = self.FLS.all_financial_one_stock[main_file].iloc[0,:].index[1:]
     return pd_data #pd.DataFrame([roe roa profit_revenue profit_cost])
   
-def main_financial_data_process(path, stock_codes):
+def stock_factors_calc(path, stock_codes):
 
   FFC =financail_factor_calc(path=path)
 
@@ -214,7 +214,7 @@ if __name__ == '__main__':
   #stock_codes = ['000001','000002','000004']
   
   path = '../../../data/'
-  main_financial_data_process(path)
+  stock_factors_calc(path)
   print("processed successfully!!!")
  # data_main = data[0]
 

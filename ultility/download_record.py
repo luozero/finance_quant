@@ -48,7 +48,7 @@ class download_record:
       with open(self.path_file) as f:
           process_record_dict = json.load(f)
     
-    process_record_dict.update({key1: {key2: value}})
+    process_record_dict[key1].update({key2: value})
 
     with open(self.path_file, 'w') as f:
       json_data = process_record_dict
@@ -69,19 +69,24 @@ class download_record:
 
     return data
 
-  def write_skip_stock(self,stock):
+  def write_skip_stock(self, stock):
+    # add s
+    sstock = 's' + stock
     if os.path.exists(self.path_stock_rec):
       pd_skip = pd.read_csv(self.path_stock_rec)
-      pd_skip1 = pd.DataFrame([stock],columns=['stock'])
+      pd_skip1 = pd.DataFrame([sstock],columns=['stock'])
       pd_skip = pd_skip.append(pd_skip1,ignore_index=True)
       # pd_skip = pd_skip.concat(pd_skip1,ignore_index=True)
     else:
-      pd_skip = pd.DataFrame([stock],columns=['stock'])
-    pd_skip.to_csv(self.path_stock_rec, index = False)
+      pd_skip = pd.DataFrame([sstock],columns=['stock'])
+    pd_skip.to_csv(self.path_stock_rec, encoding='gbk', index = False)
     
   def read_skip_stock(self):
+
     if os.path.exists(self.path_stock_rec):
-      data = pd.read_csv(self.path_stock_rec)
+      data = pd.read_csv(self.path_stock_rec, encoding='gbk')
+      # remove s
+      data = data.applymap(lambda x: x[1:])
       return data.loc[:,'stock']
     return pd.DataFrame()
   

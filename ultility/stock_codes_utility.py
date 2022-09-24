@@ -2,6 +2,7 @@
 import os
 import tushare as ts
 from stock_deeplearning.ultility.download_record import download_record as DR
+from stock_deeplearning.ultility.common_def import *
 KECHUANG_CODE = 688000
 '''
 Created on 2018��10��4��
@@ -12,8 +13,8 @@ class stock_codes_utility:
   def __init__(self,path='../../../data/'):
     ts.set_token('ddd82cf225ed602f13bfcde56ef943643d79634125e3449dc9dce182')
     self.pro = ts.pro_api()
-    self.DR = DR(path=path,skip = 'skip_stock.csv')
-    self.processing_DR = DR(path=path,skip = 'process_stock.csv')
+    self.DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
+    self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
   
   def stock_codes(self):
     # basic_data = ts.get_stock_basics()
@@ -28,6 +29,16 @@ class stock_codes_utility:
 
     stock_codes.sort()
     print(stock_codes)
+    return stock_codes
+
+  def skip_stock_codes(self, stock_codes):
+
+    if os.path.exists(self.DR.path_stock_rec):
+      skip_stocks = self.DR.read_skip_stock()
+      if False == skip_stocks.empty:
+        for stock in skip_stocks:
+          if stock in stock_codes:
+            stock_codes.remove(stock)
     return stock_codes
     
   def stock_codes_remove_no_stock_basic(self):

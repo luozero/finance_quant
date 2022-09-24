@@ -24,14 +24,9 @@ def stock_basic_finance_download(path_root='../data/', stock_codes = ['000001'])
   daily_trade_data = process_daily_trade_data(path_root, stock_codes)
   daily_trade_data.processe_daily_trade_data_quarter()
 
-
-def factors_rank(path_root='../data/', filename = 'rank_result', stock_codes = ['000001'],
-                dates = ['2018-09-30'], factors = [FID['roe'], FID['roa']]):
-  financial_factors_rank(path_root, filename, stock_codes, dates, factors)
-
-
 if __name__ == '__main__':
-  path = '../data_20200516/'
+
+  # default configure file name
   filename = 'conf.json'
   try:
     opts, args = getopt.getopt(sys.argv[1:], "f:p:", ["filename=", "path="])
@@ -43,8 +38,6 @@ if __name__ == '__main__':
       print('python3  financial_stock_basic_proc.py -f conf.json')
     elif opt in ("-f", "--filename"):
       filename = arg
-    elif opt in ("-p", "--path"):
-      path = arg
   
 
   conf = read_config(filename)
@@ -57,11 +50,14 @@ if __name__ == '__main__':
   stock_codes = scu.stock_codes()
   # stock_codes = ['000001','000002']
 
+  # download all the data
   stock_basic_finance_download(path, stock_codes)
 
   # need to disable following code when debug
-  stock_codes = scu.stock_codes_remove_no_stock_basic()
+  stock_codes = scu.skip_stock_codes(stock_codes)
 
-  main_financial_data_process(path, stock_codes)
+  # factors caculate
+  stock_factors_calc(path, stock_codes)
 
-  factors_rank(path, result_name, stock_codes, dates, factors)
+  # rank the factor
+  financial_factors_rank(path, result_name, stock_codes, dates, factors)

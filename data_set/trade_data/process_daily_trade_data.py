@@ -24,7 +24,7 @@ class process_daily_trade_data(object):
     #self.path = path
     self.stock_file_daily_trade_quarter = os.path.join(path, FILE_DAILY_TRADE_QUARTER)
 
-    self.DR = DR(path_root, JSON_FILE_PROCESS_RECORD, CSV_PROCESS_DAILY_TRADE_SKIP_STOCK)
+    self.DR = DR(path_root, JSON_FILE_PROCESS_RECORD, CSV_SKIP_STOCK)
 
     print("path stock trade data", path)
     self.FLD = FLD(path=path_root)
