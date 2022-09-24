@@ -11,7 +11,7 @@ from sklearn.cluster import KMeans
 sys.path.append("./finance_data")
 from financial_index_calc import finance_index_dic as FID
 from financial_index_rank import financial_index_rank
-import  financial_download
+import  stock_data_download
 
 #-o ../../../data/score/k300 -k 100
 if __name__ == '__main__':
@@ -33,7 +33,7 @@ if __name__ == '__main__':
   path_score = '../../../data/score'
   path_plot = '../../../data/figure'
   path_score_kmean = outputfile
-  stocks = financial_download.ts_stock_codes()
+  stocks = stock_data_download.ts_stock_codes()
   #stocks = ['000001','000002','000004','000005','000006']
   dates = ['2018-06-30']
   if not os.path.exists(path_plot):

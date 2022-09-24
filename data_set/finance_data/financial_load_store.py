@@ -40,12 +40,12 @@ class financial_load_store:
         print("load file ", csv_file_path)
 
         # fetch data according to date align
-        columns = pd.read_csv(csv_file_path, encoding='gbk', nrows = 0)
-        columns = list(columns.columns[:-1])
+        columns_tmp = pd.read_csv(csv_file_path, encoding='gbk', nrows = 0)
+        columns = list(columns_tmp.columns)
         data = pd.read_csv(csv_file_path, encoding='gbk', usecols=columns)
         # data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
         # find min_column for non trade data
-        if (ite.find(FILE_DAILY_TRADE[2:]) == -1):
+        if (ite.find(FILE_DAILY_TRADE[2 : 13]) == -1):
           if(data.shape[1]<min_column):
               min_column = data.shape[1]
         data = data.replace('--', 0)
@@ -61,7 +61,7 @@ class financial_load_store:
     for ite in file_list:
       if data_file[ite].empty == False:
         # loc data for non trade data
-        if (ite.find(FILE_DAILY_TRADE[2:]) == -1):
+        if (ite.find(FILE_DAILY_TRADE[2 : 13]) == -1):
           data_file[ite] = data_file[ite].iloc[:, : self.min_column-TAIL_MARGIN]
       else:
         data_file[ite] = pd.DataFrame()

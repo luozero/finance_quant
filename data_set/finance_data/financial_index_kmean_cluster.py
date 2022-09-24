@@ -10,7 +10,7 @@ from sklearn.cluster import spectral_clustering
 from sklearn.cluster import AgglomerativeClustering
 from financial_index_calc import finance_index_dic as FID
 from financial_index_rank import financial_index_rank
-import financial_download
+import stock_data_download
 import os
 import sys, getopt
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
   path = '../../../data/finance_processed'
   path_score = '../../../data/score'
   path_score_cluster = outputfile
-  stocks = financial_download.ts_stock_codes()
+  stocks = stock_data_download.ts_stock_codes()
   #stocks = ['000001','000002','000004','000005','000006']
   dates = [date]
   #k = 300

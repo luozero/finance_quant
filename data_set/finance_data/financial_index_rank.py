@@ -6,7 +6,7 @@ Created on 2018��9��17��
 '''
 import financial_index_calc as fic
 from financial_index_calc import finance_index_dic as FID
-import financial_download
+import stock_data_download
 import pandas as pd
 import os
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
   path = '../../../data/finance_processed'
   path_score = '../../../data/score'
   print(fic.finance_index_dic['roe'])
-  stocks = financial_download.ts_stock_codes()
+  stocks = stock_data_download.ts_stock_codes()
   #stocks = ['000001','000002','000004','000005','000006']
   dates = ['2018-06-30']#,'2017-12-31'
   fir = financial_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)

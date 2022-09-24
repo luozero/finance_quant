@@ -27,6 +27,16 @@ def try_download_csv(path, filename, url, Schedule,stock, download_count):
     continue_download_this_stock = 1
   return continue_download_this_stock
 
+def download_daily_trade(stock):
+  #daily trade
+  if int(stock)<600000:
+    url = LINK_STOCK_DAILY_TRADE_SZ
+  else:
+    url = LINK_STOCK_DAILY_TRADE_SH
+  continue_download_this_stock = try_download_csv(path, FILE_DAILY_TRADE, url, Schedule, stock, download_count)
+  if continue_download_this_stock==1:
+    return continue_download_this_stock
+
 def fetch_stock_finance_data(path,stock, download_count):
   #main finance
   continue_download_this_stock = try_download_csv(path, FILE_MAIN, LINK_MAIN_FINANCE, Schedule, stock, download_count)
@@ -70,15 +80,11 @@ def fetch_stock_finance_data(path,stock, download_count):
   continue_download_this_stock = try_download_csv(path, FILE_LOANS, LINK_LOANS_FINANCE, Schedule, stock, download_count)
   if continue_download_this_stock==1:
     return continue_download_this_stock
-  
-  #daily trade
-  if int(stock)<600000:
-    url = LINK_STOCK_DAILY_TRADE_SZ
-  else:
-    url = LINK_STOCK_DAILY_TRADE_SH
-  continue_download_this_stock = try_download_csv(path, FILE_DAILY_TRADE, url, Schedule, stock, download_count)
-  if continue_download_this_stock==1:
-    return continue_download_this_stock
+
+  continue_download_this_stock = download_daily_trade(stock)
+  return continue_download_this_stock
+
+
 
 def ts_stock_codes():
   basic_data = ts.get_stock_basics()
@@ -101,7 +107,7 @@ def store_stock_index(download_stock_file, stock_index):
   his = pd.Series(stock_index)
   his.to_csv(download_stock_file)
 
-def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
+def download_finance(path_root = '../../../data/', stock_codes = ['000001'], download_all = True):
 
   path = os.path.join(path_root, FOLDER_DATA_DOWNLOAD)
   if not os.path.exists(path):
@@ -117,7 +123,11 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001']):
     continue_download_this_stock = 1
     download_count = 0
     while continue_download_this_stock == 1:
-      continue_download_this_stock = fetch_stock_finance_data(path, stock, download_count)
+      if download_all:
+        continue_download_this_stock = fetch_stock_finance_data(path, stock, download_count)
+      else:
+        continue_download_this_stock = download_daily_trade(stock)
+
       download_count = download_count + 1
       if download_count > DOWNLOAD_THR:
         break
