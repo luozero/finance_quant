@@ -17,28 +17,7 @@ def read_config(filename):
     conf = json.load(f)
   return conf
 
-def stock_basic_finance_download(path_root='../data/', stock_codes = ['000001']):
-
-  download_finance(path_root, stock_codes)
-
-  daily_trade_data = process_daily_trade_data(path_root, stock_codes)
-  daily_trade_data.processe_daily_trade_data_quarter()
-
-if __name__ == '__main__':
-
-  # default configure file name
-  filename = 'conf.json'
-  try:
-    opts, args = getopt.getopt(sys.argv[1:], "f:p:", ["filename=", "path="])
-  except getopt.GetoptError:
-    print('test.py -o <outputfile>')
-    sys.exit(2)
-  for opt, arg in opts:
-    if opt == '-h':
-      print('python3  financial_stock_basic_proc.py -f conf.json')
-    elif opt in ("-f", "--filename"):
-      filename = arg
-  
+def finance_process(filename):
 
   conf = read_config(filename)
   path = conf['path']
@@ -51,7 +30,11 @@ if __name__ == '__main__':
   # stock_codes = ['000001','000002']
 
   # download all the data
-  stock_basic_finance_download(path, stock_codes)
+  download_finance(path, stock_codes, True)
+
+  # process quarter trade
+  daily_trade_data = process_daily_trade_data(path, stock_codes)
+  daily_trade_data.trade_data_quarter()
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)
@@ -61,3 +44,47 @@ if __name__ == '__main__':
 
   # rank the factor
   financial_factors_rank(path, result_name, stock_codes, dates, factors)
+
+def trade_process(filename):
+
+  conf = read_config(filename)
+  path = conf['path']
+
+  scu = SCU(path)
+  stock_codes = scu.stock_codes()
+  # stock_codes = ['000001','000002']
+
+  # download daily trade data
+  download_finance(path, stock_codes, False)
+
+  # need to disable following code when debug
+  stock_codes = scu.skip_stock_codes(stock_codes)
+
+  #process daily trade data
+  daily_trade_data = process_daily_trade_data(path, stock_codes)
+  daily_trade_data.price_volume_ration(stock_codes)
+
+if __name__ == '__main__':
+
+  # default configure file name
+  filename = 'conf.json'
+  trade_procss_flag =  True 
+  try:
+    opts, args = getopt.getopt(sys.argv[1:], "f:p:", ["filename=", "path="])
+  except getopt.GetoptError:
+    print('test.py -o <outputfile>')
+    sys.exit(2)
+  for opt, arg in opts:
+    if opt == '-h':
+      print('python3  financial_stock_basic_proc.py -f conf.json')
+    elif opt in ("-f", "--filename"):
+      filename = arg
+    elif opt in ("-t", "--trade process"):
+      
+      trade_procss_flag = True 
+  
+  if trade_procss_flag:
+    trade_process(filename)
+  else:
+    finance_process(filename)
+  

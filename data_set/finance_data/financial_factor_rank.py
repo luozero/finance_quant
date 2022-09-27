@@ -8,6 +8,7 @@ import stock_deeplearning.data_set.finance_data.financial_factor_calc as FFC
 from stock_deeplearning.data_set.finance_data.financial_factor_calc import finance_index_dic as FID
 from stock_deeplearning.data_set.finance_data.financial_factor_io import financial_factor_io as FIO
 from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
+from stock_deeplearning.ultility.common_def import *
 import pandas as pd
 import os
 import sys, getopt
@@ -16,6 +17,7 @@ class financial_factor_rank:
   def __init__(self, path = '../../../data/', path_factor = '../../../data/factor_io',
                path_cluster='../../../data/factor_cluster',
                stocks = ['000001'], dates=['2018-06-30'], indexs=['roe'],file_name = '1806_1712_1'):
+
     self.stocks = stocks
     self.dates = dates
     self.indexs = indexs
@@ -81,7 +83,7 @@ def financial_factors_rank(path_root, filename = 'rank_result', stock_codes = ['
                            dates = ['2018-09-30'], factors = [FID['roe'], FID['roa']]):
   path = os.path.join(path_root)
   path_score = os.path.join(path_root, 'score')
-  path_rank = os.path.join(path_root, 'rank')
+  path_rank = os.path.join(path_root, FOLDER_RANK)
   path_factor = os.path.join(path_root, 'factor_io')
 
   ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster=path_rank, stocks=stock_codes, dates=dates,
