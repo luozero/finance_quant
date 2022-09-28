@@ -17,20 +17,24 @@ def read_config(filename):
     conf = json.load(f)
   return conf
 
-def finance_process(filename):
+def finance_process(conf):
+  
+  common_conf = conf['common']
+  download_finance = common_conf['download_finance']
+  path = common_conf['path']
 
-  conf = read_config(filename)
-  path = conf['path']
-  result_name = conf['result_name']
-  dates = conf['dates']
-  factors = conf['factors']
+  finance_conf = conf['finance']
+  result_name = finance_conf['result_name']
+  dates = finance_conf['dates']
+  factors = finance_conf['factors']
 
   scu = SCU(path)
   stock_codes = scu.stock_codes()
   # stock_codes = ['000001','000002']
 
   # download all the data
-  download_finance(path, stock_codes, True)
+  if download_finance:
+    download_finance(path, stock_codes, True)
 
   # process quarter trade
   daily_trade_data = process_daily_trade_data(path, stock_codes)
@@ -45,32 +49,40 @@ def finance_process(filename):
   # rank the factor
   financial_factors_rank(path, result_name, stock_codes, dates, factors)
 
-def trade_process(filename):
+def trade_process(conf):
 
-  conf = read_config(filename)
-  path = conf['path']
+  common_conf = conf['common']
+  download_finance = common_conf['download_finance']
+  path = common_conf['path']
+
+  trade_conf = conf['trade']
+  trade_ouput_file = trade_conf['trade_ratio_file']
+
 
   scu = SCU(path)
   stock_codes = scu.stock_codes()
   # stock_codes = ['000001','000002']
 
   # download daily trade data
-  download_finance(path, stock_codes, False)
+  if download_finance:
+    download_finance(path, stock_codes, False)
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)
 
   #process daily trade data
   daily_trade_data = process_daily_trade_data(path, stock_codes)
-  daily_trade_data.price_volume_ration(stock_codes)
+  daily_trade_data.price_volume_ration(stock_codes, trade_ouput_file)
 
 if __name__ == '__main__':
 
   # default configure file name
   filename = 'conf.json'
-  trade_procss_flag =  True 
+  # default finance analysis
+  trade_flag =  False 
+  # tradeflag =  True 
   try:
-    opts, args = getopt.getopt(sys.argv[1:], "f:p:", ["filename=", "path="])
+    opts, args = getopt.getopt(sys.argv[1:], "f:p:t:", ["filename=", "path=", "tradeflag="])
   except getopt.GetoptError:
     print('test.py -o <outputfile>')
     sys.exit(2)
@@ -79,12 +91,14 @@ if __name__ == '__main__':
       print('python3  financial_stock_basic_proc.py -f conf.json')
     elif opt in ("-f", "--filename"):
       filename = arg
-    elif opt in ("-t", "--trade process"):
-      
-      trade_procss_flag = True 
+    elif opt in ("-t", "--tradeflag"):
+      trade_flag = True 
+
+  conf = read_config(filename)
+  trade_flag = conf["common"]["trade_flag"]
   
-  if trade_procss_flag:
-    trade_process(filename)
+  if trade_flag:
+    trade_process(conf)
   else:
-    finance_process(filename)
+    finance_process(conf)
   

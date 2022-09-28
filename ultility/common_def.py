@@ -33,7 +33,6 @@ FOLDER_DAILY_TRADE_PROCESSED = "daily_trade_processed"
 
 # process trade data folder from daily trade data
 FILE_DAILY_TRADE_QUARTER = "{}_daily_trade_quarter.csv"
-FILE_DAILY_TRADE_RATIO = "trade_ratio.csv"
 
 # json process config
 JSON_FILE_PROCESS_RECORD = "process_record.json"

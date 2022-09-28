@@ -26,7 +26,7 @@ class process_daily_trade_data(object):
     stock_folder_daily_trade = os.path.join(path_root, FOLDER_DAILY_TRADE_PROCESSED)
     if not os.path.exists(stock_folder_daily_trade):
       os.makedirs(stock_folder_daily_trade)
-    self.daily_trade_ratio_file = stock_folder_daily_trade + '/' + FILE_DAILY_TRADE_RATIO
+    self.daily_trade_ratio_folder = stock_folder_daily_trade + '/'
 
     self.DR = DR(path_root, JSON_FILE_PROCESS_RECORD, CSV_SKIP_STOCK)
 
@@ -77,7 +77,7 @@ class process_daily_trade_data(object):
         self.DR.write_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, self.proc_id)
         self.proc_id = self.proc_id + 1
   
-  def price_volume_ration(self, stock_codes):
+  def price_volume_ration(self, stock_codes, outputfile):
 
     scu = SCU()
 
@@ -140,12 +140,11 @@ class process_daily_trade_data(object):
 
         pd_stock = pd.DataFrame(pct_change_list, columns=[scu.add_stock_xshg_xshe(stock_code)])
 
-# , index = [scu.add_stock_xshg_xshe(stock_code)]
-
         pd_total_stock = pd.concat([pd_total_stock, pd_stock], axis=1)
     
-    pd_total_stock = pd.DataFrame(pd_total_stock.T.values, columns=pct_columns_list)
-    pd_total_stock.to_csv(self.daily_trade_ratio_file, encoding='gbk')
+    pd_total_stock1 = pd.DataFrame(pd_total_stock.T.values, columns=pct_columns_list, index=pd_total_stock.columns)
+    pd_total_stock1.to_csv(self.daily_trade_ratio_folder + outputfile, encoding='gbk')
+    print("store to ", self.daily_trade_ratio_folder + outputfile)
 
 
 

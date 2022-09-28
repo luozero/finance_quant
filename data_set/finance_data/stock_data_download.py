@@ -27,7 +27,7 @@ def try_download_csv(path, filename, url, Schedule,stock, download_count):
     continue_download_this_stock = 1
   return continue_download_this_stock
 
-def download_daily_trade(stock):
+def download_daily_trade(path, stock, download_count):
   #daily trade
   if int(stock)<600000:
     url = LINK_STOCK_DAILY_TRADE_SZ
@@ -81,7 +81,7 @@ def download_finance_data(path,stock, download_count):
   if continue_download_this_stock==1:
     return continue_download_this_stock
 
-  continue_download_this_stock = download_daily_trade(stock)
+  continue_download_this_stock = download_daily_trade(path, stock, download_count)
   return continue_download_this_stock
 
 def download_finance(path_root = '../../../data/', stock_codes = ['000001'], download_all = True):
@@ -91,7 +91,10 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001'], dow
     os.makedirs(path)
 
   dr = DR(path_root, JSON_FILE_PROCESS_RECORD)
-  stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
+  if download_all:
+    stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
+  else:
+    stock_index = 0
   stock_codes = stock_codes[stock_index:]
 
   DOWNLOAD_THR = 20
@@ -103,7 +106,7 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001'], dow
       if download_all:
         continue_download_this_stock = download_finance_data(path, stock, download_count)
       else:
-        continue_download_this_stock = download_daily_trade(stock)
+        continue_download_this_stock = download_daily_trade(path, stock, download_count)
 
       download_count = download_count + 1
       if download_count > DOWNLOAD_THR:
@@ -115,7 +118,8 @@ def download_finance(path_root = '../../../data/', stock_codes = ['000001'], dow
     else:
       print("failed to download staock", stock)
     stock_index = stock_index + 1
-    dr.write_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX, stock_index)
+    if download_all:
+      dr.write_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX, stock_index)
 
 if __name__ == '__main__':
   download_finance()
