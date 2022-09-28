@@ -43,9 +43,10 @@ class trade_ratio_ml:
     for stock_code in self.stock_codes:
       try:
         data = trade_ratio_tmp1.loc[stock_code, :]
+        print("used stock code: ", stock_code)
+        pd_trade_ratio_filter = pd.concat([pd_trade_ratio_filter, data], axis = 1)
       except:
-        print("dismiss this stock: ", stock_code)
-      pd_trade_ratio_filter = pd.concat([pd_trade_ratio_filter, data], axis = 1)
+        print("dismiss stock code: ", stock_code)
 
     trade_ratio = pd_trade_ratio_filter.T.reset_index(drop=True)
 
@@ -56,5 +57,5 @@ class trade_ratio_ml:
 
     trade_ratio_cluster = pd.concat([trade_ratio, pd.DataFrame(labels, columns=['cluster'])], axis = 1)
     trade_ratio_cluster = trade_ratio_cluster.sort_values(by=['cluster'])
-    trade_ratio_cluster.to_csv(self.daily_trade_ratio_folder + outputfile, encoding='gbk')
+    trade_ratio_cluster.to_csv(self.daily_trade_ratio_folder + outputfile, encoding='gbk', index = False)
     print("store file: ", self.daily_trade_ratio_folder + outputfile)

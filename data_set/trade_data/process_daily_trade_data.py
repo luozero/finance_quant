@@ -98,7 +98,7 @@ class process_daily_trade_data(object):
         days = 5
 
         # price change
-        pct_change = daily_trade_data.loc[0 : days, '收盘价'].pct_change()[1:] * 100
+        pct_change = 0 - daily_trade_data.loc[0 : days, '收盘价'].pct_change()[1:] * 100
         pct_change_list = list(pct_change)
         price_pct = lambda x :  (daily_trade_data.loc[0, '收盘价'] - daily_trade_data.loc[x, '收盘价']) * 100 \
             / daily_trade_data.loc[x, '收盘价'] 
@@ -118,7 +118,7 @@ class process_daily_trade_data(object):
         pct_change_list.append( price_pct(days * 80))
 
         # volumn change
-        volumn_change = daily_trade_data.loc[:days, '成交量'].pct_change()[1:] * 100
+        volumn_change = 0 - daily_trade_data.loc[:days, '成交量'].pct_change()[1:] * 100
         pct_change_list = pct_change_list + list(volumn_change)
         # 1days vs 5 days
         pct_ = (daily_trade_data.loc[ 0 , '成交量'] - daily_trade_data.loc[ 1 : days, '成交量'].mean()) * 100 / daily_trade_data.loc[ 1 : days, '成交量'].mean()

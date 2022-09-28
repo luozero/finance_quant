@@ -17,7 +17,7 @@ def read_config(filename):
 def finance_process(conf):
   
   common_conf = conf['common']
-  download_finance = common_conf['download_finance']
+  download_finance_flag = common_conf['download_finance']
   path = common_conf['path']
 
   finance_conf = conf['finance']
@@ -30,7 +30,7 @@ def finance_process(conf):
   # stock_codes = ['000001','000002']
 
   # download all the data
-  if download_finance:
+  if download_finance_flag:
     download_finance(path, stock_codes, True)
 
   # process quarter trade
@@ -49,7 +49,7 @@ def finance_process(conf):
 def trade_process(conf):
 
   common_conf = conf['common']
-  download_finance = common_conf['download_finance']
+  download_finance_flag = common_conf['download_finance']
   path = common_conf['path']
 
   trade_conf = conf['trade']
@@ -61,7 +61,7 @@ def trade_process(conf):
   # stock_codes = ['000001','000002']
 
   # download daily trade data
-  if download_finance:
+  if download_finance_flag:
     download_finance(path, stock_codes, False)
 
   # need to disable following code when debug

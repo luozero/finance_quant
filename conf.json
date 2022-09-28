@@ -2,7 +2,7 @@
 	"common":
 	{
 		"path": "../data_20220921",
-		"download_finance": 0,
+		"download_finance": 1,
 		"trade_flag": 1
 	},
 	"finance":
@@ -15,8 +15,8 @@
 	"trade":
 	{
 		"trade_ratio_file": "trade_ratio_0928.csv",
-    "kmean_trade_ratio_file": "kmean_trade_ratio_0928.csv",
+    "kmean_trade_ratio_file": "kmean_trade_ratio_0928_50.csv",
     "kmnean_stock_num": 500,
-    "n_clusters": 10
+    "n_clusters": 50
 	}
 }
