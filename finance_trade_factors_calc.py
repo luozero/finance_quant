@@ -1,5 +1,5 @@
-import sys
 import json
+import sys, getopt
 sys.path.append(r'../')
 
 # import ptvsd
@@ -7,10 +7,7 @@ sys.path.append(r'../')
 
 from stock_deeplearning.data_set.finance_data.stock_data_download import download_finance
 from stock_deeplearning.data_set.finance_data.stock_basic import *
-from stock_deeplearning.data_set.finance_data.financial_factor_calc import *
-from stock_deeplearning.data_set.finance_data.financial_factor_rank import *
 from stock_deeplearning.data_set.trade_data.process_daily_trade_data import process_daily_trade_data
-from stock_deeplearning.ultility.common_def import process_record_dict
 
 def read_config(filename):
   with open(filename, 'r') as f:

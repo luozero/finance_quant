@@ -1,6 +1,22 @@
 {
-"path": "../data_20220921",
-"result_name": "rank",
-"dates": ["2022-06-30", "2022-03-31", "2021-12-31", "2021-09-30", "2021-06-30", "2021-03-31", "2020-12-31", "2020-09-30", "2020-06-30", "2020-03-31", "2019-12-31", "2019-09-30", "2019-06-30", "2019-03-31"],
-"factors": ["roe", "roa", "profit_revenue", "cash_incr_rate", "profit_cost", "equlity_incr_rate", "revenue_incr_rate", "profit_incr_rate"]
+	"common":
+	{
+		"path": "../data_20220921",
+		"download_finance": 0,
+		"trade_flag": 1
+	},
+	"finance":
+	{
+		"result_name": "0925_rank.csv",
+		"dates_bak": ["2022-06-30", "2022-03-31", "2021-12-31", "2021-09-30", "2021-06-30", "2021-03-31", "2020-12-31", "2020-09-30", "2020-06-30", "2020-03-31", "2019-12-31", "2019-09-30", "2019-06-30", "2019-03-31"],
+		"dates": ["2022-06-30", "2022-03-31", "2021-12-31", "2021-09-30", "2021-06-30", "2021-03-31"],
+		"factors": ["roe", "roa", "profit_revenue", "cash_incr_rate", "profit_cost", "equlity_incr_rate", "revenue_incr_rate", "profit_incr_rate"]
+	},
+	"trade":
+	{
+		"trade_ratio_file": "trade_ratio_0928.csv",
+    "kmean_trade_ratio_file": "kmean_trade_ratio_0928.csv",
+    "kmnean_stock_num": 500,
+    "n_clusters": 10
+	}
 }

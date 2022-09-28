@@ -138,7 +138,7 @@ class process_daily_trade_data(object):
         pct_ = volumn_pct(days * 40)
         pct_change_list.append(pct_)
 
-        pd_stock = pd.DataFrame(pct_change_list, columns=[scu.add_stock_xshg_xshe(stock_code)])
+        pd_stock = pd.DataFrame(pct_change_list, columns=[scu.add_stock_sh_sz(stock_code)])
 
         pd_total_stock = pd.concat([pd_total_stock, pd_stock], axis=1)
     

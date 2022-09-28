@@ -26,7 +26,7 @@ class financial_factor_rank:
     if not os.path.exists(path_cluster):
       os.makedirs(path_cluster)
     self.fetch_factors = fio.fetch_selected_factors(indexs, dates)
-    self.path_cluster = os.path.join(path_cluster,'{}'.format(file_name)+'_rank.csv')
+    self.path_cluster = os.path.join(path_cluster, file_name)
   
   def load_all_financial_index(self,dates,stocks):
    # stock_codes = ['000719']
