@@ -5,7 +5,7 @@ sys.path.append(r'../')
 # import ptvsd
 # ptvsd.settrace(None, ('0.0.0.0', 12345))
 
-from stock_deeplearning.data_set.finance_data.stock_data_download import download_finance
+from stock_deeplearning.data_set.finance_data.stock_data_download import stock_data_download
 from stock_deeplearning.data_set.finance_data.stock_basic import *
 from stock_deeplearning.data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
@@ -31,7 +31,8 @@ def finance_process(conf):
 
   # download all the data
   if download_finance_flag:
-    download_finance(path, stock_codes, True)
+    data_download = stock_data_download(path, stock_codes)
+    data_download.download_finance(True)
 
   # process quarter trade
   daily_trade_data = process_daily_trade_data(path, stock_codes)
@@ -62,7 +63,8 @@ def trade_process(conf):
 
   # download daily trade data
   if download_finance_flag:
-    download_finance(path, stock_codes, False)
+    data_download = stock_data_download(path, stock_codes)
+    data_download.download_finance(False)
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)
