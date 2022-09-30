@@ -4,11 +4,11 @@ import pandas as pd
 import numpy as np
 import os
 
-from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
-from stock_deeplearning.ultility.download_record import download_record as DR
-from stock_deeplearning.ultility.common_func import nearest_date
-from stock_deeplearning.ultility.common_def import * 
-from stock_deeplearning.data_set.finance_data.financial_load_store import financial_load_store as FLD
+from ultility.stock_codes_utility import stock_codes_utility as SCU
+from ultility.download_record import download_record as DR
+from ultility.common_func import nearest_date
+from ultility.common_def import * 
+from data_set.finance_data.financial_load_store import financial_load_store as FLD
 
 class process_daily_trade_data(object):
 
@@ -77,7 +77,7 @@ class process_daily_trade_data(object):
         self.DR.write_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, self.proc_id)
         self.proc_id = self.proc_id + 1
   
-  def price_volume_ration(self, stock_codes, outputfile):
+  def price_volume_ratio(self, stock_codes, outputfile):
 
     scu = SCU()
 

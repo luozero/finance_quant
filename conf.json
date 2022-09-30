@@ -2,7 +2,8 @@
 	"common":
 	{
 		"path": "../data_20220921",
-		"download_finance": 1,
+		"?data_type": "finance_stock_data, stock_data, index_data",
+		"data_type": "index_data",
 		"trade_flag": 1
 	},
 	"finance":
@@ -14,7 +15,8 @@
 	},
 	"trade":
 	{
-		"trade_ratio_file": "trade_ratio_0928.csv",
+		"stock_trade_ratio_file": "stock_trade_ratio_0928.csv",
+		"index_trade_ratio_file": "index_trade_ratio_0928.csv",
     "kmean_trade_ratio_file": "kmean_trade_ratio_0928_50.csv",
     "kmnean_stock_num": 500,
     "n_clusters": 50

@@ -1,13 +1,15 @@
 import json
 import sys, getopt
+
+from ultility.common_def import *
 sys.path.append(r'../')
 
 # import ptvsd
 # ptvsd.settrace(None, ('0.0.0.0', 12345))
 
-from stock_deeplearning.data_set.finance_data.stock_data_download import stock_data_download
-from stock_deeplearning.data_set.finance_data.stock_basic import *
-from stock_deeplearning.data_set.trade_data.process_daily_trade_data import process_daily_trade_data
+from data_set.finance_data.data_download import data_download
+from data_set.finance_data.stock_basic import *
+from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
 def read_config(filename):
   with open(filename, 'r') as f:
@@ -17,7 +19,7 @@ def read_config(filename):
 def finance_process(conf):
   
   common_conf = conf['common']
-  download_finance_flag = common_conf['download_finance']
+  download_type = common_conf['data_type']
   path = common_conf['path']
 
   finance_conf = conf['finance']
@@ -30,9 +32,8 @@ def finance_process(conf):
   # stock_codes = ['000001','000002']
 
   # download all the data
-  if download_finance_flag:
-    data_download = stock_data_download(path, stock_codes)
-    data_download.download_finance(True)
+  data_download_1 = data_download(path, stock_codes)
+  data_download_1.download_data(download_type)
 
   # process quarter trade
   daily_trade_data = process_daily_trade_data(path, stock_codes)
@@ -50,28 +51,33 @@ def finance_process(conf):
 def trade_process(conf):
 
   common_conf = conf['common']
-  download_finance_flag = common_conf['download_finance']
+  data_type = common_conf['data_type']
   path = common_conf['path']
 
   trade_conf = conf['trade']
-  trade_ouput_file = trade_conf['trade_ratio_file']
+
+  if data_type == TYPE_STOCK:
+    trade_ouput_file = trade_conf['stock_trade_ratio_file']
+  elif data_type == TYPE_INDEX:
+    trade_ouput_file = trade_conf['index_trade_ratio_file']
 
 
   scu = SCU(path)
-  stock_codes = scu.stock_codes()
+  # stock_codes = scu.stock_codes()
+  stock_codes = scu.stock_codes_from_table(data_type)
   # stock_codes = ['000001','000002']
 
   # download daily trade data
-  if download_finance_flag:
-    data_download = stock_data_download(path, stock_codes)
-    data_download.download_finance(False)
+
+  data_download_1 = data_download(path, stock_codes)
+  data_download_1.download_data(data_type)
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)
 
   #process daily trade data
   daily_trade_data = process_daily_trade_data(path, stock_codes)
-  daily_trade_data.price_volume_ration(stock_codes, trade_ouput_file)
+  daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
 
 if __name__ == '__main__':
 
@@ -94,10 +100,13 @@ if __name__ == '__main__':
       trade_flag = True 
 
   conf = read_config(filename)
-  trade_flag = conf["common"]["trade_flag"]
+  common_conf = conf['common']
+  data_type = common_conf['data_type']
   
-  if trade_flag:
+  if data_type == TYPE_FINANCE_STOCK:
+    finance_process(conf)
+  elif data_type == TYPE_INDEX or data_type == TYPE_STOCK:
     trade_process(conf)
   else:
-    finance_process(conf)
+    print('do not support this data type: ', data_type)
   

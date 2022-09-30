@@ -1,8 +1,9 @@
 # coding: utf8
 import os
+import pandas as pd
 import tushare as ts
-from stock_deeplearning.ultility.download_record import download_record as DR
-from stock_deeplearning.ultility.common_def import *
+from ultility.download_record import download_record as DR
+from ultility.common_def import *
 KECHUANG_CODE = 688000
 '''
 Created on 2018��10��4��
@@ -30,6 +31,19 @@ class stock_codes_utility:
     stock_codes.sort()
     print(stock_codes)
     return stock_codes
+  
+  def stock_codes_from_table(self, type):
+
+    if type == TYPE_FINANCE_STOCK or type == TYPE_STOCK:
+      pd1 = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
+      stock_codes = pd.DataFrame(pd1.loc[:,'stock_code']).applymap(lambda x: x[2:]).values.squeeze()
+      return sorted(stock_codes)
+    elif type == TYPE_INDEX:
+      pd1 = pd.read_csv('./table/index_codes.csv', encoding='gbk')
+      index_codes = pd1.loc[:,'index_code'].values.squeeze()
+      return sorted(index_codes)
+    else:
+      print('do not support this type ', type)
 
   def skip_stock_codes(self, stock_codes):
 
