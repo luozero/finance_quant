@@ -53,6 +53,7 @@ def trade_process(conf):
 
   common_conf = conf['common']
   data_type = common_conf['data_type']
+  download = common_conf['download']
   path = common_conf['path']
 
   trade_conf = conf['trade']
@@ -71,7 +72,8 @@ def trade_process(conf):
   # download daily trade data
 
   data_download_1 = data_download(path, stock_codes)
-  # data_download_1.download_data(data_type)
+  if download == "yes":
+    data_download_1.download_data(data_type)
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)

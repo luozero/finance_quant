@@ -4,7 +4,8 @@
 		"path": "../data_20220921",
 		"?data_type": "finance_stock_data, stock_data, index_data",
 		"data_type": "index_data",
-		"trade_flag": 1
+    "?download": "yes, no",
+		"download": "no"
 	},
 	"finance":
 	{
