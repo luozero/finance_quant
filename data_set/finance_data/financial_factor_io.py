@@ -4,11 +4,11 @@ Created on 2018��9��17��
 
 @author: ll
 '''
-from stock_deeplearning.data_set.finance_data.financial_load_store import financial_load_store as FLS
-from stock_deeplearning.data_set.finance_data.financial_factor_calc import finance_index_dic as FID
+from data_set.finance_data.financial_load_store import financial_load_store as FLS
+from data_set.finance_data.financial_factor_calc import finance_index_dic as FID
 import pandas as pd
 import os
-from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
+from ultility.stock_codes_utility import stock_codes_utility as SCU
 
 class financial_factor_io:
   def __init__(self,path = '../../../data/',path_factor = '../../../data/factor_io', \

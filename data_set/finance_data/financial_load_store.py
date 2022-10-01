@@ -2,9 +2,9 @@
 import pandas as pd
 import numpy as np
 import os
-from stock_deeplearning.ultility.download_record import download_record as DR
-from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
-from stock_deeplearning.ultility.common_def import * 
+from ultility.download_record import download_record as DR
+from ultility.stock_codes_utility import stock_codes_utility as SCU
+from ultility.common_def import * 
 
 FILE_LIST = {'main': FILE_MAIN, 'abstract': FILE_ABSTRACT,'profit': FILE_PROFIT, 'cash': FILE_CASH, 'loans': FILE_LOANS, 'daily_trade_quarter': FILE_DAILY_TRADE_QUARTER}
 TAIL_MARGIN = 1

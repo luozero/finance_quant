@@ -2,10 +2,10 @@
 import pandas as pd
 import numpy as np
 import os
-from stock_deeplearning.data_set.finance_data.financial_load_store import financial_load_store as FLS
-from stock_deeplearning.ultility.stock_codes_utility import stock_codes_utility as SCU
-from stock_deeplearning.ultility.download_record import download_record as DR
-from stock_deeplearning.ultility.common_def import * 
+from data_set.finance_data.financial_load_store import financial_load_store as FLS
+from ultility.stock_codes_utility import stock_codes_utility as SCU
+from ultility.download_record import download_record as DR
+from ultility.common_def import * 
 
 finance_index_dic = {
   #####earning capacity
