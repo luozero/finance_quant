@@ -17,7 +17,8 @@
 	{
 		"stock_trade_ratio_file": "stock_trade_ratio_0928.csv",
 		"index_trade_ratio_file": "index_trade_ratio_0928.csv",
-    "kmean_trade_ratio_file": "kmean_trade_ratio_0928_50.csv",
+    "stock_kmean_trade_ratio_file": "stock_kmean_trade_ratio_0928_50.csv",
+    "index_kmean_trade_ratio_file": "index_kmean_trade_ratio_0928.csv",
     "kmnean_stock_num": 500,
     "n_clusters": 50
 	}

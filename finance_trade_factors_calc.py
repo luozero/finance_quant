@@ -7,6 +7,7 @@ sys.path.append(r'../')
 # import ptvsd
 # ptvsd.settrace(None, ('0.0.0.0', 12345))
 
+from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
 from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
@@ -19,7 +20,7 @@ def read_config(filename):
 def finance_process(conf):
   
   common_conf = conf['common']
-  download_type = common_conf['data_type']
+  data_type = common_conf['data_type']
   path = common_conf['path']
 
   finance_conf = conf['finance']
@@ -33,10 +34,10 @@ def finance_process(conf):
 
   # download all the data
   data_download_1 = data_download(path, stock_codes)
-  data_download_1.download_data(download_type)
+  data_download_1.download_data(data_type)
 
   # process quarter trade
-  daily_trade_data = process_daily_trade_data(path, stock_codes)
+  daily_trade_data = process_daily_trade_data(path, stock_codes, data_type)
   daily_trade_data.trade_data_quarter()
 
   # need to disable following code when debug
@@ -70,13 +71,13 @@ def trade_process(conf):
   # download daily trade data
 
   data_download_1 = data_download(path, stock_codes)
-  data_download_1.download_data(data_type)
+  # data_download_1.download_data(data_type)
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)
 
   #process daily trade data
-  daily_trade_data = process_daily_trade_data(path, stock_codes)
+  daily_trade_data = process_daily_trade_data(path, stock_codes, data_type)
   daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
 
 if __name__ == '__main__':

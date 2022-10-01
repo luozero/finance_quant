@@ -1,8 +1,9 @@
 import json
 import sys, getopt
-sys.path.append(r'../')
+# sys.path.append(r'../')
 
-from stock_deeplearning.stock_ai.trade_ratio_ml import trade_ratio_ml
+from stock_ai.trade_ratio_ml import trade_ratio_ml
+from ultility.common_def import *
 
 def read_config(filename):
   with open(filename, 'r') as f:
@@ -13,17 +14,24 @@ def trade_ratio_k_mean(conf):
 
   common_conf = conf['common']
   path = common_conf['path']
+  data_type = common_conf['data_type']
 
   trade_conf = conf['trade']
-  trade_ratio_file = trade_conf['trade_ratio_file']
-  kmean_trade_ratio_file = trade_conf['kmean_trade_ratio_file']
+
+  if data_type == TYPE_STOCK:
+    trade_ratio_file = trade_conf['stock_trade_ratio_file']
+    kmean_trade_ratio_file = trade_conf['stock_kmean_trade_ratio_file']
+  elif data_type == TYPE_INDEX:
+    trade_ratio_file = trade_conf['index_trade_ratio_file']
+    kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
+
   n_clusters = trade_conf['n_clusters']
   kmnean_stock_num =  trade_conf['kmnean_stock_num']
 
   finance_conf = conf['finance']
   finance_factor_rank_file = finance_conf['result_name']
 
-  trade_ratio = trade_ratio_ml(path, trade_ratio_file, finance_factor_rank_file, kmnean_stock_num)
+  trade_ratio = trade_ratio_ml(path, trade_ratio_file, finance_factor_rank_file, data_type, kmnean_stock_num)
   trade_ratio.kmean(n_clusters, kmean_trade_ratio_file)
 
 # def trade_kmean(conf):

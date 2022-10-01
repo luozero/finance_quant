@@ -12,13 +12,11 @@ from data_set.finance_data.financial_load_store import financial_load_store as F
 
 class process_daily_trade_data(object):
 
-  def __init__(self, path_root='../../../data/', stock_codes=['000001']):
+  def __init__(self, path_root='../../../data/', stock_codes=['000001'], data_type = TYPE_STOCK):
 
     path = os.path.join(path_root, FOLDER_DATA_DOWNLOAD)
     if not os.path.exists(path):
       print("pls download finance data")
-    self.file_daily_trade = os.path.join(path, FILE_DAILY_TRADE)
-
 
     #self.path = path
     self.stock_file_daily_trade_quarter = os.path.join(path, FILE_DAILY_TRADE_QUARTER)
@@ -36,6 +34,8 @@ class process_daily_trade_data(object):
     self.proc_id = self.DR.read_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX)
     self.stock_codes = stock_codes[self.proc_id:]
 
+    self.data_type = data_type
+
   
   def trade_data_quarter(self):
 
@@ -50,7 +50,7 @@ class process_daily_trade_data(object):
           self.DR.write_skip_stock(stock_code)
       else:
 
-        file_name = FILE_DAILY_TRADE.format(stock_code)
+        file_name = FILE_STOCK_DAILY_TRADE.format(stock_code)
         dates = data_main[finance_main].columns[1:self.FLD.min_column]
 
         daily_trade_data = self.FLD.load_financical_data([file_name])[file_name]
@@ -89,7 +89,8 @@ class process_daily_trade_data(object):
 
     for stock_code in stock_codes:
 
-      file_name = FILE_DAILY_TRADE.format(stock_code)
+      file_name = FILE_STOCK_DAILY_TRADE.format(stock_code)
+
       daily_trade_data = self.FLD.load_financical_data([file_name])[file_name]
 
       # here need 400 trade days datas
@@ -98,10 +99,11 @@ class process_daily_trade_data(object):
         days = 5
 
         # price change
-        pct_change = 0 - daily_trade_data.loc[0 : days, '收盘价'].pct_change()[1:] * 100
+        price_data = pd.Series(daily_trade_data.loc[:, '收盘价'], dtype = np.float)
+
+        pct_change = 0 - price_data[0 : days + 1].pct_change()[1:] * 100
         pct_change_list = list(pct_change)
-        price_pct = lambda x :  (daily_trade_data.loc[0, '收盘价'] - daily_trade_data.loc[x, '收盘价']) * 100 \
-            / daily_trade_data.loc[x, '收盘价'] 
+        price_pct = lambda x :  (price_data[0] - price_data[x]) * 100 / price_data[x] 
         # 5 days
         pct_change_list.append( price_pct(days))
         # 10 days
@@ -118,13 +120,16 @@ class process_daily_trade_data(object):
         pct_change_list.append( price_pct(days * 80))
 
         # volumn change
-        volumn_change = 0 - daily_trade_data.loc[:days, '成交量'].pct_change()[1:] * 100
+        # volumn_data = pd.Series(pd.DataFrame(daily_trade_data.loc[:, '成交量']).applymap(lambda x: np.float(x)).values.squeeze())
+        volumn_data = pd.Series(daily_trade_data.loc[:, '成交量'],dtype=np.float)
+
+        volumn_change = 0 - volumn_data[0 : days + 1].pct_change()[1:] * 100
         pct_change_list = pct_change_list + list(volumn_change)
         # 1days vs 5 days
-        pct_ = (daily_trade_data.loc[ 0 , '成交量'] - daily_trade_data.loc[ 1 : days, '成交量'].mean()) * 100 / daily_trade_data.loc[ 1 : days, '成交量'].mean()
+        pct_ = (volumn_data[0] - volumn_data[1 : days].mean()) * 100 / volumn_data[ 1 : days].mean()
         pct_change_list.append(pct_)
-        volumn_pct = lambda x : (daily_trade_data.loc[ 0 : days - 1, '成交量'].mean() - daily_trade_data.loc[ days : 2 * days - 1, '成交量'].mean()) * 100 \
-                / daily_trade_data.loc[ days : 2 * days - 1, '成交量'].mean()
+        volumn_pct = lambda x : (volumn_data[ 0 : days - 1].mean() - volumn_data[ days : 2 * days - 1].mean()) * 100 \
+                / volumn_data[ days : 2 * days - 1].mean()
         # 5 days vs 5 days
         pct_ = volumn_pct(days)
         pct_change_list.append(pct_)
@@ -138,7 +143,10 @@ class process_daily_trade_data(object):
         pct_ = volumn_pct(days * 40)
         pct_change_list.append(pct_)
 
-        pd_stock = pd.DataFrame(pct_change_list, columns=[scu.add_stock_sh_sz(stock_code)])
+        if self.data_type == TYPE_STOCK:
+          pd_stock = pd.DataFrame(pct_change_list, columns=[scu.add_stock_sh_sz(stock_code)])
+        elif self.data_type == TYPE_INDEX:
+          pd_stock = pd.DataFrame(pct_change_list, columns=[stock_code])
 
         pd_total_stock = pd.concat([pd_total_stock, pd_stock], axis=1)
     
