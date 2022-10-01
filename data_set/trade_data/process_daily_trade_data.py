@@ -98,10 +98,13 @@ class process_daily_trade_data(object):
 
         days = 5
 
+        data_pct_change_one_day = lambda x: (x[0 : days].values - x[1 : days + 1].values) / x[1 : days + 1].values * 100
+
         # price change
         price_data = pd.Series(daily_trade_data.loc[:, '收盘价'], dtype = np.float)
+        # pct_change = 0 - price_data[0 : days + 1].pct_change()[1:] * 100
+        pct_change = data_pct_change_one_day(price_data)
 
-        pct_change = 0 - price_data[0 : days + 1].pct_change()[1:] * 100
         pct_change_list = list(pct_change)
         price_pct = lambda x :  (price_data[0] - price_data[x]) * 100 / price_data[x] 
         # 5 days
@@ -123,7 +126,9 @@ class process_daily_trade_data(object):
         # volumn_data = pd.Series(pd.DataFrame(daily_trade_data.loc[:, '成交量']).applymap(lambda x: np.float(x)).values.squeeze())
         volumn_data = pd.Series(daily_trade_data.loc[:, '成交量'],dtype=np.float)
 
-        volumn_change = 0 - volumn_data[0 : days + 1].pct_change()[1:] * 100
+        # volumn_change = 0 - volumn_data[0 : days + 1].pct_change()[1:] * 100
+        volumn_change = data_pct_change_one_day(volumn_data)
+
         pct_change_list = pct_change_list + list(volumn_change)
         # 1days vs 5 days
         pct_ = (volumn_data[0] - volumn_data[1 : days].mean()) * 100 / volumn_data[ 1 : days].mean()
