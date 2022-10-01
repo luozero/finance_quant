@@ -50,7 +50,10 @@ class process_daily_trade_data(object):
           self.DR.write_skip_stock(stock_code)
       else:
 
-        file_name = FILE_STOCK_DAILY_TRADE.format(stock_code)
+        if self.data_type == TYPE_STOCK:
+          file_name = FILE_STOCK_DAILY_TRADE.format(stock_code)
+        elif self.data_type == TYPE_INDEX:
+          file_name = FILE_INDEX_DAILY_TRADE.format(stock_code)
         dates = data_main[finance_main].columns[1:self.FLD.min_column]
 
         daily_trade_data = self.FLD.load_financical_data([file_name])[file_name]
@@ -154,7 +157,7 @@ class process_daily_trade_data(object):
           pd_stock = pd.DataFrame(pct_change_list, columns=[stock_code])
 
         pd_total_stock = pd.concat([pd_total_stock, pd_stock], axis=1)
-    
+
     pd_total_stock1 = pd.DataFrame(pd_total_stock.T.values, columns=pct_columns_list, index=pd_total_stock.columns)
     pd_total_stock1.to_csv(self.daily_trade_ratio_folder + outputfile, encoding='gbk')
     print("store to ", self.daily_trade_ratio_folder + outputfile)

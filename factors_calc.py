@@ -64,7 +64,7 @@ def trade_process(conf):
     trade_ouput_file = trade_conf['index_trade_ratio_file']
 
 
-  scu = SCU(path)
+  scu = SCU(path, data_type)
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table(data_type)
   # stock_codes = ['000001','000002']

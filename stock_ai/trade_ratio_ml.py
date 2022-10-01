@@ -47,6 +47,8 @@ class trade_ratio_ml:
     trade_ratio = trade_ratio.dropna()
     trade_ratio = trade_ratio.replace(np.inf, 0)
     self.trade_ratio = trade_ratio
+
+    self.data_type = data_type
     
   def kmean(self, k = 10, outputfile = 'output.csv'):
     #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, self.dates)

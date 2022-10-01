@@ -9,12 +9,10 @@ from retry import retry
 from ultility.download_record import download_record as DR
 from ultility.common_def import * 
 
-
 DOWNLOAD_THR = 20
-try_index = 0
 
 class data_download:
-  def __init__(self, path='../../../data/', stock_codes=['000001']):
+  def __init__(self, path='../../../data/', stock_codes=['000001'], type_data = TYPE_FINANCE_STOCK):
 
     self.path = os.path.join(path, FOLDER_DATA_DOWNLOAD)
     if not os.path.exists(self.path):
@@ -24,6 +22,7 @@ class data_download:
     self.date = str(date).replace('-','')
 
     self.stock_codes = stock_codes
+    self.type_data = type_data
 
   def Schedule(self, a,b,c):
       per = 100.0 * a * b / c
@@ -36,31 +35,30 @@ class data_download:
 
   @retry(DOWNLOAD_THR) 
   def try_download_csv(self, filename, url, stock):
-
+    a = stock[2]
+    if self.type_data == TYPE_INDEX:
+      if int(a) >= 3:
+        stock_change = '1' + stock[2:]
+      else:
+        stock_change = '0' + stock[2:]
+    else:
+      if int(a)<6:
+        stock_change = '1' + stock[2:]
+      else:
+        stock_change = '0' + stock[2:]
+    # download
     url = url.format(stock, self.date)
-
     request.urlretrieve(url, filename, self.Schedule)
     
-    # try_index = try_index + 1
-    # if try_index > DOWNLOAD_THR:
-    #   print('fail to download stock ', url, 'try_index ', try_index)
-
-  def download_stock_daily_trade(self, stock):
+  def download_daily_trade(self, stock):
     #daily trade
-    if int(stock)<600000:
-      stock_change = '1' + stock
+    if self.type_data == TYPE_INDEX:
+      file_name = FILE_INDEX_DAILY_TRADE
+      link = LINK_INDEX_DAILY_TRADE
     else:
-      stock_change = '0' + stock
-    self.try_download_csv(self.file_name(FILE_STOCK_DAILY_TRADE, stock), LINK_STOCK_DAILY_TRADE, stock_change)
-
-  def download_index_daily_trade(self, stock):
-    #daily trade
-    a = stock[2]
-    if int(a) >= 3:
-      stock_change = '1' + stock[2:]
-    else:
-      stock_change = '0' + stock[2:]
-    self.try_download_csv(self.file_name(FILE_STOCK_DAILY_TRADE, stock), LINK_INDEX_DAILY_TRADE, stock_change)
+      file_name = FILE_STOCK_DAILY_TRADE
+      link = LINK_STOCK_DAILY_TRADE
+    self.try_download_csv(self.file_name(file_name, stock), link, stock)
 
   def download_finance_data(self, stock):
     #main finance
@@ -82,12 +80,10 @@ class data_download:
     #loans
     self.try_download_csv(self.file_name(FILE_LOANS, stock), LINK_LOANS_FINANCE, stock)
     # stock daily trade
-    self.download_stock_daily_trade(stock)
+    self.download_daily_trade(stock)
 
-
-  def download_data(self, download_type = True):
-
-    if download_type == TYPE_FINANCE_STOCK:
+  def download_data(self, data_type = True):
+    if data_type == TYPE_FINANCE_STOCK:
       dr = DR(self.path, JSON_FILE_PROCESS_RECORD)
       stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
     else:
@@ -95,20 +91,16 @@ class data_download:
     stock_codes = self.stock_codes[stock_index:]
 
     for stock in (stock_codes):
-
       print("fetching code: ", stock)
-
-      if download_type == TYPE_FINANCE_STOCK:
+      if data_type == TYPE_FINANCE_STOCK:
         self.download_finance_data(stock)
         dr.write_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX, stock_index)
-      elif download_type == TYPE_STOCK:
-        self.download_stock_daily_trade(stock)
-      elif download_type == TYPE_INDEX:
-        self.download_index_daily_trade(stock)
+      elif data_type == TYPE_STOCK or data_type == TYPE_INDEX:
+        self.download_daily_trade(stock)
       else:
-        print('do not support this download type', download_type)
+        print('do not support this download type', data_type)
 
-      if download_type == TYPE_FINANCE_STOCK:
+      if data_type == TYPE_FINANCE_STOCK:
         stock_index = stock_index + 1
 
 if __name__ == '__main__':

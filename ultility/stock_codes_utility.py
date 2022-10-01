@@ -11,11 +11,19 @@ Created on 2018��10��4��
 @author: intel
 '''
 class stock_codes_utility:
-  def __init__(self,path='../../../data/'):
+  def __init__(self,path='../../../data/', type_data = TYPE_STOCK):
     ts.set_token('ddd82cf225ed602f13bfcde56ef943643d79634125e3449dc9dce182')
     self.pro = ts.pro_api()
     self.DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
     self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
+
+    if type_data == TYPE_STOCK:
+      self.table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
+    elif type_data == TYPE_INDEX:
+      self.table = pd.read_csv('./table/index_codes.csv', encoding='gbk')
+    else:
+      print("not support this kind type: ", type_data)
+    self.type_data = type_data
   
   def stock_codes(self):
     # basic_data = ts.get_stock_basics()
@@ -33,17 +41,12 @@ class stock_codes_utility:
     return stock_codes
   
   def stock_codes_from_table(self, type):
+    codes = self.table.loc[:,'code'].values.squeeze()
+    return sorted(codes)
 
-    if type == TYPE_FINANCE_STOCK or type == TYPE_STOCK:
-      pd1 = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
-      stock_codes = pd.DataFrame(pd1.loc[:,'stock_code']).applymap(lambda x: x[2:]).values.squeeze()
-      return sorted(stock_codes)
-    elif type == TYPE_INDEX:
-      pd1 = pd.read_csv('./table/index_codes.csv', encoding='gbk')
-      index_codes = pd1.loc[:,'index_code'].values.squeeze()
-      return sorted(index_codes)
-    else:
-      print('do not support this type ', type)
+  def stock_codes_get_name(self, code):
+    data = self.table
+    return data[data['code'].isin([code])]['name'][0]
 
   def skip_stock_codes(self, stock_codes):
 
