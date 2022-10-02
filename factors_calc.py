@@ -21,6 +21,7 @@ def finance_process(conf):
   
   common_conf = conf['common']
   data_type = common_conf['data_type']
+  download = common_conf['download']
   path = common_conf['path']
 
   finance_conf = conf['finance']
@@ -35,8 +36,9 @@ def finance_process(conf):
   # stock_codes = ['000001','000002']
 
   # download all the data
-  data_download_1 = data_download(path, stock_codes)
-  data_download_1.download_data(data_type)
+  if download == "yes":
+    data_download_1 = data_download(path, stock_codes)
+    data_download_1.download_data(data_type)
 
   # process quarter trade
   daily_trade_data = process_daily_trade_data(path, stock_codes, data_type)
@@ -69,12 +71,11 @@ def trade_process(conf):
   scu = SCU(path, data_type)
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table(data_type)
-  # stock_codes = ['000001','000002']
+  # stock_codes = ['SZ000001','SZ000002']
 
   # download daily trade data
-
-  data_download_1 = data_download(path, stock_codes)
   if download == "yes":
+    data_download_1 = data_download(path, stock_codes)
     data_download_1.download_data(data_type)
 
   # need to disable following code when debug

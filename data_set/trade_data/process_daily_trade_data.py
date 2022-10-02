@@ -86,6 +86,8 @@ class process_daily_trade_data(object):
         '5days', '10days', '20days', '200days']
     pct_change_pd = pd.DataFrame()
 
+    code_names_list = []
+    codes_list = []
     for stock_code in stock_codes:
 
       file_name = get_stock_index_file(self.data_type, stock_code)
@@ -93,8 +95,6 @@ class process_daily_trade_data(object):
       daily_trade_data = self.FLD.load_financical_data([file_name])[file_name]
 
       # here need 400 trade days datas
-      code_names = []
-      codes = []
       if daily_trade_data.shape[0] > 400:
 
         days = 5
@@ -149,15 +149,15 @@ class process_daily_trade_data(object):
         pct_ = volumn_pct(days * 40)
         pct_change_list.append(pct_)
 
-        pct_change_series = pd.series(pct_change_list)
+        pct_change_series = pd.Series(pct_change_list)
         pct_change_pd = pd.concat([pct_change_pd, pct_change_series], axis=1)
 
-        codes = codes.append(stock_code)
+        codes_list.append(stock_code)
         code_name = self.scu.stock_codes_get_name(stock_code)
-        code_names = code_names.append(code_name)
+        code_names_list.append(code_name)
 
-    pct_change_pd = pd.DataFrame(pct_change_pd.T.values, columns=pct_columns_list, index=codes)
-    pct_change_pd = pd.concat([code_names, pct_change_pd], axis=1)
+    pct_change_pd = pd.DataFrame(pct_change_pd.T.values, columns=pct_columns_list, index=codes_list)
+    pct_change_pd = pd.concat([pd.Series(code_names_list, index=codes_list), pct_change_pd], axis=1)
     pct_change_pd.to_csv(self.daily_trade_ratio_folder + outputfile, encoding='gbk')
     print("store to ", self.daily_trade_ratio_folder + outputfile)
 

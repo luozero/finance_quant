@@ -33,25 +33,25 @@ TYPE_INDEX 				 = 'index_data'
 FOLDER_DATA_DOWNLOAD = 'finance'
 
 # factor folder
-FOLDER_FACTOR = 'finance_processed'
-FOLDER_RANK = 'rank'
+FOLDER_FACTOR                = 'finance_processed'
+FOLDER_RANK                  = 'rank'
 FOLDER_DAILY_TRADE_PROCESSED = "daily_trade_processed"
 
 # process trade data folder from daily trade data
 FILE_DAILY_TRADE_QUARTER = "{}_daily_trade_quarter.csv"
 
 # json process config
-JSON_FILE_PROCESS_RECORD = "process_record.json"
+JSON_FILE_PROCESS_RECORD              = "process_record.json"
 
-KEY_DOWNLOAD = 'download'
-KEY_DOWNLOAD_DAILY_TRADE_DATA_INDEX = 'download_daily_trade_data_index'
-KEY_DOWNLOAD_FINANCE_DATA_INDEX = 'download_finance_data_index'
-KEY_PROCESS = 'process'
+KEY_DOWNLOAD                          = 'download'
+KEY_DOWNLOAD_DAILY_TRADE_DATA_INDEX   = 'download_daily_trade_data_index'
+KEY_DOWNLOAD_FINANCE_DATA_INDEX       = 'download_finance_data_index'
+KEY_PROCESS                           = 'process'
 KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX = "daily_trade_quarter_index"
-KEY_PROCESS_FINANCE_FACTOR_INDEX = "stock_factor_calc_index"
+KEY_PROCESS_FINANCE_FACTOR_INDEX      = "stock_factor_calc_index"
 
-process_record_dict = {KEY_DOWNLOAD: {}, KEY_PROCESS: {}}
+process_record_dict                   = {KEY_DOWNLOAD: {}, KEY_PROCESS: {}}
 
 # csv file
-CSV_SKIP_STOCK = "skip_stocks.csv"
-CSV_PROCESS_FINANCE_SKIP_STOCK = "finance_skip_stocks.csv"
+CSV_SKIP_STOCK                  = "skip_stocks.csv"
+CSV_PROCESS_FINANCE_SKIP_STOCK  = "finance_skip_stocks.csv"

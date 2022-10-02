@@ -46,7 +46,7 @@ class stock_codes_utility:
 
   def stock_codes_get_name(self, code):
     data = self.table
-    return data[data['code'].isin([code])]['name'][0]
+    return data[data['code'].isin([code])]['name'].values[0]
 
   def skip_stock_codes(self, stock_codes):
 

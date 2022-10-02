@@ -52,9 +52,9 @@ class data_download:
         stock_change = '0' + stock[2:]
     else:
       if int(a) >= 6:
-        stock_change = '1' + stock[2:]
-      else:
         stock_change = '0' + stock[2:]
+      else:
+        stock_change = '1' + stock[2:]
     # download
     try:
       url = url.format(stock_change, self.date)
