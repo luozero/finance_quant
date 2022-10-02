@@ -41,8 +41,8 @@ class stock_codes_utility:
     return stock_codes
   
   def stock_codes_from_table(self, type):
-    codes = self.table.loc[:,'code'].values.squeeze()
-    return sorted(codes)
+    codes = sorted(self.table.loc[:,'code'].values.squeeze())
+    return codes
 
   def stock_codes_get_name(self, code):
     data = self.table

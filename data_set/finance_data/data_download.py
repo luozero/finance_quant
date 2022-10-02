@@ -29,12 +29,21 @@ class data_download:
       if per > 100 :
           per = 100
       print('%.2f%%' % per)
-  
-  def file_name(self, filename, stock):
-    return os.path.join(self.path,filename.format(stock))
 
   @retry(DOWNLOAD_THR) 
   def try_download_csv(self, filename, url, stock):
+    filename = os.path.join(self.path, filename.format(stock))
+    stock_change = stock[2:]
+    # download
+    try:
+      url = url.format(stock_change, self.date)
+      request.urlretrieve(url, filename, self.Schedule)
+    except:
+      print('skip this stok: ', stock)
+
+  @retry(DOWNLOAD_THR) 
+  def try_download_trade_csv(self, filename, url, stock):
+    filename = os.path.join(self.path, filename.format(stock))
     a = stock[2]
     if self.type_data == TYPE_INDEX:
       if int(a) >= 3:
@@ -42,13 +51,17 @@ class data_download:
       else:
         stock_change = '0' + stock[2:]
     else:
-      if int(a)<6:
+      if int(a) >= 6:
         stock_change = '1' + stock[2:]
       else:
         stock_change = '0' + stock[2:]
     # download
-    url = url.format(stock, self.date)
-    request.urlretrieve(url, filename, self.Schedule)
+    try:
+      url = url.format(stock_change, self.date)
+      print(url)
+      request.urlretrieve(url, filename, self.Schedule)
+    except:
+      print('skip this stok: ', stock)
     
   def download_daily_trade(self, stock):
     #daily trade
@@ -58,33 +71,33 @@ class data_download:
     else:
       file_name = FILE_STOCK_DAILY_TRADE
       link = LINK_STOCK_DAILY_TRADE
-    self.try_download_csv(self.file_name(file_name, stock), link, stock)
+    self.try_download_trade_csv(file_name, link, stock)
 
   def download_finance_data(self, stock):
     #main finance
-    self.try_download_csv(self.file_name(FILE_MAIN, stock), LINK_MAIN_FINANCE, stock)
+    self.try_download_csv(FILE_MAIN, LINK_MAIN_FINANCE, stock)
     # earning
-    self.try_download_csv(self.file_name(FILE_EARNING, stock), LINK_EARNING_CAPACITY, stock)
+    self.try_download_csv(FILE_EARNING, LINK_EARNING_CAPACITY, stock)
     # return debit
-    self.try_download_csv(self.file_name(FILE_RETURN_DEBIT, stock), LINK_RETURN_DEBIT_CAPACITY, stock)
+    self.try_download_csv(FILE_RETURN_DEBIT, LINK_RETURN_DEBIT_CAPACITY, stock)
     # growth
-    self.try_download_csv(self.file_name(FILE_GROWTH, stock), LINK_GROWTH_CAPACITY, stock)
+    self.try_download_csv(FILE_GROWTH, LINK_GROWTH_CAPACITY, stock)
     # operation
-    self.try_download_csv(self.file_name(FILE_OPERATION, stock), LINK_OPERATION_CAPACITY, stock)
+    self.try_download_csv(FILE_OPERATION, LINK_OPERATION_CAPACITY, stock)
     #abstract
-    self.try_download_csv(self.file_name(FILE_ABSTRACT, stock), LINK_ADBSTRACT_FINANCE, stock)
+    self.try_download_csv(FILE_ABSTRACT, LINK_ADBSTRACT_FINANCE, stock)
     #profit
-    self.try_download_csv(self.file_name(FILE_PROFIT, stock), LINK_PROFIT_FINANCE, stock)
+    self.try_download_csv(FILE_PROFIT, LINK_PROFIT_FINANCE, stock)
     #cash
-    self.try_download_csv(self.file_name(FILE_CASH, stock), LINK_CASH_FINANCE, stock)
+    self.try_download_csv(FILE_CASH, LINK_CASH_FINANCE, stock)
     #loans
-    self.try_download_csv(self.file_name(FILE_LOANS, stock), LINK_LOANS_FINANCE, stock)
+    self.try_download_csv(FILE_LOANS, LINK_LOANS_FINANCE, stock)
     # stock daily trade
     self.download_daily_trade(stock)
 
   def download_data(self, data_type = True):
     if data_type == TYPE_FINANCE_STOCK:
-      dr = DR(self.path, JSON_FILE_PROCESS_RECORD)
+      dr = DR(self.path, '../' + JSON_FILE_PROCESS_RECORD)
       stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
     else:
       stock_index = 0

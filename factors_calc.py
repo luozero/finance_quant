@@ -29,7 +29,9 @@ def finance_process(conf):
   factors = finance_conf['factors']
 
   scu = SCU(path)
-  stock_codes = scu.stock_codes()
+  # stock_codes = scu.stock_codes()
+  stock_codes = scu.stock_codes_from_table(data_type)
+  print(stock_codes)
   # stock_codes = ['000001','000002']
 
   # download all the data
