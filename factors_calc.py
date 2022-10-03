@@ -39,7 +39,7 @@ def finance_process(conf):
 
   # download all the data
   if download == "yes":
-    data_download_1 = data_download(path, stock_codes)
+    data_download_1 = data_download(path, stock_codes, data_type)
     data_download_1.download_data(data_type)
 
   # process quarter trade
@@ -77,7 +77,7 @@ def trade_process(conf):
 
   # download daily trade data
   if download == "yes":
-    data_download_1 = data_download(path, stock_codes)
+    data_download_1 = data_download(path, stock_codes, data_type)
     data_download_1.download_data(data_type)
 
   # need to disable following code when debug

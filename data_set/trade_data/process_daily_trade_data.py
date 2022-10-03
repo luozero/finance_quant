@@ -36,7 +36,7 @@ class process_daily_trade_data(object):
 
     self.data_type = data_type
 
-    self.scu = SCU(data_type)
+    self.scu = SCU(path_root, data_type)
 
   
   def trade_data_quarter(self):
