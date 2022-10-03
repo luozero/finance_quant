@@ -56,7 +56,7 @@ class trade_ratio_ml:
 
     trade_ratio = self.trade_ratio
 
-    kmeans = KMeans(n_clusters=k, random_state=0).fit(trade_ratio.iloc[:,1:].values)
+    kmeans = KMeans(n_clusters=k, random_state=0).fit(trade_ratio.iloc[:,2:].values)
     labels = kmeans.labels_
 
     trade_ratio_cluster = pd.concat([trade_ratio, pd.DataFrame(labels, columns=['cluster'])], axis = 1)
