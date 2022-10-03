@@ -9,6 +9,8 @@ sys.path.append(r'../')
 
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
+from data_set.finance_data.financial_factor_calc import *
+from data_set.finance_data.financial_factor_rank import *
 from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
@@ -33,7 +35,7 @@ def finance_process(conf):
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table(data_type)
   print(stock_codes)
-  # stock_codes = ['000001','000002']
+  # stock_codes = ['SH600032']
 
   # download all the data
   if download == "yes":

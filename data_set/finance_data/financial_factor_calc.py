@@ -95,7 +95,8 @@ class financail_factor_calc:
  
     daily_trade_data_quarter_file = FILE_DAILY_TRADE_QUARTER.format(stock_code)
     market_cap = self.FLS.fetch_one_trade_data_quarter_in_stock(daily_trade_data_quarter_file,'总市值')
-    EV = market_cap + debt - excess_cash
+    market_cap_size = debt.size
+    EV = market_cap[:market_cap_size] + debt - excess_cash
     #####earning capacity
     #roe
     roe = self.ab_ratio_calc(earning,equlity,'roe')
@@ -160,13 +161,13 @@ class financail_factor_calc:
     EBITDA_EV_ratio = self.ab_ratio_calc(EBITDA,EV,finance_index_dic['EDITDA2EV'])
     pd_data = pd.concat([pd_data, EBITDA_EV_ratio], axis=1)
     ###BB2P
-    divedends_market_cap_ratio = self.ab_ratio_calc(divedends,market_cap,finance_index_dic['BB2P'])
+    divedends_market_cap_ratio = self.ab_ratio_calc(divedends,market_cap[:market_cap_size],finance_index_dic['BB2P'])
     pd_data = pd.concat([pd_data, divedends_market_cap_ratio], axis=1)
     ###BB2EV
     divedends_EV_ratio = self.ab_ratio_calc(divedends,EV,finance_index_dic['BB2EV'])
     pd_data = pd.concat([pd_data, divedends_EV_ratio], axis=1)
     #B2P
-    B2P_ratio = self.ab_ratio_calc(equlity,market_cap,finance_index_dic['B2P'])/100
+    B2P_ratio = self.ab_ratio_calc(equlity,market_cap[:market_cap_size],finance_index_dic['B2P'])/100
     pd_data = pd.concat([pd_data, B2P_ratio], axis=1)
     #S2EV
     S2EV_ratio = self.ab_ratio_calc(revenue,EV,finance_index_dic['S2EV'])

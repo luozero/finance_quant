@@ -72,7 +72,7 @@ class process_daily_trade_data(object):
 
         # trade_data_quarter.index = dates
         file_csv = self.stock_file_daily_trade_quarter.format(stock_code)
-        trade_data_quarter.to_csv(file_csv, encoding='gbk')
+        trade_data_quarter.to_csv(file_csv, encoding='gbk', index = False)
         print("store to ", file_csv)
 
         self.DR.write_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, self.proc_id)

@@ -9,7 +9,7 @@ from retry import retry
 from ultility.download_record import download_record as DR
 from ultility.common_def import * 
 
-DOWNLOAD_THR = 20
+DELAY = 50
 
 class data_download:
   def __init__(self, path='../../../data/', stock_codes=['000001'], type_data = TYPE_FINANCE_STOCK):
@@ -30,7 +30,7 @@ class data_download:
           per = 100
       print('%.2f%%' % per)
 
-  @retry(DOWNLOAD_THR) 
+  @retry(tries=-1, delay=DELAY) 
   def try_download_csv(self, filename, url, stock):
     filename = os.path.join(self.path, filename.format(stock))
     stock_change = stock[2:]
@@ -41,7 +41,7 @@ class data_download:
     except:
       print('skip this stok: ', stock)
 
-  @retry(DOWNLOAD_THR) 
+  @retry(tries=-1, delay=DELAY)
   def try_download_trade_csv(self, filename, url, stock):
     filename = os.path.join(self.path, filename.format(stock))
     a = stock[2]
