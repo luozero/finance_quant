@@ -2,7 +2,7 @@
 import pandas as pd
 import os
 import json
-from stock_deeplearning.ultility.common_def import * 
+from ultility.common_def import * 
 
 class download_record:
   def __init__(self,path='../../../data/',record='rec.json', skip = 'skip_stock.csv'):
