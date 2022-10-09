@@ -1,7 +1,7 @@
 {
 	"common":
 	{
-		"path": "../data_20220921",
+		"path": "../data_20221002",
 		"?data_type": "finance_stock_data, stock_data, index_data",
 		"data_type": "index_data",
     "?download": "yes, no",

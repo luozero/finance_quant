@@ -80,9 +80,9 @@ class process_daily_trade_data(object):
   
   def price_volume_ratio(self, stock_codes, outputfile):
 
-    pct_columns_list = ['day1  price', 'day2', 'day3', 'day4', 'day5',\
+    pct_columns_list = ['day1_price', 'day2', 'day3', 'day4', 'day5',\
       '5days', '10days', '20days', '60days', '100days', '200days', '400days',\
-      'day1  volumn', 'day2', 'day3', 'day4', 'day5', '1vs5days_mean',\
+      'day1_volumn', 'day2', 'day3', 'day4', 'day5', '1vs5days_mean',\
         '5days', '10days', '20days', '200days']
     pct_change_pd = pd.DataFrame()
 
@@ -102,7 +102,7 @@ class process_daily_trade_data(object):
         data_pct_change_one_day = lambda x: (x[0 : days].values - x[1 : days + 1].values) / x[1 : days + 1].values * 100
 
         # price change
-        price_data = pd.Series(daily_trade_data.loc[:, '收盘价'], dtype = np.float)
+        price_data = pd.Series(daily_trade_data.loc[:, '收盘价'], dtype = np.float64)
         # pct_change = 0 - price_data[0 : days + 1].pct_change()[1:] * 100
         pct_change = data_pct_change_one_day(price_data)
 
@@ -125,7 +125,7 @@ class process_daily_trade_data(object):
 
         # volumn change
         # volumn_data = pd.Series(pd.DataFrame(daily_trade_data.loc[:, '成交量']).applymap(lambda x: np.float(x)).values.squeeze())
-        volumn_data = pd.Series(daily_trade_data.loc[:, '成交量'],dtype=np.float)
+        volumn_data = pd.Series(daily_trade_data.loc[:, '成交量'],dtype=np.float64)
 
         # volumn_change = 0 - volumn_data[0 : days + 1].pct_change()[1:] * 100
         volumn_change = data_pct_change_one_day(volumn_data)
@@ -134,8 +134,9 @@ class process_daily_trade_data(object):
         # 1days vs 5 days
         pct_ = (volumn_data[0] - volumn_data[1 : days].mean()) * 100 / volumn_data[ 1 : days].mean()
         pct_change_list.append(pct_)
-        volumn_pct = lambda x : (volumn_data[ 0 : days - 1].mean() - volumn_data[ days : 2 * days - 1].mean()) * 100 \
-                / volumn_data[ days : 2 * days - 1].mean()
+
+        volumn_pct = lambda x : (volumn_data[0 : x - 1].mean() - volumn_data[x : 2 * x - 1].mean()) * 100 \
+                / volumn_data[x : 2 * x - 1].mean()
         # 5 days vs 5 days
         pct_ = volumn_pct(days)
         pct_change_list.append(pct_)
