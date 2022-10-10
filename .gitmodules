@@ -1,0 +1,3 @@
+[submodule "efinance"]
+	path = efinance
+	url = git@github.com:luozero/efinance.git
