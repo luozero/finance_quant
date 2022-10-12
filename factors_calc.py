@@ -1,5 +1,6 @@
 import json
 import sys, getopt
+import datetime
 
 from ultility.common_def import *
 sys.path.append(r'../')
@@ -68,7 +69,10 @@ def trade_process(conf):
     trade_ouput_file = trade_conf['stock_trade_ratio_file']
   elif data_type == TYPE_INDEX:
     trade_ouput_file = trade_conf['index_trade_ratio_file']
-
+  
+  date = datetime.date.today()
+  date = str(date).replace('-','')
+  trade_ouput_file = trade_ouput_file.format(date)
 
   scu = SCU(path, data_type)
   # stock_codes = scu.stock_codes()

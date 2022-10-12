@@ -1,5 +1,6 @@
 import json
 import sys, getopt
+import datetime
 # sys.path.append(r'../')
 
 from stock_ai.trade_ratio_ml import trade_ratio_ml
@@ -24,6 +25,11 @@ def trade_ratio_k_mean(conf):
   elif data_type == TYPE_INDEX:
     trade_ratio_file = trade_conf['index_trade_ratio_file']
     kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
+
+  date = datetime.date.today()
+  date = str(date).replace('-','')
+  trade_ratio_file = trade_ratio_file.format(date)
+  kmean_trade_ratio_file = kmean_trade_ratio_file.format(date)
 
   n_clusters = trade_conf['n_clusters']
   kmnean_stock_num =  trade_conf['kmnean_stock_num']
