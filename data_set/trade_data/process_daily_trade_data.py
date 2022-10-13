@@ -21,10 +21,10 @@ class process_daily_trade_data(object):
     #self.path = path
     self.stock_file_daily_trade_quarter = os.path.join(path, FILE_DAILY_TRADE_QUARTER)
 
-    stock_folder_daily_trade = os.path.join(path_root, FOLDER_DAILY_TRADE_PROCESSED)
-    if not os.path.exists(stock_folder_daily_trade):
-      os.makedirs(stock_folder_daily_trade)
-    self.daily_trade_ratio_folder = stock_folder_daily_trade + '/'
+    store_folder = os.path.join(path_root, get_date(), FOLDER_DAILY_TRADE_PROCESSED)
+    if not os.path.exists(store_folder):
+      os.makedirs(store_folder)
+    self.store_folder = store_folder + '/'
 
     self.DR = DR(path_root, JSON_FILE_PROCESS_RECORD, CSV_SKIP_STOCK)
 
@@ -159,8 +159,8 @@ class process_daily_trade_data(object):
 
     pct_change_pd = pd.DataFrame(pct_change_pd.T.values, columns=pct_columns_list, index=codes_list)
     pct_change_pd = pd.concat([pd.Series(code_names_list, index=codes_list), pct_change_pd], axis=1)
-    pct_change_pd.to_csv(self.daily_trade_ratio_folder + outputfile, encoding='gbk')
-    print("store to ", self.daily_trade_ratio_folder + outputfile)
+    pct_change_pd.to_csv(os.path.join(self.store_folder, outputfile), encoding='gbk')
+    print("store to ", os.path.join(self.store_folder, outputfile))
 
 
 

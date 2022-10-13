@@ -10,6 +10,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 from ultility.common_def import * 
+from ultility.common_func import * 
 
 # from sklearn.cluster import DBSCAN
 # from sklearn.cluster import spectral_clustering
@@ -18,14 +19,14 @@ from ultility.common_def import *
 class trade_ratio_ml:
   def __init__(self, path = '../../../data/finance_processed', file_trade_ratio='trade_ratio.csv', file_finance_rank='rank.csk', data_type = TYPE_STOCK, stock_num = 100):
 
-    stock_folder_daily_trade = os.path.join(path, FOLDER_DAILY_TRADE_PROCESSED)
-    if not os.path.exists(stock_folder_daily_trade):
+    store_folder = os.path.join(path, get_date(), FOLDER_DAILY_TRADE_PROCESSED)
+    if not os.path.exists(store_folder):
       print("pls run trade ratio python to generate file", file_trade_ratio)
 
-    self.daily_trade_ratio_folder = stock_folder_daily_trade
+    self.store_folder = store_folder
 
-    daily_trade_ratio_file = stock_folder_daily_trade + '/' + file_trade_ratio
-    trade_ratio = pd.read_csv(daily_trade_ratio_file, encoding='gbk')
+    daily_trade_csv = os.path.join(store_folder, file_trade_ratio)
+    trade_ratio = pd.read_csv(daily_trade_csv, encoding='gbk')
 
     # stock trade ratio, do filter
     if data_type == TYPE_STOCK:
@@ -61,6 +62,6 @@ class trade_ratio_ml:
 
     trade_ratio_cluster = pd.concat([trade_ratio, pd.DataFrame(labels, columns=['cluster'])], axis = 1)
     trade_ratio_cluster = trade_ratio_cluster.sort_values(by=['cluster'])
-    outputfile = os.path.join(self.daily_trade_ratio_folder, outputfile)
+    outputfile = os.path.join(self.store_folder, outputfile)
     trade_ratio_cluster.to_csv(outputfile, encoding='gbk', index = False)
     print("store file: ", outputfile)

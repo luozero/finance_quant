@@ -70,9 +70,9 @@ def trade_process(conf):
   elif data_type == TYPE_INDEX:
     trade_ouput_file = trade_conf['index_trade_ratio_file']
   
-  date = datetime.date.today()
-  date = str(date).replace('-','')
-  trade_ouput_file = trade_ouput_file.format(date)
+  # date = datetime.date.today()
+  # date = str(date).replace('-','')
+  # trade_ouput_file = trade_ouput_file.format(date)
 
   scu = SCU(path, data_type)
   # stock_codes = scu.stock_codes()

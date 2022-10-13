@@ -26,10 +26,11 @@ def trade_ratio_k_mean(conf):
     trade_ratio_file = trade_conf['index_trade_ratio_file']
     kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
 
-  date = datetime.date.today()
-  date = str(date).replace('-','')
-  trade_ratio_file = trade_ratio_file.format(date)
-  kmean_trade_ratio_file = kmean_trade_ratio_file.format(date)
+#   date = datetime.date.today()
+#   date = str(date).replace('-','')
+# #  date = '20221012'
+#   trade_ratio_file = trade_ratio_file.format(date)
+  # kmean_trade_ratio_file = kmean_trade_ratio_file.format(date)
 
   n_clusters = trade_conf['n_clusters']
   kmnean_stock_num =  trade_conf['kmnean_stock_num']

@@ -3,9 +3,9 @@
 	{
 		"path": "../finance_data",
 		"?data_type": "finance_stock_data, stock_data, index_data",
-		"data_type": "index_data",
+		"data_type": "stock_data",
     "?download": "yes, no",
-		"download": "no"
+		"download": "yes"
 	},
 	"finance":
 	{
@@ -16,10 +16,10 @@
 	},
 	"trade":
 	{
-		"stock_trade_ratio_file": "stock_trade_ratio.csv",
-		"index_trade_ratio_file": "index_trade_ratio.csv",
-    "stock_kmean_trade_ratio_file": "stock_kmean_trade_ratio.csv",
-    "index_kmean_trade_ratio_file": "index_kmean_trade_ratio.csv",
+		"stock_trade_ratio_file": "stock_trade_ratio_{}.csv",
+		"index_trade_ratio_file": "index_trade_ratio_{}.csv",
+    "stock_kmean_trade_ratio_file": "stock_kmean_trade_ratio_{}.csv",
+    "index_kmean_trade_ratio_file": "index_kmean_trade_ratio_{}.csv",
     "kmnean_stock_num": 500,
     "n_clusters": 50
 	}
