@@ -20,33 +20,31 @@ def read_config(filename):
     conf = json.load(f)
   return conf
 
-def finance_process(conf):
+def finance_factor_process(conf):
   
   common_conf = conf['common']
-  data_type = common_conf['data_type']
   download = common_conf['download']
-  path = common_conf['path']
   folder = common_conf["folder"]
 
-  finance_conf = conf['finance']
+
+  path = common_conf['path']
+  path_finance = os.path.join(path, folder['data_finance'])
+  path_factor = os.path.join(path, folder["finance_factors"])
+  path_rank = os.path.join(path, folder["finance_rank"])
+
+
   result_name = finance_conf['result_name']
+
+  finance_conf = conf['finance']
   dates = finance_conf['dates']
   factors = finance_conf['factors']
 
-  path_finance = os.path.join(path, folder['data_finance'])
-  path_rank = os.path.join(path, folder["finance_rank"])
-  path_factor = os.path.join(path, folder["finance_factors"])
-
+  data_type = 'finance_stock_data'
   scu = SCU(path)
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table(data_type)
   print(stock_codes)
   # stock_codes = ['SH600032']
-
-  # download all the data
-  if download == "yes":
-    data_download_1 = data_download(path_finance, stock_codes, data_type)
-    data_download_1.download_data(data_type)
 
   # process quarter trade
   daily_trade_data = process_daily_trade_data(path, path_finance, path_finance, stock_codes, data_type)
@@ -56,54 +54,51 @@ def finance_process(conf):
   stock_codes = scu.skip_stock_codes(stock_codes)
 
   # factors caculate
-  ffc =finance_factor_calc(path, path_finance, path_factor)
+  ffc = finance_factor_calc(path, path_finance, path_factor)
   ffc.stock_factors_calc(stock_codes)
 
   # rank the factor
   finance_factors_rank(path_factor, path_rank, result_name, stock_codes, dates, factors)
 
-def trade_process(conf):
+def daily_trade_process(conf):
 
   common_conf = conf['common']
-  data_type = common_conf['data_type']
-  download = common_conf['download']
-  path = common_conf['path']
   folder = common_conf["folder"]
-
+  path = common_conf['path']
   trade_conf = conf['trade']
 
-  if data_type == TYPE_STOCK:
-    trade_ouput_file = trade_conf['stock_trade_ratio_file']
+  finance_163_daily_trade_factor = trade_conf['finance_163_daily_trade_factor']
+  stock_163_daily_trade_factor = trade_conf['stock_163_daily_trade_factor']
+  index_163_daily_trade_factor = trade_conf['index_163_daily_trade_factor']
+
+  if finance_163_daily_trade_factor == 'yes':
+    finance_factor_process(conf)
+
+  if stock_163_daily_trade_factor == 'yes':
     path_in = os.path.join(path, folder['data_stock'])
-  elif data_type == TYPE_INDEX:
-    trade_ouput_file = trade_conf['index_trade_ratio_file']
+    path_out = os.path.join(path, folder['process_trade'])
+    trade_ouput_file = trade_conf['stock_trade_ratio_file']
+    data_type = TYPE_STOCK
+    scu = SCU(path, data_type)
+    stock_codes = scu.stock_codes_from_table(data_type)
+    # stock_codes = ['SZ301213', 'SH600519']
+    # need to disable following code when debug
+    stock_codes = scu.skip_stock_codes(stock_codes)
+    #process daily trade data
+    daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
+    daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
+
+  if index_163_daily_trade_factor == 'yes':
     path_in = os.path.join(path, folder['data_index'])
-  elif data_type == TYPE_FINANCE_STOCK:
-    path_in = os.path.join(path, folder['data_finance'])
+    path_out = os.path.join(path, folder['process_trade'])
+    trade_ouput_file = trade_conf['index_trade_ratio_file']
+    data_type = TYPE_INDEX
+    scu = SCU(path, data_type)
+    stock_codes = scu.stock_codes_from_table(data_type)
+    #process daily trade data
+    daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
+    daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
 
-  path_out = os.path.join(path, folder['process_trade'])
-  
-  
-  # date = datetime.date.today()
-  # date = str(date).replace('-','')
-  # trade_ouput_file = trade_ouput_file.format(date)
-
-  scu = SCU(path, data_type)
-  # stock_codes = scu.stock_codes()
-  stock_codes = scu.stock_codes_from_table(data_type)
-  # stock_codes = ['SZ000001','SZ000002']
-
-  # download daily trade data
-  if download == "yes":
-    data_download_1 = data_download(path_in, stock_codes, data_type)
-    data_download_1.download_data(data_type)
-
-  # need to disable following code when debug
-  stock_codes = scu.skip_stock_codes(stock_codes)
-
-  #process daily trade data
-  daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
-  daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
 
 if __name__ == '__main__':
 
@@ -126,13 +121,6 @@ if __name__ == '__main__':
       trade_flag = True 
 
   conf = read_config(filename)
-  common_conf = conf['common']
-  data_type = common_conf['data_type']
-  
-  if data_type == TYPE_FINANCE_STOCK:
-    finance_process(conf)
-  elif data_type == TYPE_INDEX or data_type == TYPE_STOCK:
-    trade_process(conf)
-  else:
-    print('do not support this data type: ', data_type)
-  
+
+  daily_trade_process(conf)
+
