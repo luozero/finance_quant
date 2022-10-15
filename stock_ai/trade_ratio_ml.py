@@ -17,20 +17,22 @@ from ultility.common_func import *
 # from sklearn.cluster import AgglomerativeClustering
 
 class trade_ratio_ml:
-  def __init__(self, path = '../../../data/finance_processed', file_trade_ratio='trade_ratio.csv', file_finance_rank='rank.csk', data_type = TYPE_STOCK, stock_num = 100):
+  def __init__(self, path_finance_rank = 'path_finance_rank', path_in = 'path_in', path_out = 'path_out', file_trade_ratio='trade_ratio.csv', file_finance_rank='rank.csk', data_type = TYPE_STOCK, stock_num = 100):
 
-    store_folder = os.path.join(path, get_date(), FOLDER_DAILY_TRADE_PROCESSED)
-    if not os.path.exists(store_folder):
+    path_out = os.path.join(path_out, get_date())
+    if not os.path.exists(path_out):
       print("pls run trade ratio python to generate file", file_trade_ratio)
+      os.makedirs(path_out)
+    self.path_out = path_out
 
-    self.store_folder = store_folder
-
-    daily_trade_csv = os.path.join(store_folder, file_trade_ratio)
+    if not os.path.exists(path_in):
+      print("pls run trade ratio python to generate file", file_trade_ratio)
+    daily_trade_csv = os.path.join(path_in, file_trade_ratio)
     trade_ratio = pd.read_csv(daily_trade_csv, encoding='gbk')
 
     # stock trade ratio, do filter
     if data_type == TYPE_STOCK:
-      csv_finance_factor = os.path.join(path, FOLDER_RANK, file_finance_rank)
+      csv_finance_factor = os.path.join(path_finance_rank, file_finance_rank)
       pd1 = pd.read_csv(csv_finance_factor, encoding='gbk')
       self.stock_codes = pd1.iloc[1:stock_num, 0]
 
@@ -52,7 +54,7 @@ class trade_ratio_ml:
     self.data_type = data_type
     
   def kmean(self, k = 10, outputfile = 'output.csv'):
-    #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, self.dates)
+    #fecth_indexs = FIR.fetch_selected_finance_indexs(indexs, self.dates)
     #date = '2017-12-31'
 
     trade_ratio = self.trade_ratio
@@ -62,6 +64,6 @@ class trade_ratio_ml:
 
     trade_ratio_cluster = pd.concat([trade_ratio, pd.DataFrame(labels, columns=['cluster'])], axis = 1)
     trade_ratio_cluster = trade_ratio_cluster.sort_values(by=['cluster'])
-    outputfile = os.path.join(self.store_folder, outputfile)
+    outputfile = os.path.join(self.path_out, outputfile)
     trade_ratio_cluster.to_csv(outputfile, encoding='gbk', index = False)
     print("store file: ", outputfile)

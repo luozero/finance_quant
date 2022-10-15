@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import os
-from data_set.finance_data.financial_load_store import financial_load_store as FLS
+from data_set.finance_data.finance_load_store import finance_load_store as FLS
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from ultility.download_record import download_record as DR
 from ultility.common_def import * 
@@ -27,12 +27,16 @@ finance_index_dic = {
   'OL':'OL','OLinc':'OLinc','WCinc':'WCinc','NCOinc':'NCOinc',
   'icapx':'icapx','capxG':'capxG','XF':'XF','shareInc':'shareInc',
   }
-class financail_factor_calc:
-  def __init__(self, path='../../../data/'):
+class finance_factor_calc:
+
+  def __init__(self, path = 'path', path_finance='path_finances', path_factor='path_factor'):
+    self.path_factor = path_factor
+    if not os.path.exists(path_factor):
+      os.makedirs(path_factor)
+
     self.path = path
-    if not os.path.exists(path):
-      os.makedirs(path)
-    self.FLS = FLS(path)
+    self.FLS = FLS(path_finance, path_factor)
+
   def ab_ratio_calc(self, a,b,str):
     data = a/b
     data[np.isinf(data)]=0
@@ -57,40 +61,40 @@ class financail_factor_calc:
     pd_data = pd.DataFrame(dict_data)
     return pd_data
   
-  def financial_index_calc(self,stock_code):
+  def finance_factor_calc(self,stock_code):
     main_file = FILE_MAIN.format(stock_code) 
-    equlity = self.FLS.fetch_one_financial_factor_in_stock(main_file,'股东权益不含少数股东权益(万元)')
-    asset = self.FLS.fetch_one_financial_factor_in_stock(main_file,'总资产(万元)')
-    revenue = self.FLS.fetch_one_financial_factor_in_stock(main_file,'主营业务收入(万元)')
-    cash = self.FLS.fetch_one_financial_factor_in_stock(main_file,'经营活动产生的现金流量净额(万元)')
-    debt = self.FLS.fetch_one_financial_factor_in_stock(main_file,'总负债(万元)')
+    equlity = self.FLS.fetch_one_finance_factor_in_stock(main_file,'股东权益不含少数股东权益(万元)')
+    asset = self.FLS.fetch_one_finance_factor_in_stock(main_file,'总资产(万元)')
+    revenue = self.FLS.fetch_one_finance_factor_in_stock(main_file,'主营业务收入(万元)')
+    cash = self.FLS.fetch_one_finance_factor_in_stock(main_file,'经营活动产生的现金流量净额(万元)')
+    debt = self.FLS.fetch_one_finance_factor_in_stock(main_file,'总负债(万元)')
     
     profit_file = FILE_PROFIT.format(stock_code)
-    earning = self.FLS.fetch_one_financial_factor_in_stock(profit_file,'净利润(万元)')
-    interest = self.FLS.fetch_one_financial_factor_in_stock(profit_file,'利息支出(万元)')
-    tax0 = self.FLS.fetch_one_financial_factor_in_stock(profit_file,'所得税费用(万元)')
-    #tax1 = self.FLS.fetch_one_financial_factor_in_stock('profit','营业税金及附加(万元)')
-    cost = self.FLS.fetch_one_financial_factor_in_stock(profit_file,'营业总成本(万元)')
+    earning = self.FLS.fetch_one_finance_factor_in_stock(profit_file,'净利润(万元)')
+    interest = self.FLS.fetch_one_finance_factor_in_stock(profit_file,'利息支出(万元)')
+    tax0 = self.FLS.fetch_one_finance_factor_in_stock(profit_file,'所得税费用(万元)')
+    #tax1 = self.FLS.fetch_one_finance_factor_in_stock('profit','营业税金及附加(万元)')
+    cost = self.FLS.fetch_one_finance_factor_in_stock(profit_file,'营业总成本(万元)')
     EBIT = earning + interest + tax0
    
     loans_file = FILE_LOANS.format(stock_code)
-    equity = self.FLS.fetch_one_financial_factor_in_stock(loans_file,'所有者权益(或股东权益)合计(万元)')
-    debt_total = self.FLS.fetch_one_financial_factor_in_stock(loans_file,'负债合计(万元)')
-    intangible_asset = self.FLS.fetch_one_financial_factor_in_stock(loans_file,'无形资产(万元)')
-    dev_cost = self.FLS.fetch_one_financial_factor_in_stock(loans_file,'开发支出(万元)')
-    goodwell = self.FLS.fetch_one_financial_factor_in_stock(loans_file,'商誉(万元)')
-    fix_asset = self.FLS.fetch_one_financial_factor_in_stock(loans_file,'固定资产(万元)')
+    equity = self.FLS.fetch_one_finance_factor_in_stock(loans_file,'所有者权益(或股东权益)合计(万元)')
+    debt_total = self.FLS.fetch_one_finance_factor_in_stock(loans_file,'负债合计(万元)')
+    intangible_asset = self.FLS.fetch_one_finance_factor_in_stock(loans_file,'无形资产(万元)')
+    dev_cost = self.FLS.fetch_one_finance_factor_in_stock(loans_file,'开发支出(万元)')
+    goodwell = self.FLS.fetch_one_finance_factor_in_stock(loans_file,'商誉(万元)')
+    fix_asset = self.FLS.fetch_one_finance_factor_in_stock(loans_file,'固定资产(万元)')
     noncurrent_asset = intangible_asset + goodwell + fix_asset
     
     cash_file = FILE_CASH.format(stock_code)
-    depreciation = self.FLS.fetch_one_financial_factor_in_stock(cash_file,' 固定资产折旧、油气资产折耗、生产性物资折旧(万元)')
-    amortize0 = self.FLS.fetch_one_financial_factor_in_stock(cash_file,' 无形资产摊销(万元)')
-    amortize1 = self.FLS.fetch_one_financial_factor_in_stock(cash_file,' 长期待摊费用摊销(万元)')
-    excess_cash = self.FLS.fetch_one_financial_factor_in_stock(cash_file,' 现金的期末余额(万元)')
-    #cash_quivalent = self.FLS.fetch_one_financial_factor_in_stock('cash',' 期末现金及现金等价物余额(万元)')
-    cash_quivalent = self.FLS.fetch_one_financial_factor_in_stock(cash_file,' 加:期初现金及现金等价物余额(万元)')
+    depreciation = self.FLS.fetch_one_finance_factor_in_stock(cash_file,' 固定资产折旧、油气资产折耗、生产性物资折旧(万元)')
+    amortize0 = self.FLS.fetch_one_finance_factor_in_stock(cash_file,' 无形资产摊销(万元)')
+    amortize1 = self.FLS.fetch_one_finance_factor_in_stock(cash_file,' 长期待摊费用摊销(万元)')
+    excess_cash = self.FLS.fetch_one_finance_factor_in_stock(cash_file,' 现金的期末余额(万元)')
+    #cash_quivalent = self.FLS.fetch_one_finance_factor_in_stock('cash',' 期末现金及现金等价物余额(万元)')
+    cash_quivalent = self.FLS.fetch_one_finance_factor_in_stock(cash_file,' 加:期初现金及现金等价物余额(万元)')
     
-    divedends = self.FLS.fetch_one_financial_factor_in_stock(cash_file,' 分配股利、利润或偿付利息所支付的现金(万元)')
+    divedends = self.FLS.fetch_one_finance_factor_in_stock(cash_file,' 分配股利、利润或偿付利息所支付的现金(万元)')
     EBITDA = EBIT + depreciation +amortize0 + amortize1
  
     daily_trade_data_quarter_file = FILE_DAILY_TRADE_QUARTER.format(stock_code)
@@ -183,33 +187,31 @@ class financail_factor_calc:
     pd_data = pd.concat([pd_data, E2EV], axis=1)
     
     
-    pd_data.index = self.FLS.all_financial_one_stock[main_file].iloc[0,:].index[1:]
+    pd_data.index = self.FLS.all_finance_one_stock[main_file].iloc[0,:].index[1:]
     return pd_data #pd.DataFrame([roe roa profit_revenue profit_cost])
   
-def stock_factors_calc(path, stock_codes):
+  def stock_factors_calc(self, stock_codes):
 
-  FFC =financail_factor_calc(path=path)
+    dr = DR(self.path, JSON_FILE_PROCESS_RECORD)
+    
+    proc_id = dr.read_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX)
+    stock_codes = stock_codes[proc_id:]
 
-  dr = DR(path, JSON_FILE_PROCESS_RECORD)
-  
-  proc_id = dr.read_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX)
-  stock_codes = stock_codes[proc_id:]
+    for stock_code in stock_codes:
 
-  for stock_code in stock_codes:
+      print("stock:",stock_code)
 
-    print("stock:",stock_code)
+      self.FLS.load_all_finance_data(stock_code)
+      # FFC.FLS.load_all_processed_stock_basic_one_stock([stock_code])
+      data_processed = self.finance_factor_calc(stock_code)
 
-    FFC.FLS.load_all_financial_one_stock(stock_code)
-    # FFC.FLS.load_all_processed_stock_basic_one_stock([stock_code])
-    data_processed = FFC.financial_index_calc(stock_code)
+      self.FLS.store_process_financical_data(data_processed, stock_code)
 
-    FFC.FLS.store_process_financical_data(data_processed, stock_code)
+      proc_id = proc_id + 1
 
-    proc_id = proc_id + 1
+      dr.write_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX, proc_id)
 
-    dr.write_data(KEY_PROCESS, KEY_PROCESS_FINANCE_FACTOR_INDEX, proc_id)
-
-    print("stock ", stock_code, " finished!!!")
+      print("stock ", stock_code, " finished!!!")
     
 if __name__ == '__main__':
   #stock_codes = ['000001','000002','000004']

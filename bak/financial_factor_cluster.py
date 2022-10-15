@@ -10,13 +10,13 @@ from sklearn.cluster import spectral_clustering
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import AffinityPropagation
 from sklearn.cluster import Birch
-from financial_factor_calc import finance_index_dic as FID
-from financial_factor_io import financial_factor_io as FIO
+from finance_factor_calc import finance_index_dic as FID
+from finance_factor_io import finance_factor_io as FIO
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 import os
 import sys, getopt
 
-class financial_factor_cluster:
+class finance_factor_cluster:
   def __init__(self, path = '../../../data/', path_factor = '../../../data/factor_io',
                path_cluster='../../../data/factor_cluster',
                stocks = ['000001'], dates=['2018-06-30'], indexs=['roe'],alg = 'kmean',file_name = '1806_1712_1'):
@@ -31,8 +31,8 @@ class financial_factor_cluster:
     self.path_cluster = os.path.join(path_cluster,'{}'.format(file_name)+'_cluster_{}.csv')
     self.alg = alg
     
-  def cluster_financial_indexs(self, k):
-    #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, self.dates)
+  def cluster_finance_indexs(self, k):
+    #fecth_indexs = FIR.fetch_selected_finance_indexs(indexs, self.dates)
     #date = '2017-12-31'
     date = dates[0]
     print('cluster is', date, 'alg is', self.alg)
@@ -79,7 +79,7 @@ class financial_factor_cluster:
     self.fetch_factors.to_csv(self.path_cluster.format(date))
     print('save folder is', self.path_cluster.format(date))
 
-#python financial_factor_cluster.py -o ../../../data/factor_cluster -k 100 -d 2017-12-31 -a affinity -f affinity_roe_rev_profit_cash11
+#python finance_factor_cluster.py -o ../../../data/factor_cluster -k 100 -d 2017-12-31 -a affinity -f affinity_roe_rev_profit_cash11
 if __name__ == '__main__':
   outputfile = ''
   try:
@@ -109,7 +109,7 @@ if __name__ == '__main__':
   #stocks = ['000001','000002','000004','000005','000006']
   dates = ['2018-06-30','2017-12-31','2016-12-31']
   #k = 300
-  #FIR = financial_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
+  #FIR = finance_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
   indexs = [
     #earning capacity
     FID['roe'],\
@@ -140,8 +140,8 @@ if __name__ == '__main__':
   'icapx':'icapx','capxG':'capxG','XF':'XF','shareInc':'shareInc',
   '''
   path_cluster = os.path.join(path_cluster)
-  FFC = financial_factor_cluster(path=path, path_factor=path_factor, path_cluster=path_cluster,\
+  FFC = finance_factor_cluster(path=path, path_factor=path_factor, path_cluster=path_cluster,\
                                   stocks=stocks,dates=dates,indexs=indexs,alg=alg,file_name = filename)
-  FFC.cluster_financial_indexs(k)
-  #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, dates)
+  FFC.cluster_finance_indexs(k)
+  #fecth_indexs = FIR.fetch_selected_finance_indexs(indexs, dates)
   pass

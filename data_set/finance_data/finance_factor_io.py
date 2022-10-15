@@ -4,26 +4,28 @@ Created on 2018��9��17��
 
 @author: ll
 '''
-from data_set.finance_data.financial_load_store import financial_load_store as FLS
-from data_set.finance_data.financial_factor_calc import finance_index_dic as FID
+from data_set.finance_data.finance_load_store import finance_load_store as FLS
+from data_set.finance_data.finance_factor_calc import finance_index_dic as FID
 import pandas as pd
 import os
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 
-class financial_factor_io:
-  def __init__(self,path = '../../../data/',path_factor = '../../../data/factor_io', \
+class finance_factor_io:
+  def __init__(self, path_factor = 'path_factor', \
                stocks = '000001', dates=['2018-06-30'],file_name = '1806_1712'):
     self.stock_codes = []
-    self.path = path
+
     self.path_factor = path_factor
     if not os.path.exists(path_factor):
-            os.makedirs(path_factor)
+      print("factor is do exist", path_factor)
+      exit(-1)
+            # os.makedirs(path_factor)
     self.path_factor_io = os.path.join(path_factor,'fetched_factors_{}.csv'.format(file_name))
-    self.financial_factors = self.load_all_financial_factor(dates,stocks)
+    self.finance_factors = self.load_all_finance_factor(dates,stocks)
   
-  def load_all_financial_factor(self,dates,stocks):
+  def load_all_finance_factor(self,dates,stocks):
    # stock_codes = ['000719']
-    fls = FLS(path = self.path)
+    fls = FLS(path_factor = self.path_factor)
     data_dict = {}
     for stock_code in stocks:
       print("stock:",stock_code)
@@ -48,7 +50,7 @@ class financial_factor_io:
         if column_flag==True:
           column.append(factor+date)
         print('date',date,'stock_code',stock_code)
-        factor_temp.append(self.financial_factors[stock_code].loc[date,factor])
+        factor_temp.append(self.finance_factors[stock_code].loc[date,factor])
       column_flag = False
       factor_value = pd.concat([factor_value, pd.DataFrame([factor_temp])],axis=0)
       #factor_value = factor_value.append(factor_temp,index = stock_code)
@@ -64,7 +66,6 @@ class financial_factor_io:
         list_columns = list_columns + column
         pd_factor_values = pd.concat([pd_factor_values, factor_value], axis=1)
       pd_factor_values.columns = list_columns
-      scu = SCU(path=self.path)
       pd_factor_values.index = self.stock_codes #scu.add_allstock_sh_sz(self.stock_codes)
       pd_factor_values.to_csv(self.path_factor_io, encoding='gbk')
     else:
@@ -80,7 +81,7 @@ if __name__ == '__main__':
   stocks = scu.stock_codes_remove_no_stock_basic()
   stocks = ['000001','000002','000004','000005','000006']
   dates = ['2018-06-30','2017-12-31']#,'2017-12-31'
-  ffio = financial_factor_io(path=path, path_factor=path_factor, \
+  ffio = finance_factor_io(path=path, path_factor=path_factor, \
                              stocks = stocks, dates = dates,file_name = '1806_1712_1')
   indexs = [
     #earning capacity
@@ -110,6 +111,6 @@ if __name__ == '__main__':
   
   ffio.fetch_selected_factors(indexs, dates)
   print('rank all the stock successfully');
-  #data_dict = load_all_financial_processed_data(path)
+  #data_dict = load_all_finance_processed_data(path)
 
   pass

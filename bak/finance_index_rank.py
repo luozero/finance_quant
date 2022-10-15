@@ -4,13 +4,13 @@ Created on 2018��9��17��
 
 @author: ll
 '''
-import financial_index_calc as fic
-from financial_index_calc import finance_index_dic as FID
+import finance_factor_calc as fic
+from finance_factor_calc import finance_index_dic as FID
 import stock_data_download
 import pandas as pd
 import os
 
-class financial_index_rank:
+class finance_index_rank:
   def __init__(self,path = '../../../data/finance_processed',path_score = '../../../data/score', stocks = '000001', dates=['2018-06-30']):
     self.stock_codes = []
     self.path = path
@@ -20,9 +20,9 @@ class financial_index_rank:
     self.path_overview_scores = os.path.join(path_score,'overview_scores_{}.csv'.format(dates[-1]))
     self.path_index = os.path.join(path_score,'index_{}.csv'.format(dates[-1]))
     self.path_index_score = os.path.join(path_score,'index_score_{}.csv'.format(dates[-1]))
-    self.financial_index_data = self.load_all_financial_index(dates,stocks)
+    self.finance_index_data = self.load_all_finance_index(dates,stocks)
   
-  def load_all_financial_index(self,dates,stocks):
+  def load_all_finance_index(self,dates,stocks):
    # stock_codes = ['000719']
     data_dict = {}
     for stock_code in stocks:
@@ -38,7 +38,7 @@ class financial_index_rank:
       data_dict[stock_code] = data_finance
     return data_dict
   
-  def assess_one_financial_index(self, index, dates):
+  def assess_one_finance_index(self, index, dates):
     index_series = pd.Series(dtype=float)
     score_series = pd.Series(dtype=float)
     len_dates = len(dates)
@@ -46,7 +46,7 @@ class financial_index_rank:
       index_series[stock_code] = 0.0
       for date in dates:
         print('date',date,'stock_code',stock_code)
-        index_series[stock_code] = index_series[stock_code] + self.financial_index_data[stock_code].loc[date,index]
+        index_series[stock_code] = index_series[stock_code] + self.finance_index_data[stock_code].loc[date,index]
       index_series[stock_code]  = index_series[stock_code] / float(len_dates);
     index_series_sorted = index_series.sort_values(axis=0,ascending=False) #sorted(index_series.items(), key = lambda d:d[1],reverse = True)
     stock_len = len(index_series_sorted)
@@ -57,7 +57,7 @@ class financial_index_rank:
     score_series = score_series.sort_index(axis=0,ascending=True)#sorted(score_series.items(), key = lambda d:d[0],reverse = True)
     return [pd.DataFrame({index:index_series}), pd.DataFrame({index:score_series})]
   
-  def fetch_selected_financial_indexs(self, indexs, dates,path_kmean):
+  def fetch_selected_finance_indexs(self, indexs, dates,path_kmean):
     fecth_indexs = pd.Series(dtype=float)
     for date in dates:
       pd_indexs_path = os.path.join(path_kmean,'fecthing_finance_index_{}.csv'.format(date))
@@ -66,7 +66,7 @@ class financial_index_rank:
         print('fecthing date', date)
         for index in indexs:
           print('processing index is', index)
-          [pd_index, pd_score] = self.assess_one_financial_index(index, [date])
+          [pd_index, pd_score] = self.assess_one_finance_index(index, [date])
           pd_indexs = pd.concat([pd_indexs, pd_index], axis=1)
         pd_indexs.to_csv(pd_indexs_path, encoding='gbk')
       else:
@@ -74,12 +74,12 @@ class financial_index_rank:
       fecth_indexs[date] = pd_indexs
     return fecth_indexs
   
-  def assess_selected_financial_index(self,indexs,dates):
+  def assess_selected_finance_index(self,indexs,dates):
     pd_indexs = pd.DataFrame()
     pd_scores = pd.DataFrame()
     for index in indexs:
       print('processing index is', index)
-      [pd_index, pd_score] = self.assess_one_financial_index(index, dates)
+      [pd_index, pd_score] = self.assess_one_finance_index(index, dates)
       pd_indexs = pd.concat([pd_indexs, pd_index], axis=1)
       pd_scores = pd.concat([pd_scores, pd_score], axis=1)
     
@@ -98,7 +98,7 @@ if __name__ == '__main__':
   stocks = stock_data_download.ts_stock_codes()
   #stocks = ['000001','000002','000004','000005','000006']
   dates = ['2018-06-30']#,'2017-12-31'
-  fir = financial_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
+  fir = finance_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
   indexs = [
     #earning capacity
     FID['roe'],\
@@ -125,8 +125,8 @@ if __name__ == '__main__':
  
   
   
-  fir.assess_selected_financial_index(indexs, dates)
+  fir.assess_selected_finance_index(indexs, dates)
   print('rank all the stock successfully');
-  #data_dict = load_all_financial_processed_data(path)
+  #data_dict = load_all_finance_processed_data(path)
 
   pass

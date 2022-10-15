@@ -8,53 +8,51 @@ from ultility.stock_codes_utility import stock_codes_utility as SCU
 from ultility.download_record import download_record as DR
 from ultility.common_func import * 
 from ultility.common_def import * 
-from data_set.finance_data.financial_load_store import financial_load_store as FLD
+from data_set.finance_data.finance_load_store import finance_load_store as FLD
 
 class process_daily_trade_data(object):
 
-  def __init__(self, path_root='../../../data/', stock_codes=['000001'], data_type = TYPE_STOCK):
+  def __init__(self, path = "path", path_in = 'path_in', path_out = 'path_out', stock_codes=['000001'], data_type = TYPE_STOCK):
 
-    path = os.path.join(path_root, FOLDER_DATA_DOWNLOAD)
-    if not os.path.exists(path):
+    if not os.path.exists(path_in):
       print("pls download finance data")
 
-    #self.path = path
-    self.stock_file_daily_trade_quarter = os.path.join(path, FILE_DAILY_TRADE_QUARTER)
+    # path_out = os.path.join(path_out, get_date())
+    if not os.path.exists(path_out):
+      os.makedirs(path_out)
+    self.path_out = path_out
 
-    store_folder = os.path.join(path_root, get_date(), FOLDER_DAILY_TRADE_PROCESSED)
-    if not os.path.exists(store_folder):
-      os.makedirs(store_folder)
-    self.store_folder = store_folder + '/'
+    print("path stock trade data", path_in)
+    self.path_in = path_in
 
-    self.DR = DR(path_root, JSON_FILE_PROCESS_RECORD, CSV_SKIP_STOCK)
-
-    print("path stock trade data", path)
-    self.FLD = FLD(path=path_root)
-
+    self.DR = DR(path, JSON_FILE_PROCESS_RECORD, CSV_SKIP_STOCK)
     self.proc_id = self.DR.read_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX)
     self.stock_codes = stock_codes[self.proc_id:]
 
     self.data_type = data_type
 
-    self.scu = SCU(path_root, data_type)
+    self.scu = SCU(path, data_type)
 
-  
   def trade_data_quarter(self):
+
+    stock_file_daily_trade_quarter = os.path.join(self.path_in, FILE_DAILY_TRADE_QUARTER)
 
     for stock_code in self.stock_codes:
 
-      data_main = self.FLD.load_all_financial_one_stock(stock_code)
       finance_main = FILE_MAIN.format(stock_code)
+      data_main = read_csv(self.path_in, finance_main)
 
-      if data_main[finance_main].empty == True:
+      if data_main.empty == True:
 
           print("no this stock", stock_code, "data")
           self.DR.write_skip_stock(stock_code)
       else:
 
         file_name = get_stock_index_file(self.data_type, stock_code)
-        dates = data_main[finance_main].columns[1:self.FLD.min_column]
-        daily_trade_data = self.FLD.load_financical_data([file_name])[file_name]
+        daily_trade_data = read_csv(self.path_in, file_name) 
+
+        dates = data_main.columns
+
 
         # no trade data skip this stock 
         if (daily_trade_data.shape[0] == 0):
@@ -65,13 +63,13 @@ class process_daily_trade_data(object):
         daily_trade_dates = daily_trade_data.loc[:,'日期']
         trade_data_quarter = pd.DataFrame(columns=daily_trade_data.columns)
 
-        for get_date in dates:
+        for get_date in dates[1:-1]:
 
           date_in_daily_trade_dates = nearest_date(daily_trade_dates, get_date)
           trade_data_quarter = pd.concat([trade_data_quarter, daily_trade_data[date_in_daily_trade_dates == daily_trade_dates]])
 
         # trade_data_quarter.index = dates
-        file_csv = self.stock_file_daily_trade_quarter.format(stock_code)
+        file_csv = stock_file_daily_trade_quarter.format(stock_code)
         trade_data_quarter.to_csv(file_csv, encoding='gbk', index = False)
         print("store to ", file_csv)
 
@@ -92,7 +90,7 @@ class process_daily_trade_data(object):
 
       file_name = get_stock_index_file(self.data_type, stock_code)
 
-      daily_trade_data = self.FLD.load_financical_data([file_name])[file_name]
+      daily_trade_data = read_csv(self.path_in, file_name) 
 
       # here need 400 trade days datas
       if daily_trade_data.shape[0] > 400:
@@ -159,8 +157,8 @@ class process_daily_trade_data(object):
 
     pct_change_pd = pd.DataFrame(pct_change_pd.T.values, columns=pct_columns_list, index=codes_list)
     pct_change_pd = pd.concat([pd.Series(code_names_list, index=codes_list), pct_change_pd], axis=1)
-    pct_change_pd.to_csv(os.path.join(self.store_folder, outputfile), encoding='gbk')
-    print("store to ", os.path.join(self.store_folder, outputfile))
+    pct_change_pd.to_csv(os.path.join(self.path_out, outputfile), encoding='gbk')
+    print("store to ", os.path.join(self.path_out, outputfile))
 
 
 

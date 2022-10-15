@@ -9,8 +9,8 @@ import sys, getopt
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 sys.path.append("./finance_data")
-from financial_index_calc import finance_index_dic as FID
-from financial_index_rank import financial_index_rank
+from finance_factor_calc import finance_index_dic as FID
+from finance_index_rank import finance_index_rank
 import  stock_data_download
 
 #-o ../../../data/score/k300 -k 100
@@ -39,7 +39,7 @@ if __name__ == '__main__':
   if not os.path.exists(path_plot):
       os.makedirs(path_plot)
   #k = 300
-  FIR = financial_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
+  FIR = finance_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
   indexs = [
     #earning capacity
     FID['roe'],\
@@ -63,7 +63,7 @@ if __name__ == '__main__':
   FID['cash_incr_rate'],\
   FID['asset_incr_rate'],
   '''
-  feth_indexs = FIR.fetch_selected_financial_indexs(indexs, dates,path_score_kmean)
+  feth_indexs = FIR.fetch_selected_finance_indexs(indexs, dates,path_score_kmean)
   for i in range(0,9):
     plt.figure()
     feth_indexs['2018-06-30'][indexs[i]].hist(bins=1000)
@@ -71,5 +71,5 @@ if __name__ == '__main__':
     plt.savefig(os.path.join(path_plot,indexs[i]))
   plt.show()
 
-  #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, dates)
+  #fecth_indexs = FIR.fetch_selected_finance_indexs(indexs, dates)
   pass

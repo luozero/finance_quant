@@ -8,29 +8,29 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import spectral_clustering
 from sklearn.cluster import AgglomerativeClustering
-from financial_index_calc import finance_index_dic as FID
-from financial_index_rank import financial_index_rank
+from finance_factor_calc import finance_index_dic as FID
+from finance_index_rank import finance_index_rank
 import stock_data_download
 import os
 import sys, getopt
 
-class financial_index_kmean_cluster:
+class finance_index_kmean_cluster:
   def __init__(self, path = '../../../data/finance_processed', path_score='../../../data/score', path_score_cluster='../../../data/score', 
                stocks = ['000001'], dates=['2018-06-30'], indexs=['roe'],alg = 'kmean'):
     self.path_score = path_score
     self.stocks = stocks
     self.dates = dates
     self.indexs = indexs
-    FIR = financial_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
+    FIR = finance_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
     
     if not os.path.exists(path_score_cluster):
       os.makedirs(path_score_cluster)
-    self.feth_indexs = FIR.fetch_selected_financial_indexs(indexs, dates,path_score_cluster)
+    self.feth_indexs = FIR.fetch_selected_finance_indexs(indexs, dates,path_score_cluster)
     self.path_index_score = os.path.join(path_score_cluster,'index_score_{}'.format(alg)+'_cluster_{}.csv')
     self.alg = alg
     
-  def cluster_financial_indexs(self, k):
-    #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, self.dates)
+  def cluster_finance_indexs(self, k):
+    #fecth_indexs = FIR.fetch_selected_finance_indexs(indexs, self.dates)
     #date = '2017-12-31'
     for date in dates:
       print('kmean date is', date)
@@ -52,7 +52,7 @@ class financial_index_kmean_cluster:
       self.feth_indexs[date] = self.feth_indexs[date].sort_values("Cluster",axis=0,ascending=True)
       self.feth_indexs[date].to_csv(self.path_index_score.format(date))
 
-#python financial_index_kmean_cluster.py -o ../../../data/score/k100 -k 100 -d 2017-12-31
+#python finance_index_kmean_cluster.py -o ../../../data/score/k100 -k 100 -d 2017-12-31
 if __name__ == '__main__':
   outputfile = ''
   try:
@@ -79,7 +79,7 @@ if __name__ == '__main__':
   #stocks = ['000001','000002','000004','000005','000006']
   dates = [date]
   #k = 300
-  #FIR = financial_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
+  #FIR = finance_index_rank(path=path, path_score=path_score, stocks = stocks, dates = dates)
   indexs = [
     #earning capacity
     FID['roe'],\
@@ -104,7 +104,7 @@ if __name__ == '__main__':
   FID['asset_incr_rate'],
   '''
   path_score_cluster = os.path.join(path_score_cluster)
-  FIKC = financial_index_kmean_cluster(path=path, path_score=path_score, path_score_cluster=path_score_cluster, stocks=stocks,dates=dates,indexs=indexs,alg=alg)
-  FIKC.cluster_financial_indexs(k)
-  #fecth_indexs = FIR.fetch_selected_financial_indexs(indexs, dates)
+  FIKC = finance_index_kmean_cluster(path=path, path_score=path_score, path_score_cluster=path_score_cluster, stocks=stocks,dates=dates,indexs=indexs,alg=alg)
+  FIKC.cluster_finance_indexs(k)
+  #fecth_indexs = FIR.fetch_selected_finance_indexs(indexs, dates)
   pass

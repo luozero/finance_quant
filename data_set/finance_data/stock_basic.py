@@ -9,7 +9,7 @@ import pandas as pd
 import datetime
 import os
 
-from data_set.finance_data.financial_load_store import financial_load_store as FLD
+from data_set.finance_data.finance_load_store import finance_load_store as FLD
 from ultility.download_record import download_record as DR
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 MAX_DOWNLOAD_TIMES = 50
@@ -105,7 +105,7 @@ class stock_basic:
     proc_id = self.proc_dr.read_index();
 
     for stock in self.stock_codes:
-      data_main = self.FLD.load_all_financial_one_stock(stock)
+      data_main = self.FLD.load_all_finance_data(stock)
 
       if data_main['main'].empty == False:
         dates = data_main['main'].columns[1:self.FLD.min_column]

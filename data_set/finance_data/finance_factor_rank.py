@@ -4,31 +4,30 @@ Created on 2018��9��17��
 
 @author: ll
 '''
-import data_set.finance_data.financial_factor_calc as FFC
-from data_set.finance_data.financial_factor_calc import finance_index_dic as FID
-from data_set.finance_data.financial_factor_io import financial_factor_io as FIO
+import data_set.finance_data.finance_factor_calc as FFC
+from data_set.finance_data.finance_factor_calc import finance_index_dic as FID
+from data_set.finance_data.finance_factor_io import finance_factor_io as FIO
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from ultility.common_def import *
 import pandas as pd
 import os
 import sys, getopt
 
-class financial_factor_rank:
-  def __init__(self, path = '../../../data/', path_factor = '../../../data/factor_io',
-               path_cluster='../../../data/factor_cluster',
+class finance_factor_rank:
+  def __init__(self, path_factor = 'path_factor', path_rank = 'path_rank',
                stocks = ['000001'], dates=['2018-06-30'], indexs=['roe'],file_name = '1806_1712_1'):
 
     self.stocks = stocks
     self.dates = dates
     self.indexs = indexs
-    fio = FIO(path=path, path_factor=path_factor, stocks = stocks, dates = dates, file_name = file_name)
+    fio = FIO(path_factor=path_factor, stocks = stocks, dates = dates, file_name = file_name)
     
-    if not os.path.exists(path_cluster):
-      os.makedirs(path_cluster)
+    if not os.path.exists(path_rank):
+      os.makedirs(path_rank)
     self.fetch_factors = fio.fetch_selected_factors(indexs, dates)
-    self.path_cluster = os.path.join(path_cluster, file_name)
+    self.path_rank = os.path.join(path_rank, file_name)
   
-  def load_all_financial_index(self,dates,stocks):
+  def load_all_finance_index(self,dates,stocks):
    # stock_codes = ['000719']
     data_dict = {}
     for stock_code in stocks:
@@ -44,7 +43,7 @@ class financial_factor_rank:
       data_dict[stock_code] = data_finance
     return data_dict
   
-  def assess_one_financial_factor(self, index):
+  def assess_one_finance_factor(self, index):
     score_series = pd.Series(dtype=float)
     #len_dates = len(dates)
     factor_series = self.fetch_factors.loc[:,index]
@@ -57,12 +56,12 @@ class financial_factor_rank:
     score_series = score_series.sort_index(axis=0,ascending=True)#sorted(score_series.items(), key = lambda d:d[0],reverse = True)
     return [pd.DataFrame({index:factor_series}), pd.DataFrame({index:score_series})]
     
-  def assess_selected_financial_factor(self,dates):
+  def assess_selected_finance_factor(self,dates):
     pd_indexs = pd.DataFrame()
     pd_scores = pd.DataFrame()
     for index in self.fetch_factors.columns:
       print('processing index is', index)
-      [pd_index, pd_score] = self.assess_one_financial_factor(index)
+      [pd_index, pd_score] = self.assess_one_finance_factor(index)
       pd_indexs = pd.concat([pd_indexs, pd_index], axis=1)
       pd_scores = pd.concat([pd_scores, pd_score], axis=1)
     
@@ -75,18 +74,14 @@ class financial_factor_rank:
     print(pd_indexs)
 
     pd_indexs = pd_indexs.sort_values("rank",axis=0,ascending=False)
-    pd_indexs.to_csv(self.path_cluster, encoding='gbk')
-    print(self.path_cluster)
+    pd_indexs.to_csv(self.path_rank, encoding='gbk')
+    print(self.path_rank)
 
 
-def financial_factors_rank(path_root, filename = 'rank_result', stock_codes = ['000001'],
+def finance_factors_rank(path_finance_factor, path_finance_rank, filename = 'rank_result', stock_codes = ['000001'],
                            dates = ['2018-09-30'], factors = [FID['roe'], FID['roa']]):
-  path = os.path.join(path_root)
-  path_score = os.path.join(path_root, 'score')
-  path_rank = os.path.join(path_root, FOLDER_RANK)
-  path_factor = os.path.join(path_root, 'factor_io')
 
-  ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster=path_rank, stocks=stock_codes, dates=dates,
+  ffr = finance_factor_rank(path_factor=path_finance_factor, path_rank=path_finance_rank, stocks=stock_codes, dates=dates,
                               indexs=factors, file_name=filename)
   """ 
   FID['debt_incr_rate'],\
@@ -99,10 +94,10 @@ def financial_factors_rank(path_root, filename = 'rank_result', stock_codes = ['
   FID['dev_rev_ratio']\
   """
 
-  ffr.assess_selected_financial_factor(dates)
+  ffr.assess_selected_finance_factor(dates)
   print('rank all the stock successfully');
       
-#python financial_factor_rank.py -f rank_output
+#python finance_factor_rank.py -f rank_output
 if __name__ == '__main__':
   path = '../../../data/finance_processed'
   path_score = '../../../data/score'
@@ -142,7 +137,7 @@ if __name__ == '__main__':
   ]
   dates = ['2018-09-30','2018-06-30','2017-12-31','2016-12-31','2015-12-31','2014-12-31']#,'2017-12-31'
   dates = ['2018-09-30','2018-06-30','2018-03-31','2017-12-31','2017-09-30','2017-06-30','2017-03-31']#,'2017-12-31'
-  ffr = financial_factor_rank(path=path, path_factor=path_factor, path_cluster = path_rank, stocks = stocks, dates = dates, indexs = indexs, file_name = filename)
+  ffr = finance_factor_rank(path=path, path_factor=path_factor, path_cluster = path_rank, stocks = stocks, dates = dates, indexs = indexs, file_name = filename)
   """ 
   FID['debt_incr_rate'],\
   ###asset struct
@@ -156,8 +151,8 @@ if __name__ == '__main__':
  
   
   
-  ffr.assess_selected_financial_factor(dates)
+  ffr.assess_selected_finance_factor(dates)
   print('rank all the stock successfully');
-  #data_dict = load_all_financial_processed_data(path)
+  #data_dict = load_all_finance_processed_data(path)
 
   pass

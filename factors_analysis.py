@@ -1,4 +1,5 @@
 import json
+import os
 import sys, getopt
 import datetime
 # sys.path.append(r'../')
@@ -16,6 +17,7 @@ def trade_ratio_k_mean(conf):
   common_conf = conf['common']
   path = common_conf['path']
   data_type = common_conf['data_type']
+  folder = common_conf["folder"]
 
   trade_conf = conf['trade']
 
@@ -25,6 +27,10 @@ def trade_ratio_k_mean(conf):
   elif data_type == TYPE_INDEX:
     trade_ratio_file = trade_conf['index_trade_ratio_file']
     kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
+
+  path_finance_rank = os.path.join(path, folder['finance_rank'])
+  path_in = os.path.join(path, folder['process_trade'])
+  path_out = os.path.join(path, folder['process_analyse'])
 
 #   date = datetime.date.today()
 #   date = str(date).replace('-','')
@@ -38,7 +44,7 @@ def trade_ratio_k_mean(conf):
   finance_conf = conf['finance']
   finance_factor_rank_file = finance_conf['result_name']
 
-  trade_ratio = trade_ratio_ml(path, trade_ratio_file, finance_factor_rank_file, data_type, kmnean_stock_num)
+  trade_ratio = trade_ratio_ml(path_finance_rank, path_in, path_out, trade_ratio_file, finance_factor_rank_file, data_type, kmnean_stock_num)
   trade_ratio.kmean(n_clusters, kmean_trade_ratio_file)
 
 # def trade_kmean(conf):
@@ -47,7 +53,7 @@ def trade_ratio_k_mean(conf):
 if __name__ == '__main__':
 
   # default configure file name
-  filename = 'conf.json'
+  filename = './conf/conf.json'
   # default finance analysis
   trade_flag =  False 
   # tradeflag =  True 
@@ -58,7 +64,7 @@ if __name__ == '__main__':
     sys.exit(2)
   for opt, arg in opts:
     if opt == '-h':
-      print('python3  financial_stock_basic_proc.py -f conf.json')
+      print('python3  finance_stock_basic_proc.py -f conf.json')
     elif opt in ("-f", "--filename"):
       filename = arg
     elif opt in ("-t", "--tradeflag"):

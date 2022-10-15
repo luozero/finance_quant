@@ -14,7 +14,7 @@ DELAY = 50
 class data_download:
   def __init__(self, path='../../../data/', stock_codes=['000001'], type_data = TYPE_FINANCE_STOCK):
 
-    self.path = os.path.join(path, FOLDER_DATA_DOWNLOAD)
+    self.path = path
     if not os.path.exists(self.path):
       os.makedirs(self.path)
     date = datetime.date.today()
