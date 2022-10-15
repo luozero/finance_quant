@@ -6,17 +6,14 @@ import datetime
 
 from stock_ai.trade_ratio_ml import trade_ratio_ml
 from ultility.common_def import *
+from ultility.common_func import *
 
-def read_config(filename):
-  with open(filename, 'r') as f:
-    conf = json.load(f)
-  return conf
 
-def trade_ratio_k_mean(conf):
+
+def trade_ratio_k_mean(conf, data_type):
 
   common_conf = conf['common']
   path = common_conf['path']
-  data_type = common_conf['data_type']
   folder = common_conf["folder"]
 
   trade_conf = conf['trade']
@@ -31,12 +28,6 @@ def trade_ratio_k_mean(conf):
   path_finance_rank = os.path.join(path, folder['finance_rank'])
   path_in = os.path.join(path, folder['process_trade'])
   path_out = os.path.join(path, folder['process_analyse'])
-
-#   date = datetime.date.today()
-#   date = str(date).replace('-','')
-# #  date = '20221012'
-#   trade_ratio_file = trade_ratio_file.format(date)
-  # kmean_trade_ratio_file = kmean_trade_ratio_file.format(date)
 
   n_clusters = trade_conf['n_clusters']
   kmnean_stock_num =  trade_conf['kmnean_stock_num']
@@ -72,5 +63,6 @@ if __name__ == '__main__':
 
   conf = read_config(filename)
   
-  trade_ratio_k_mean(conf)
+  trade_ratio_k_mean(conf, TYPE_STOCK)
+  trade_ratio_k_mean(conf, TYPE_INDEX)
   

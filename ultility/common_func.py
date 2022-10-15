@@ -1,5 +1,6 @@
 # coding: utf8
 import os
+import json
 import pandas as pd
 import datetime
 from ultility.common_def import *
@@ -18,6 +19,11 @@ def get_date():
   date = datetime.date.today()
   date = str(date).replace('-','')
   return date
+
+def read_config(filename):
+  with open(filename, 'r') as f:
+    conf = json.load(f)
+  return conf
 
 def read_csv(path, file):
   csv_file_path = os.path.join(path, file)

@@ -6,8 +6,9 @@
     "data_type": "stock_data",
     "?download": "yes, no",
     "download_163_finance": "no",
-    "download_163_stock_trade": "yes",
-    "download_163_index_trade": "yes",
+    "download_163_stock_trade": "no",
+    "download_163_index_trade": "no",
+    "download_easymoney_index_block_trade": "yes",
     "folder": {
       "data_finance": "data/finance",
       "finance_factors": "process/finance_factors",
@@ -28,6 +29,9 @@
   },
   "trade":
   {
+    "?easymoney index block": "indexs = ['sh', 'sz', 'sh_sz', 'cn'], blocks = ['indurstry', 'concept', 'province']",
+    "easymoney_indexs": ["cn"],
+    "easymoney_blocks": ["indurstry", "concept"],
     "finance_163_daily_trade_factor": "no",
     "stock_163_daily_trade_factor": "yes",
     "index_163_daily_trade_factor": "yes",

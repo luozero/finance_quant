@@ -3,10 +3,8 @@ import sys, getopt
 import datetime
 
 from ultility.common_def import *
+from ultility.common_func import *
 sys.path.append(r'../')
-
-# import ptvsd
-# ptvsd.settrace(None, ('0.0.0.0', 12345))
 
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
@@ -14,11 +12,6 @@ from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
 from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
-
-def read_config(filename):
-  with open(filename, 'r') as f:
-    conf = json.load(f)
-  return conf
 
 def finance_factor_process(conf):
   
@@ -39,7 +32,8 @@ def finance_factor_process(conf):
   dates = finance_conf['dates']
   factors = finance_conf['factors']
 
-  data_type = 'finance_stock_data'
+  data_type = TYPE_FINANCE_STOCK
+
   scu = SCU(path)
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table(data_type)

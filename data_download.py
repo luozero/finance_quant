@@ -3,10 +3,9 @@ import sys, getopt
 import datetime
 
 from ultility.common_def import *
+from ultility.common_func import *
 sys.path.append(r'../')
-
-# import ptvsd
-# ptvsd.settrace(None, ('0.0.0.0', 12345))
+sys.path.append(r'./efinance')
 
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
@@ -15,10 +14,8 @@ from data_set.finance_data.finance_factor_rank import *
 from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
-def read_config(filename):
-  with open(filename, 'r') as f:
-    conf = json.load(f)
-  return conf
+#efinance
+import index_block
 
 def download_163(path, path_in, data_type):
     scu = SCU(path)
@@ -26,6 +23,12 @@ def download_163(path, path_in, data_type):
     print(stock_codes)
     data_download_1 = data_download(path_in, stock_codes, data_type)
     data_download_1.download_data(data_type)
+
+def download_easymoney(path, conf_trade):
+  indexs = conf_trade["easymoney_indexs"]
+  blocks = conf_trade["easymoney_blocks"]
+  inde_block_data = index_block.get_index_block_data(path)
+  inde_block_data.get_data()
 
 def download_163_data(conf):
   
@@ -36,6 +39,7 @@ def download_163_data(conf):
   download_163_finance = common_conf['download_163_finance']
   download_163_stock_trade = common_conf['download_163_stock_trade']
   download_163_index_trade = common_conf['download_163_index_trade']
+  download_easymoney_index_block_trade = common_conf['download_easymoney_index_block_trade']
 
   # stock_codes = scu.stock_codes()
   # stock_codes = ['SH600032']
@@ -52,6 +56,10 @@ def download_163_data(conf):
   if download_163_index_trade == "yes":
     path_index = os.path.join(path, folder['data_index'])
     download_163(path, path_index, TYPE_INDEX)
+
+  if download_easymoney_index_block_trade == "yes":
+    path_index = os.path.join(path, folder['data_index'])
+    download_easymoney(path_index, conf["trade"])
 
 if __name__ == '__main__':
 
