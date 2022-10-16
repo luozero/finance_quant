@@ -6,8 +6,8 @@
     "data_type": "stock_data",
     "?download": "yes, no",
     "download_163_finance": "no",
-    "download_163_stock_trade": "no",
-    "download_163_index_trade": "no",
+    "download_163_stock_trade": "yes",
+    "download_163_index_trade": "yes",
     "download_eastmoney_index_block_trade": "yes",
     "folder": {
       "data_finance": "data/finance",

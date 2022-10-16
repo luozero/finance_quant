@@ -15,7 +15,7 @@ from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
 #efinance
-import index_block
+import efinance as ef
 
 def download_163(path, path_in, data_type):
     scu = SCU(path)
@@ -24,10 +24,10 @@ def download_163(path, path_in, data_type):
     data_download_1 = data_download(path_in, stock_codes, data_type)
     data_download_1.download_data(data_type)
 
-def download_easymoney(path, conf_trade):
-  indexs = conf_trade["easymoney_indexs"]
-  blocks = conf_trade["easymoney_blocks"]
-  inde_block_data = index_block.get_index_block_data(path)
+def download_eastmoney(path, conf_trade):
+  indexs = conf_trade["eastmoney_indexs"]
+  blocks = conf_trade["eastmoney_blocks"]
+  inde_block_data = ef.stock.index_block.get_index_block_data(path)
   inde_block_data.get_data()
 
 def download_163_data(conf):
@@ -39,7 +39,7 @@ def download_163_data(conf):
   download_163_finance = common_conf['download_163_finance']
   download_163_stock_trade = common_conf['download_163_stock_trade']
   download_163_index_trade = common_conf['download_163_index_trade']
-  download_easymoney_index_block_trade = common_conf['download_easymoney_index_block_trade']
+  download_eastmoney_index_block_trade = common_conf['download_eastmoney_index_block_trade']
 
   # stock_codes = scu.stock_codes()
   # stock_codes = ['SH600032']
@@ -57,9 +57,9 @@ def download_163_data(conf):
     path_index = os.path.join(path, folder['data_index'])
     download_163(path, path_index, TYPE_INDEX)
 
-  if download_easymoney_index_block_trade == "yes":
+  if download_eastmoney_index_block_trade == "yes":
     path_index = os.path.join(path, folder['data_index'])
-    download_easymoney(path_index, conf["trade"])
+    download_eastmoney(path_index, conf["trade"])
 
 if __name__ == '__main__':
 
