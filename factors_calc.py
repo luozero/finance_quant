@@ -21,8 +21,8 @@ def finance_factor_process(conf):
 
 
   path = common_conf['path']
-  path_finance = os.path.join(path, folder['data_finance'])
-  path_factor = os.path.join(path, folder["finance_factors"])
+  path_finance = os.path.join(path, folder['stock_data'])
+  path_factor = os.path.join(path, folder["data_stock"])
   path_rank = os.path.join(path, folder["finance_rank"])
 
 

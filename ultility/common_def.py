@@ -12,17 +12,17 @@ LINK_STOCK_DAILY_TRADE       = 'https://quotes.money.163.com/service/chddata.htm
 LINK_INDEX_DAILY_TRADE 			 = 'http://quotes.money.163.com/service/chddata.html?code={}&start=19910102&end={}&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER'
 
 # download file name
-FILE_MAIN 						 = '{}_main.csv'
-FILE_EARNING 					 = '{}_earning.csv'
-FILE_RETURN_DEBIT 	   = '{}_return_debit.csv'
-FILE_GROWTH 					 = '{}_growth.csv'
-FILE_OPERATION 				 = '{}_operation.csv'
-FILE_ABSTRACT 				 = '{}_abstract.csv'
-FILE_PROFIT 					 = '{}_profit.csv'
-FILE_CASH 						 = '{}_cash.csv'
-FILE_LOANS 						 = '{}_loans.csv'
-FILE_STOCK_DAILY_TRADE = '{}_stock_daily_trade.csv'
-FILE_INDEX_DAILY_TRADE = '{}_index_daily_trade.csv'
+FILE_MAIN 						 = 'main.csv'
+FILE_EARNING 					 = 'earning.csv'
+FILE_RETURN_DEBIT 	   = 'return_debit.csv'
+FILE_GROWTH 					 = 'growth.csv'
+FILE_OPERATION 				 = 'operation.csv'
+FILE_ABSTRACT 				 = 'abstract.csv'
+FILE_PROFIT 					 = 'profit.csv'
+FILE_CASH 						 = 'cash.csv'
+FILE_LOANS 						 = 'loans.csv'
+FILE_STOCK_DAILY_TRADE = 'stock_daily_trade.csv'
+FILE_INDEX_DAILY_TRADE = 'index_daily_trade.csv'
 
 # download data fyle
 TYPE_FINANCE_STOCK = 'finance_stock_data'
@@ -38,7 +38,7 @@ FOLDER_RANK                  = 'rank'
 FOLDER_DAILY_TRADE_PROCESSED = "daily_trade_processed"
 
 # process trade data folder from daily trade data
-FILE_DAILY_TRADE_QUARTER = "{}_daily_trade_quarter.csv"
+FILE_DAILY_TRADE_QUARTER = "daily_trade_quarter.csv"
 
 # json process config
 JSON_FILE_PROCESS_RECORD              = "process_record.json"

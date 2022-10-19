@@ -35,8 +35,6 @@ class process_daily_trade_data(object):
 
   def trade_data_quarter(self):
 
-    stock_file_daily_trade_quarter = os.path.join(self.path_in, FILE_DAILY_TRADE_QUARTER)
-
     for stock_code in self.stock_codes:
 
       finance_main = FILE_MAIN.format(stock_code)
@@ -48,8 +46,8 @@ class process_daily_trade_data(object):
           self.DR.write_skip_stock(stock_code)
       else:
 
-        file_name = get_stock_index_file(self.data_type, stock_code)
-        daily_trade_data = read_csv(self.path_in, file_name) 
+        file_name = get_stock_index_file(self.data_type)
+        daily_trade_data = read_csv(os.path.join(stock_path(self.path_in, stock), file_name))
 
         dates = data_main.columns
 
@@ -69,7 +67,7 @@ class process_daily_trade_data(object):
           trade_data_quarter = pd.concat([trade_data_quarter, daily_trade_data[date_in_daily_trade_dates == daily_trade_dates]])
 
         # trade_data_quarter.index = dates
-        file_csv = stock_file_daily_trade_quarter.format(stock_code)
+        file_csv = os.path.join(stock_path(self.path_in, stock), FILE_DAILY_TRADE_QUARTER)
         trade_data_quarter.to_csv(file_csv, encoding='gbk', index = False)
         print("store to ", file_csv)
 
@@ -151,8 +149,9 @@ class process_daily_trade_data(object):
         pct_change_series = pd.Series(pct_change_list)
         pct_change_pd = pd.concat([pct_change_pd, pct_change_series], axis=1)
 
-        codes_list.append(stock_code)
-        code_name = self.scu.stock_codes_get_name(stock_code)
+        code_change = add_stock_sh_sz_bj(stock_code)
+        codes_list.append(code_change)
+        code_name = self.scu.stock_codes_get_name(code_change)
         code_names_list.append(code_name)
 
     pct_change_pd = pd.DataFrame(pct_change_pd.T.values, columns=pct_columns_list, index=codes_list)

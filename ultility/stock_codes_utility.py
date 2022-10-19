@@ -17,12 +17,10 @@ class stock_codes_utility:
     self.DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
     self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
 
-    if type_data == TYPE_STOCK:
-      self.table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
-    elif type_data == TYPE_INDEX:
+    if type_data == TYPE_INDEX:
       self.table = pd.read_csv('./table/index_codes.csv', encoding='gbk')
     else:
-      print("not support this kind type: ", type_data)
+      self.table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
     self.type_data = type_data
   
   def stock_codes(self):
@@ -41,7 +39,7 @@ class stock_codes_utility:
     return stock_codes
   
   def stock_codes_from_table(self, type):
-    codes = sorted(self.table.loc[:,'code'].values.squeeze())
+    codes = sorted(self.table.loc[:,'code'].apply(lambda x: x[2:]).values.squeeze())
     return codes
 
   def stock_codes_get_name(self, code):

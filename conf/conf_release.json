@@ -5,17 +5,14 @@
     "?data_type": "finance_stock_data, stock_data, index_data",
     "data_type": "stock_data",
     "?download": "yes, no",
-    "download_163_finance": "no",
+    "download_163_finance": "yes",
     "download_163_stock_trade": "yes",
     "download_163_index_trade": "yes",
     "download_eastmoney_index_block_trade": "yes",
     "folder": {
-      "data_finance": "data/finance",
-      "finance_factors": "process/finance_factors",
-      "finance_rank": "process/rank",
       "data_stock": "data/stock",
       "data_index": "data/index",
-      "process_data": "process",
+      "finance_rank": "process/rank",
       "process_trade": "process/trade",
       "process_analyse": "process/analyse"
     }

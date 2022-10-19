@@ -8,6 +8,7 @@ from retry import retry
 
 from ultility.download_record import download_record as DR
 from ultility.common_def import * 
+from ultility.common_func import * 
 
 DELAY = 50
 
@@ -32,29 +33,32 @@ class data_download:
 
   @retry(tries=-1, delay=DELAY) 
   def try_download_csv(self, filename, url, stock):
-    filename = os.path.join(self.path, filename.format(stock))
-    stock_change = stock[2:]
+
+    filename = os.path.join(stock_path(self.path, stock), filename)
+    stock_change = stock
     # download
     try:
       url = url.format(stock_change, self.date)
+      print(url)
       request.urlretrieve(url, filename, self.Schedule)
     except:
       print('skip this stok: ', stock)
 
   @retry(tries=-1, delay=DELAY)
   def try_download_trade_csv(self, filename, url, stock):
-    filename = os.path.join(self.path, filename.format(stock))
+
+    filename = os.path.join(stock_path(self.path, stock), filename)
     a = stock[2]
     if self.type_data == TYPE_INDEX:
       if int(a) >= 3:
-        stock_change = '1' + stock[2:]
+        stock_change = '1' + stock
       else:
-        stock_change = '0' + stock[2:]
+        stock_change = '0' + stock
     else:
       if int(a) >= 6:
-        stock_change = '0' + stock[2:]
+        stock_change = '0' + stock
       else:
-        stock_change = '1' + stock[2:]
+        stock_change = '1' + stock
     # download
     try:
       url = url.format(stock_change, self.date)

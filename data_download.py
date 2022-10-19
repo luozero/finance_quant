@@ -18,7 +18,7 @@ from data_set.trade_data.process_daily_trade_data import process_daily_trade_dat
 from data_set.east_money.east_money_download import *
 
 def download_163(path, path_in, data_type):
-    scu = SCU(path)
+    scu = SCU(path, data_type)
     stock_codes = scu.stock_codes_from_table(data_type)
     print(stock_codes)
     data_download_1 = data_download(path_in, stock_codes, data_type)
@@ -30,7 +30,7 @@ def download_eastmoney(path, conf_trade):
   east_money_data = east_money_download(path)
   east_money_data.get_index_block_data(indexs, blocks)
 
-def download_163_data(conf):
+def download_data(conf):
   
   common_conf = conf['common']
   path = common_conf['path']
@@ -46,7 +46,7 @@ def download_163_data(conf):
 
   # download all the data
   if download_163_finance == "yes":
-    path_finance = os.path.join(path, folder['data_finance'])
+    path_finance = os.path.join(path, folder['data_stock'])
     download_163(path, path_finance, TYPE_FINANCE_STOCK)
 
   if download_163_stock_trade == "yes":
@@ -82,4 +82,4 @@ if __name__ == '__main__':
       trade_flag = True 
 
   conf = read_config(filename)
-  download_163_data(conf)
+  download_data(conf)

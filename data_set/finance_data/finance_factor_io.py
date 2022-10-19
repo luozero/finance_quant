@@ -66,7 +66,7 @@ class finance_factor_io:
         list_columns = list_columns + column
         pd_factor_values = pd.concat([pd_factor_values, factor_value], axis=1)
       pd_factor_values.columns = list_columns
-      pd_factor_values.index = self.stock_codes #scu.add_allstock_sh_sz(self.stock_codes)
+      pd_factor_values.index = [add_allstock_sh_sz_bj(stock) for stock in self.stock_codes]
       pd_factor_values.to_csv(self.path_factor_io, encoding='gbk')
     else:
       pd_factor_values = pd.read_csv(self.path_factor_io,index_col=0)
