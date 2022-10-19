@@ -15,7 +15,7 @@ from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
 #efinance
-from data_set.east_money.index_block_getter import *
+from data_set.east_money.east_money_download import *
 
 def download_163(path, path_in, data_type):
     scu = SCU(path)
@@ -27,8 +27,8 @@ def download_163(path, path_in, data_type):
 def download_eastmoney(path, conf_trade):
   indexs = conf_trade["eastmoney_indexs"]
   blocks = conf_trade["eastmoney_blocks"]
-  inde_block_data = get_index_block_data(path)
-  inde_block_data.get_data()
+  east_money_data = east_money_download(path)
+  east_money_data.get_index_block_data(indexs, blocks)
 
 def download_163_data(conf):
   
