@@ -5,7 +5,7 @@ import datetime
 from ultility.common_def import *
 from ultility.common_func import *
 sys.path.append(r'../')
-sys.path.append(r'./efinance')
+sys.path.append(os.path.abspath('./efinance'))
 
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
@@ -15,7 +15,7 @@ from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
 #efinance
-import efinance as ef
+from data_set.east_money.index_block_getter import *
 
 def download_163(path, path_in, data_type):
     scu = SCU(path)
@@ -27,7 +27,7 @@ def download_163(path, path_in, data_type):
 def download_eastmoney(path, conf_trade):
   indexs = conf_trade["eastmoney_indexs"]
   blocks = conf_trade["eastmoney_blocks"]
-  inde_block_data = ef.stock.index_block.get_index_block_data(path)
+  inde_block_data = get_index_block_data(path)
   inde_block_data.get_data()
 
 def download_163_data(conf):
