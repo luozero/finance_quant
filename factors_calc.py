@@ -20,11 +20,8 @@ def finance_factor_process(conf):
 
 
   path = common_conf['path']
-  path_finance = os.path.join(path, folder['data_stock'])
-  path_factor = os.path.join(path, folder["data_stock"])
+  path_stock = os.path.join(path, folder['data_stock'])
   path_rank = os.path.join(path, folder["finance_rank"])
-
-
 
   finance_conf = conf['finance']
   result_name = finance_conf['result_name']
@@ -40,18 +37,18 @@ def finance_factor_process(conf):
   # stock_codes = ['SH600032']
 
   # process quarter trade
-  daily_trade_data = process_daily_trade_data(path, path_finance, path_finance, stock_codes, data_type)
-  daily_trade_data.trade_data_quarter()
+  daily_trade_data = process_daily_trade_data(path, path_stock, path_stock, data_type)
+  daily_trade_data.trade_data_quarter(stock_codes)
 
   # need to disable following code when debug
   stock_codes = scu.skip_stock_codes(stock_codes)
 
   # factors caculate
-  ffc = finance_factor_calc(path, path_finance, path_factor)
+  ffc = finance_factor_calc(path, path_stock, path_stock)
   ffc.stock_factors_calc(stock_codes)
 
   # rank the factor
-  finance_factors_rank(path_factor, path_rank, result_name, stock_codes, dates, factors)
+  finance_factors_rank(path_stock, path_rank, result_name, stock_codes, dates, factors)
 
 def daily_trade_process(conf):
 
@@ -78,7 +75,7 @@ def daily_trade_process(conf):
     # need to disable following code when debug
     stock_codes = scu.skip_stock_codes(stock_codes)
     #process daily trade data
-    daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
+    daily_trade_data = process_daily_trade_data(path, path_in, path_out, data_type)
     daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
 
   if index_163_daily_trade_factor == 'yes':
@@ -89,7 +86,7 @@ def daily_trade_process(conf):
     scu = SCU(path, data_type)
     stock_codes = scu.stock_codes_from_table(data_type)
     #process daily trade data
-    daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
+    daily_trade_data = process_daily_trade_data(path, path_in, path_out, data_type)
     daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
 
 

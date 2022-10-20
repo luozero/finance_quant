@@ -102,7 +102,7 @@ class data_download:
 
   def download_data(self, data_type = True):
     if data_type == TYPE_FINANCE_STOCK:
-      dr = DR(self.path, '../' + JSON_FILE_PROCESS_RECORD)
+      dr = DR(os.path.join(self.path, '../../'), JSON_FILE_PROCESS_RECORD)
       stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
     else:
       stock_index = 0

@@ -51,8 +51,8 @@ def download_data(conf):
     download_163(path, path_finance, TYPE_FINANCE_STOCK)
 
   if download_163_stock_trade == "yes":
-    path_trade = os.path.join(path, folder['data_stock'])
-    download_163(path, path_trade, TYPE_STOCK)
+    data_stock = os.path.join(path, folder['data_stock'])
+    download_163(path, data_stock, TYPE_STOCK)
 
   if download_163_index_trade == "yes":
     path_index = os.path.join(path, folder['data_index'])

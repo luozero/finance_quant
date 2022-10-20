@@ -13,9 +13,6 @@ class finance_load_store:
     self.path_finance = path_finance
 
     self.factor_folder = path_factor
-    if not os.path.exists(self.factor_folder):
-      os.makedirs(self.factor_folder)
-    self.factor_folder = os.path.join(self.factor_folder,'{}_processed_finance.csv')
 
     #self.load_stock_basic()
   '''finance data'''
@@ -76,12 +73,12 @@ class finance_load_store:
   
   '''processed finance data'''
   def store_process_financical_data(self, data, stock_code):
-    csv_file_path = stock_path(self.factor_folder, stock_code)
+    csv_file_path = os.path.join(stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
     data.to_csv(csv_file_path, encoding='gbk')
     print("finance factor store to ", csv_file_path)
 
   def load_process_financical_data(self, stock_code):
-    csv_file_path = stock_path(self.factor_folder, stock_code)
+    csv_file_path = os.path.join(stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
     if not os.path.exists(csv_file_path):
       print('load_process_financical_data not exsit this file', stock_code)
       exit(-1)
