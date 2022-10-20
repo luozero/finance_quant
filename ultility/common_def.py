@@ -23,7 +23,9 @@ FILE_CASH 						 = 'cash.csv'
 FILE_LOANS 						 = 'loans.csv'
 FILE_STOCK_DAILY_TRADE = 'stock_daily_trade.csv'
 FILE_INDEX_DAILY_TRADE = 'index_daily_trade.csv'
-FILE_FINANCE_FACTOR = 'finance_factors.csv'
+FILE_FINANCE_FACTOR     = 'finance_factors.csv'
+FILE_TRADE_NORTH       = 'trade_north.csv'
+FILE_TRADE_MAEGIN_SHORT = 'trade_margin_short.csv'
 
 # download data fyle
 TYPE_FINANCE_STOCK = 'finance_stock_data'

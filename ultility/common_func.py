@@ -11,7 +11,7 @@ def stock_path(path, stock):
     os.makedirs(path)
   return path
 
-def get_date():
+def get_today_date():
   date = datetime.date.today()
   date = str(date).replace('-','')
   return date

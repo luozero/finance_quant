@@ -9,6 +9,7 @@
     "download_163_stock_trade": "yes",
     "download_163_index_trade": "yes",
     "download_eastmoney_index_block_trade": "yes",
+    "download_eastmoney_north_margin_trade": "yes",
     "folder": {
       "data_stock": "data/stock",
       "data_index": "data/index",

@@ -19,7 +19,7 @@ class process_daily_trade_data(object):
     if not os.path.exists(path_in):
       print("pls download finance data")
 
-    # path_out = os.path.join(path_out, get_date())
+    # path_out = os.path.join(path_out, get_today_date())
     if not os.path.exists(path_out):
       os.makedirs(path_out)
     self.path_out = path_out
@@ -58,7 +58,7 @@ class process_daily_trade_data(object):
       if data_main.empty == True:
 
           print("no this stock", stock_code, "data")
-          self.DR.write_skip_stock(stock_code)
+          dr.write_skip_stock(stock_code)
       else:
 
         file_name = self.get_stock_index_file(stock_code)

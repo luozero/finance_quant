@@ -25,11 +25,16 @@ def download_163(path, path_in, data_type):
     data_download_1 = data_download(path_in, stock_codes, data_type)
     data_download_1.download_data(data_type)
 
-def download_eastmoney(path, conf_trade):
+def download_eastmoney_index(path, conf_trade):
   indexs = conf_trade["eastmoney_indexs"]
   blocks = conf_trade["eastmoney_blocks"]
   east_money_data = east_money_download(path)
   east_money_data.get_index_block_data(indexs, blocks)
+
+def download_eastmoney_north(path):
+  east_money_data = east_money_download(path)
+  east_money_data.get_stock_margin_short()
+  east_money_data.get_stock_north()
 
 def download_data(conf):
   
@@ -41,6 +46,7 @@ def download_data(conf):
   download_163_stock_trade = common_conf['download_163_stock_trade']
   download_163_index_trade = common_conf['download_163_index_trade']
   download_eastmoney_index_block_trade = common_conf['download_eastmoney_index_block_trade']
+  download_eastmoney_north_margin_trade = common_conf['download_eastmoney_north_margin_trade']
 
   # stock_codes = scu.stock_codes()
   # stock_codes = ['SH600032']
@@ -60,8 +66,11 @@ def download_data(conf):
 
   if download_eastmoney_index_block_trade == "yes":
     path_index = os.path.join(path, folder['data_index'])
-    download_eastmoney(path_index, conf["trade"])
+    download_eastmoney_index(path_index, conf["trade"])
 
+  if download_eastmoney_north_margin_trade == "yes":
+    path = os.path.join(path, folder['data_stock'])
+    download_eastmoney_north(path)
 if __name__ == '__main__':
 
   # default configure file name
