@@ -16,19 +16,18 @@ from data_set.trade_data.process_daily_trade_data import process_daily_trade_dat
 def finance_factor_process(conf):
   
   common_conf = conf['common']
-  download = common_conf['download']
   folder = common_conf["folder"]
 
 
   path = common_conf['path']
-  path_finance = os.path.join(path, folder['stock_data'])
+  path_finance = os.path.join(path, folder['data_stock'])
   path_factor = os.path.join(path, folder["data_stock"])
   path_rank = os.path.join(path, folder["finance_rank"])
 
 
-  result_name = finance_conf['result_name']
 
   finance_conf = conf['finance']
+  result_name = finance_conf['result_name']
   dates = finance_conf['dates']
   factors = finance_conf['factors']
 
@@ -75,15 +74,15 @@ def daily_trade_process(conf):
     data_type = TYPE_STOCK
     scu = SCU(path, data_type)
     stock_codes = scu.stock_codes_from_table(data_type)
-    # stock_codes = ['SZ301213', 'SH600519']
+    # stock_codes = ['600000']
     # need to disable following code when debug
     stock_codes = scu.skip_stock_codes(stock_codes)
     #process daily trade data
     daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
-    daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
+    daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
 
   if index_163_daily_trade_factor == 'yes':
-    path_in = os.path.join(path, folder['data_index'])
+    path_in = os.path.join(path, folder['data_index'], FOLDER_163_INDEX)
     path_out = os.path.join(path, folder['process_trade'])
     trade_ouput_file = trade_conf['index_trade_ratio_file']
     data_type = TYPE_INDEX
@@ -91,7 +90,7 @@ def daily_trade_process(conf):
     stock_codes = scu.stock_codes_from_table(data_type)
     #process daily trade data
     daily_trade_data = process_daily_trade_data(path, path_in, path_out, stock_codes, data_type)
-    daily_trade_data.price_volume_ratio(stock_codes, trade_ouput_file)
+    daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
 
 
 if __name__ == '__main__':

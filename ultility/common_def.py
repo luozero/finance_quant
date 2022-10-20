@@ -30,7 +30,7 @@ TYPE_STOCK 				 = 'stock_data'
 TYPE_INDEX 				 = 'index_data'
 
 # download finance folder
-FOLDER_DATA_DOWNLOAD = 'finance'
+FOLDER_163_INDEX = '163'
 
 # factor folder
 FOLDER_FACTOR                = 'finance_processed'

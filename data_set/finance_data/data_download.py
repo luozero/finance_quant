@@ -47,14 +47,15 @@ class data_download:
   @retry(tries=-1, delay=DELAY)
   def try_download_trade_csv(self, filename, url, stock):
 
-    filename = os.path.join(stock_path(self.path, stock), filename)
-    a = stock[2]
+    a = stock[0]
     if self.type_data == TYPE_INDEX:
+      filename = os.path.join(stock_path(self.path, FOLDER_163_INDEX), stock + '.csv')
       if int(a) >= 3:
         stock_change = '1' + stock
       else:
         stock_change = '0' + stock
     else:
+      filename = os.path.join(stock_path(self.path, stock), filename)
       if int(a) >= 6:
         stock_change = '0' + stock
       else:

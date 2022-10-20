@@ -5,15 +5,11 @@ import pandas as pd
 import datetime
 from ultility.common_def import *
 
-def nearest_date(items, pivot):
-  return min(items, key=lambda x: abs(pd.Timestamp(x) - pd.Timestamp(pivot)))
-
-def get_stock_index_file(data_type):
-  if data_type == TYPE_INDEX:
-    file_name = FILE_INDEX_DAILY_TRADE
-  else:
-    file_name = FILE_STOCK_DAILY_TRADE
-  return file_name
+def stock_path(path, stock):
+  path = os.path.join(path, stock)
+  if not os.path.exists(path):
+    os.makedirs(path)
+  return path
 
 def get_date():
   date = datetime.date.today()
@@ -44,12 +40,6 @@ def read_csv(path, file):
     print('stock this file is not exist', csv_file_path)
     data = pd.DataFrame()
   return data
-
-def stock_path(path, stock):
-  path = os.path.join(path, stock)
-  if not os.path.exists(path):
-    os.makedirs(path)
-  return path
 
 def add_stock_sh_sz_bj(stock):
   if int(stock)<600000:
