@@ -13,11 +13,15 @@ from ultility.common_func import *
 DELAY = 50
 
 class data_download:
-  def __init__(self, path='../../../data/', stock_codes=['000001'], type_data = TYPE_FINANCE_STOCK):
+  def __init__(self, path = 'path', path_data='../../../data/', stock_codes=['000001'], type_data = TYPE_FINANCE_STOCK):
 
     self.path = path
     if not os.path.exists(self.path):
       os.makedirs(self.path)
+
+    self.path_data = path_data
+    if not os.path.exists(self.path_data):
+      os.makedirs(self.path_data)
     date = datetime.date.today()
     
     self.date = str(date).replace('-','')
@@ -34,7 +38,7 @@ class data_download:
   @retry(tries=-1, delay=DELAY) 
   def try_download_csv(self, filename, url, stock):
 
-    filename = os.path.join(stock_path(self.path, stock), filename)
+    filename = os.path.join(stock_path(self.path_data, stock), filename)
     stock_change = stock
     # download
     try:
@@ -49,13 +53,13 @@ class data_download:
 
     a = stock[0]
     if self.type_data == TYPE_INDEX:
-      filename = os.path.join(stock_path(self.path, FOLDER_163_INDEX), stock + '.csv')
+      filename = os.path.join(stock_path(self.path_data, FOLDER_163_INDEX), stock + '.csv')
       if int(a) >= 3:
         stock_change = '1' + stock
       else:
         stock_change = '0' + stock
     else:
-      filename = os.path.join(stock_path(self.path, stock), filename)
+      filename = os.path.join(stock_path(self.path_data, stock), filename)
       if int(a) >= 6:
         stock_change = '0' + stock
       else:
@@ -102,7 +106,7 @@ class data_download:
 
   def download_data(self, data_type = True):
     if data_type == TYPE_FINANCE_STOCK:
-      dr = DR(os.path.join(self.path, '../../'), JSON_FILE_PROCESS_RECORD)
+      dr = DR(self.path, JSON_FILE_PROCESS_RECORD)
       stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
     else:
       stock_index = 0

@@ -22,7 +22,7 @@ def download_163(path, path_in, data_type):
     stock_codes = scu.stock_codes_from_table(data_type)
     # stock_codes = ['600000']
     print(stock_codes)
-    data_download_1 = data_download(path_in, stock_codes, data_type)
+    data_download_1 = data_download(path, path_in, stock_codes, data_type)
     data_download_1.download_data(data_type)
 
 def download_eastmoney_index(path, conf_trade):
@@ -69,8 +69,8 @@ def download_data(conf):
     download_eastmoney_index(path_index, conf["trade"])
 
   if download_eastmoney_north_margin_trade == "yes":
-    path = os.path.join(path, folder['data_stock'])
-    download_eastmoney_north(path)
+    path_data = os.path.join(path, folder['data_stock'])
+    download_eastmoney_north(path_data)
 if __name__ == '__main__':
 
   # default configure file name

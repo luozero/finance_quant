@@ -42,8 +42,15 @@ class east_money_download:
     north_stock_status = self.datacenter.get_north_stock_status()
     stock_codes = north_stock_status['stock_code'].apply(lambda x: x[:-3]).values
     for stock_code in stock_codes:
+
       df = self.datacenter.get_north_stock_daily_trade(stock_code)
+
       filename = os.path.join(stock_path(self.path, stock_code), FILE_TRADE_NORTH)
+      if os.path.exists(filename):
+        df_old = pd.read_csv(filename, encoding='gbk')
+        df = pd.concat([df, df_old], axis = 0)
+      df = df.drop_duplicates()
+
       df.to_csv(filename, encoding = 'gbk', index = False)
       print('stored north', filename)
 
