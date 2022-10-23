@@ -166,10 +166,7 @@ class process_daily_trade_data(object):
     codes_list = []
     for stock_code in stock_codes:
 
-      if self.data_type == TYPE_STOCK:
-        daily_trade_data = read_csv(stock_path(self.path_in, stock_code), FILE_STOCK_DAILY_TRADE) 
-      elif self.data_type == TYPE_INDEX:
-        daily_trade_data = read_csv(self.path_in, stock_code + '.csv')
+      daily_trade_data = read_csv(self.path_in, stock_code + '.csv')
 
       if daily_trade_data.shape[0] > 400:
 

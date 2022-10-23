@@ -26,15 +26,18 @@ def download_163(path, path_in, data_type):
     data_download_1.download_data(data_type)
 
 def download_eastmoney_index(path, conf_trade):
+
+  east_money_data = east_money_download(path)
+  east_money_data.get_stock_north_index()
+
   indexs = conf_trade["eastmoney_indexs"]
   blocks = conf_trade["eastmoney_blocks"]
-  east_money_data = east_money_download(path)
   east_money_data.get_index_block_data(indexs, blocks)
 
 def download_eastmoney_north(path):
   east_money_data = east_money_download(path)
-  east_money_data.get_stock_margin_short()
   east_money_data.get_stock_north()
+  east_money_data.get_stock_margin_short()
 
 def download_data(conf):
   

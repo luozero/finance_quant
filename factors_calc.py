@@ -79,7 +79,7 @@ def daily_trade_process(conf):
     daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
 
   if index_163_daily_trade_factor == 'yes':
-    path_in = os.path.join(path, folder['data_index'], FOLDER_163_INDEX)
+    path_in = os.path.join(path, folder['data_index'])
     path_out = os.path.join(path, folder['process_trade'])
     trade_ouput_file = trade_conf['index_trade_ratio_file']
     data_type = TYPE_INDEX

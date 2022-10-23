@@ -53,7 +53,7 @@ class data_download:
 
     a = stock[0]
     if self.type_data == TYPE_INDEX:
-      filename = os.path.join(stock_path(self.path_data, FOLDER_163_INDEX), stock + '.csv')
+      filename = os.path.join(stock_path(self.path_data, stock), filename)
       if int(a) >= 3:
         stock_change = '1' + stock
       else:
