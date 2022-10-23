@@ -43,9 +43,9 @@ def read_csv(path, file):
 
 def add_stock_sh_sz_bj(stock):
   if int(stock)<600000:
-    stock = 'SZ' + stock
+    stock = 'SZ' + str(stock)
   elif int(stock) < 800000:
-    stock = 'SH' + stock
+    stock = 'SH' + str(stock)
   else:
-    stock = 'BJ' + stock
+    stock = 'BJ' + str(stock)
   return stock

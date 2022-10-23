@@ -25,7 +25,10 @@ FILE_STOCK_DAILY_TRADE = 'stock_daily_trade.csv'
 FILE_INDEX_DAILY_TRADE = 'index_daily_trade.csv'
 FILE_INDEX_NORTH_DAILY_TRADE = 'index_north_daily_trade.csv'
 FILE_FINANCE_FACTOR     = 'finance_factors.csv'
+FILE_STOCK_BILL         = 'trade_bill.csv'
+FILE_STOCK_BIG_DEAL         = 'trade_big_deal.csv'
 FILE_TRADE_NORTH       = 'trade_north.csv'
+FILE_TRADE_NORTH_NEW       = 'trade_north_new.csv'
 FILE_TRADE_MAEGIN_SHORT = 'trade_margin_short.csv'
 
 # download data fyle
@@ -40,6 +43,8 @@ FOLDER_163_INDEX = '163'
 FOLDER_FACTOR                = 'finance_processed'
 FOLDER_RANK                  = 'rank'
 FOLDER_DAILY_TRADE_PROCESSED = "daily_trade_processed"
+FOLDER_NORTH_INDEX_TEMP      = 'north_index_temp'
+FOLDER_NORTH_STOCK_TEMP      = 'north_stock_temp'
 
 # process trade data folder from daily trade data
 FILE_DAILY_TRADE_QUARTER = "daily_trade_quarter.csv"

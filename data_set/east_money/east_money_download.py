@@ -29,36 +29,39 @@ class east_money_download:
       
     for block in blocks:
       code_names = self.push2_98_getter.get_block_codes(block)
-      self.get_data_common_index_block(code_names.loc[:, 'code'].values)
+      self.get_data_common_index_block(code_names.loc[:, 'stock_code'].values)
 
     for index in indexs:
       code_names = self.push2_98_getter.get_index_codes(index)
-      self.get_data_common_index_block(code_names.loc[:, 'code'].values)
+      self.get_data_common_index_block(code_names.loc[:, 'stock_code'].values)
+
+  def combine_two_data(self, stock_code, file_name, df):
+
+    filename = os.path.join(stock_path(self.path, stock_code), file_name)
+    if os.path.exists(filename):
+      df_old = pd.read_csv(filename, encoding='gbk')
+      df = pd.concat([df, df_old], axis = 0)
+    df = df.drop_duplicates()
+
+    df.to_csv(filename, encoding = 'gbk', index = False)
+    print('stored north', filename)
 
   def get_stock_north(self):
 
     north_stock_status = self.datacenter.get_north_stock_status()
     stock_codes = north_stock_status['stock_code'].apply(lambda x: x[:-3]).values
+
     for stock_code in stock_codes:
-
       df = self.datacenter.get_north_stock_daily_trade(stock_code)
+      self.combine_two_data(stock_code, FILE_TRADE_NORTH, df)
 
-      filename = os.path.join(stock_path(self.path, stock_code), FILE_TRADE_NORTH)
-      if os.path.exists(filename):
-        df_old = pd.read_csv(filename, encoding='gbk')
-        df = pd.concat([df, df_old], axis = 0)
-      df = df.drop_duplicates()
-
-      df.to_csv(filename, encoding = 'gbk', index = False)
-      print('stored north', filename)
-
-  def update_north_index_data(self, df):
+  def update_north_data(self, df, file_name):
 
     stock_codes = df['stock_code']
     for stock_code in stock_codes:
       # print("process: ", stock_code)
       data_one = df[df['stock_code'].isin([stock_code])]
-      file_out = os.path.join(stock_path(self.path, stock_code), FILE_INDEX_NORTH_DAILY_TRADE)
+      file_out = os.path.join(stock_path(self.path, stock_code.split('.')[0]), file_name)
       if os.path.exists(file_out):
         data_file = pd.read_csv(file_out, encoding='gbk')
         data_update = pd.concat([data_one, data_file])
@@ -67,16 +70,15 @@ class east_money_download:
         data_update.to_csv(file_out, encoding = 'gbk', index = False)
       else:
         data_one.to_csv(file_out, encoding = 'gbk', index = False)
-  
-  def get_stock_north_index(self):
 
-    temp_path = os.path.join(self.path, 'north_index_temp')
+  def update_north_file(self, datacenter_func, folder, file_name, start_date = '2020-01-01', end_date = str(datetime.date.today())[0:10]):
+    temp_path = os.path.join(self.path, folder)
     if not os.path.exists(temp_path):
       os.makedirs(temp_path)
-      date_series = pd.date_range(start = '2020-01-01', end = str(datetime.date.today()))
+      date_series = pd.date_range(start = start_date, end = end_date)
       for date in date_series:
         date_str = str(date)[0:10]
-        df = self.datacenter.get_north_stock_index(date_str)
+        df = datacenter_func(date_str)
         print('download north index successfully: ', date_str)
         if len(df) > 0:
           df.to_csv(os.path.join(temp_path, date_str + '.csv'), encoding = 'gbk', index = False)
@@ -85,19 +87,27 @@ class east_money_download:
       for file in files:
         print('process file: ', file)
         df = pd.read_csv(os.path.join(temp_path, file), encoding = 'gbk')
-        self.update_north_index_data(df)
+        self.update_north_data(df, file_name)
     else:
-      date_str = str(datetime.date.today())[0:10]
-      df = self.datacenter.get_north_stock_index(date_str)
+      date_str = end_date
+      df = datacenter_func(date_str)
       if (len(df) > 0):
         print('download north index successfully: ', date_str)
-        self.update_north_index_data(df)
-
+        self.update_north_data(df, file_name)
+      
       # files = os.listdir(temp_path)
       # for file in files:
       #   print('process file: ', file)
       #   df = pd.read_csv(os.path.join(temp_path, file), encoding = 'gbk')
-      #   self.update_north_index_data(df)
+      #   self.update_north_data(df, file_name)
+
+  def get_stock_north_index(self):
+    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_TEMP, FILE_INDEX_NORTH_DAILY_TRADE)
+
+  def get_stock_north_new(self):
+    self.update_north_file(self.datacenter.get_north_stock_status, FOLDER_NORTH_STOCK_TEMP, FILE_TRADE_NORTH_NEW, start_date = '2022-07-01')
+
+
 
   def get_stock_margin_short(self):
 
@@ -108,3 +118,35 @@ class east_money_download:
       filename = os.path.join(stock_path(self.path, stock_code), FILE_TRADE_MAEGIN_SHORT)
       df.to_csv(filename, encoding = 'gbk', index = False)
       print('stored north', filename)
+  
+  def get_stock_bill(self):
+
+    push2_98 = ef.stock.push2_98_getter.push2_98()
+    all_stock_status = push2_98.get_all_stock_status()
+    stock_codes = sorted(all_stock_status['stock_code'], reverse=True)
+
+    for stock_code in stock_codes:
+      change_stock_code = stock_code[2:]
+      print('download bill stock_code', change_stock_code)
+      df = ef.stock.get_history_bill(change_stock_code)
+      df["股票代码"] = df["股票代码"].apply(lambda x: add_stock_sh_sz_bj(x))
+      df = df.sort_values(by = ['日期'], ascending=False)
+      self.combine_two_data(change_stock_code, FILE_STOCK_BILL, df)
+
+  
+  def get_stock_big_deal(self):
+
+    push2_98 = ef.stock.push2_98_getter.push2_98()
+    all_stock_status = push2_98.get_all_stock_status()
+    stock_codes = sorted(all_stock_status['stock_code'], reverse=True)
+
+    for stock_code in stock_codes:
+      change_stock_code = stock_code[2:]
+      print('download bigdeal stock_code', change_stock_code)
+      df = self.datacenter.get_stock_big_deal(change_stock_code)
+      if len(df) > 0:
+        path = os.path.join(stock_path(self.path, change_stock_code), FILE_STOCK_BIG_DEAL)
+        df.to_csv(path, encoding = 'gbk', index = False)
+        print('store ', path)
+
+
