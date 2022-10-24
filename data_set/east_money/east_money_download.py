@@ -63,22 +63,24 @@ class east_money_download:
       data_one = df[df['stock_code'].isin([stock_code])]
       file_out = os.path.join(stock_path(self.path, stock_code.split('.')[0]), file_name)
       if os.path.exists(file_out):
+        print('update_north_data: ', stock_code)
         data_file = pd.read_csv(file_out, encoding='gbk')
         data_update = pd.concat([data_one, data_file])
         data_update = data_update.sort_values(by = ['date'], ascending=False)
         data_update = data_update.drop_duplicates()
         data_update.to_csv(file_out, encoding = 'gbk', index = False)
       else:
+        print('write update_north_data: ', stock_code)
         data_one.to_csv(file_out, encoding = 'gbk', index = False)
 
-  def update_north_file(self, datacenter_func, folder, file_name, start_date = '2020-01-01', end_date = str(datetime.date.today())[0:10]):
+  def update_north_file(self, datacenter_func, folder, file_name, start_date = '2020-01-01', end_date = str(datetime.date.today())[0:10], board_type = 5):
     temp_path = os.path.join(self.path, folder)
     if not os.path.exists(temp_path):
       os.makedirs(temp_path)
       date_series = pd.date_range(start = start_date, end = end_date)
       for date in date_series:
         date_str = str(date)[0:10]
-        df = datacenter_func(date_str)
+        df = datacenter_func(date = date_str, board_type = board_type)
         print('download north index successfully: ', date_str)
         if len(df) > 0:
           df.to_csv(os.path.join(temp_path, date_str + '.csv'), encoding = 'gbk', index = False)
@@ -89,11 +91,12 @@ class east_money_download:
         df = pd.read_csv(os.path.join(temp_path, file), encoding = 'gbk')
         self.update_north_data(df, file_name)
     else:
-      date_str = end_date
-      df = datacenter_func(date_str)
-      if (len(df) > 0):
-        print('download north index successfully: ', date_str)
-        self.update_north_data(df, file_name)
+      date_strs = pd.date_range(end=end_date, periods=4)
+      for date_str in date_strs:
+        df = datacenter_func(date = date_str, board_type = board_type)
+        if (len(df) > 0):
+          print('download north index successfully: ', date_str)
+          self.update_north_data(df, file_name)
       
       # files = os.listdir(temp_path)
       # for file in files:
@@ -102,7 +105,10 @@ class east_money_download:
       #   self.update_north_data(df, file_name)
 
   def get_stock_north_index(self):
-    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_TEMP, FILE_INDEX_NORTH_DAILY_TRADE)
+    # indurstry
+    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, 5)
+    # concept
+    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_CONCEPT_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, 4)
 
   def get_stock_north_new(self):
     self.update_north_file(self.datacenter.get_north_stock_status, FOLDER_NORTH_STOCK_TEMP, FILE_TRADE_NORTH_NEW, start_date = '2022-07-01')
