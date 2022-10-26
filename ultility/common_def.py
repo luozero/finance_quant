@@ -44,6 +44,7 @@ FOLDER_FACTOR                = 'finance_processed'
 FOLDER_RANK                  = 'rank'
 FOLDER_DAILY_TRADE_PROCESSED = "daily_trade_processed"
 FOLDER_NORTH_INDEX_TEMP      = 'north_index_temp'
+FOLDER_NORTH_INDEX_CONCEPT_TEMP      = 'north_index_concept_temp'
 FOLDER_NORTH_STOCK_TEMP      = 'north_stock_temp'
 
 # process trade data folder from daily trade data

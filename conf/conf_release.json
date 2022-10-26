@@ -28,7 +28,7 @@
   "trade":
   {
     "?eastmoney index block": "indexs = ['sh', 'sz', 'sh_sz', 'cn'], blocks = ['indurstry', 'concept', 'province']",
-    "eastmoney_indexs": ["sh_sz", "cn"],
+    "eastmoney_indexs": [],
     "eastmoney_blocks": ["indurstry", "concept"],
     "finance_163_daily_trade_factor": "no",
     "stock_163_daily_trade_factor": "yes",
