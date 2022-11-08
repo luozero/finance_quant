@@ -22,19 +22,28 @@ FILE_PROFIT 					 = 'profit.csv'
 FILE_CASH 						 = 'cash.csv'
 FILE_LOANS 						 = 'loans.csv'
 FILE_STOCK_DAILY_TRADE = 'stock_daily_trade.csv'
-FILE_INDEX_DAILY_TRADE = 'index_daily_trade.csv'
-FILE_INDEX_NORTH_DAILY_TRADE = 'index_north_daily_trade.csv'
 FILE_FINANCE_FACTOR     = 'finance_factors.csv'
 FILE_STOCK_BILL         = 'trade_bill.csv'
 FILE_STOCK_BIG_DEAL         = 'trade_big_deal.csv'
 FILE_TRADE_NORTH       = 'trade_north.csv'
 FILE_TRADE_NORTH_NEW       = 'trade_north_new.csv'
 FILE_TRADE_MAEGIN_SHORT = 'trade_margin_short.csv'
+FILE_TRADE_MAEGIN_SHORT_TOTAL = 'trade_margin_short_total.csv'
 
+FILE_INDEX_DAILY_TRADE = 'index_daily_trade.csv'
+FILE_INDEX_NORTH_DAILY_TRADE = 'index_north_daily_trade.csv'
+FILE_NORTH_SH = 'north_sh.csv'
+FILE_NORTH_SZ = 'north_sz.csv'
+FILE_SOUTH_SH = 'south_sh.csv'
+FILE_SOUTH_SZ = 'south_sz.csv'
 # download data fyle
 TYPE_FINANCE_STOCK = 'finance_stock_data'
 TYPE_STOCK 				 = 'stock_data'
 TYPE_INDEX 				 = 'index_data'
+
+
+#money flow
+FILE_SHSZ_BIG_DEAL = "shsz_big_deal.csv"
 
 # download finance folder
 FOLDER_163_INDEX = '163'

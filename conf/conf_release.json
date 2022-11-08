@@ -6,13 +6,15 @@
     "data_type": "stock_data",
     "?download": "yes, no",
     "download_163_finance_flag": "no",
-    "download_163_stock_daily_flag": "yes",
+    "download_163_stock_daily_flag": "no",
     "download_163_index_daily_flag": "yes",
     "download_eastmoney_index_daily_flag": "yes",
     "download_eastmoney_stock_daily_flag": "yes",
+    "download_north_south_flag": "yes",
     "folder": {
       "data_stock": "data/stock",
       "data_index": "data/index",
+      "north_south": "data/north_south",
       "finance_rank": "process/rank",
       "process_trade": "process/trade",
       "process_analyse": "process/analyse"

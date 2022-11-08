@@ -1,11 +1,12 @@
 import json
 import sys, getopt
 import datetime
+import os
+sys.path.append(r'./')
+sys.path.append(os.path.abspath('./efinance'))
 
 from ultility.common_def import *
 from ultility.common_func import *
-sys.path.append(r'../')
-sys.path.append(os.path.abspath('./efinance'))
 
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
@@ -15,7 +16,7 @@ from data_set.finance_data.stock_basic import *
 from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
 
 #efinance
-from data_set.east_money.east_money_download import *
+from data_set.efinance_download.money_flow import *
 
 def download_163(path, path_in, data_type):
     scu = SCU(path, data_type)
@@ -27,21 +28,34 @@ def download_163(path, path_in, data_type):
 
 def download_eastmoney_index(path, conf_trade):
 
-  east_money_data = east_money_download(path)
-  east_money_data.get_stock_north_index()
+  download = money_flow(path)
+  download.get_stock_north_index()
 
   indexs = conf_trade["eastmoney_indexs"]
   blocks = conf_trade["eastmoney_blocks"]
-  east_money_data.get_index_block_data(indexs, blocks)
+  download.get_index_block_data(indexs, blocks)
 
 def download_eastmoney_stock_data_daily(path):
-  east_money_data = east_money_download(path)
-  east_money_data.get_stock_north()
-  east_money_data.get_stock_north_new()
-  east_money_data.get_stock_bill()
+  download = money_flow(path)
+  download.get_stock_margin_short_total()
+  download.get_stock_north()
+  download.get_stock_north_new()
+  download.get_stock_bill()
 
-  east_money_data.get_stock_margin_short()
-  east_money_data.get_stock_big_deal()
+  download.get_stock_margin_short()
+  download.get_stock_big_deal()
+
+def download_money_flow(path, folder):
+
+  path_data = os.path.join(path, folder['money_flow'])
+  download = money_flow(path_data)
+  download.get_shsz_big_bill()
+
+def download_north_south(path, folder):
+
+  path_data = os.path.join(path, folder['north_south'])
+  download = money_flow(path_data)
+  download.get_north_south_history()
 
 def download_data(conf):
   
@@ -54,9 +68,12 @@ def download_data(conf):
   download_163_index_daily_flag = common_conf['download_163_index_daily_flag']
   download_eastmoney_index_daily_flag = common_conf['download_eastmoney_index_daily_flag']
   download_eastmoney_stock_daily_flag = common_conf['download_eastmoney_stock_daily_flag']
+  download_north_south_flag = common_conf['download_north_south_flag']
 
   # stock_codes = scu.stock_codes()
   # stock_codes = ['SH600032']
+
+  download_money_flow(path, folder)
 
   # download all the data
   if download_163_finance_flag == "yes":
@@ -78,6 +95,9 @@ def download_data(conf):
   if download_eastmoney_stock_daily_flag == "yes":
     path_data = os.path.join(path, folder['data_stock'])
     download_eastmoney_stock_data_daily(path_data)
+
+  if download_north_south_flag == 'yes':
+    download_north_south(path, folder)
   
 
 if __name__ == '__main__':

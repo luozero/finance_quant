@@ -4,6 +4,7 @@ import json
 import pandas as pd
 import datetime
 from ultility.common_def import *
+import efinance as ef
 
 def stock_path(path, stock):
   path = os.path.join(path, stock)
@@ -49,3 +50,9 @@ def add_stock_sh_sz_bj(stock):
   else:
     stock = 'BJ' + str(stock)
   return stock
+
+def get_trading_date():
+  stock_code = '1.000001'
+  df = ef.stock.get_quote_history(stock_code)
+  date = df['日期'].values
+  return date
