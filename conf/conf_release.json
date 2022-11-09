@@ -6,7 +6,7 @@
     "data_type": "stock_data",
     "?download": "yes, no",
     "download_163_finance_flag": "no",
-    "download_163_stock_daily_flag": "no",
+    "download_163_stock_daily_flag": "yes",
     "download_163_index_daily_flag": "yes",
     "download_163_stock_detailed_flag": "yes",
     "download_eastmoney_index_daily_flag": "yes",

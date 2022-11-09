@@ -19,7 +19,7 @@ from ultility.common_func import *
 class trade_ratio_ml:
   def __init__(self, path_finance_rank = 'path_finance_rank', path_in = 'path_in', path_out = 'path_out', file_trade_ratio='trade_ratio.csv', file_finance_rank='rank.csk', data_type = TYPE_STOCK, stock_num = 100):
 
-    path_out = os.path.join(path_out, get_today_date())
+    path_out = os.path.join(path_out, common_func.get_today_date())
     if not os.path.exists(path_out):
       print("pls run trade ratio python to generate file", file_trade_ratio)
       os.makedirs(path_out)

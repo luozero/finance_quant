@@ -39,13 +39,14 @@ class data_download:
   @retry(tries=-1, delay=DELAY) 
   def try_download_csv(self, filename, url, stock):
 
-    filename = os.path.join(stock_path(self.path_data, stock), filename)
+    filename = os.path.join(common_func.stock_path(self.path_data, stock), filename)
     stock_change = stock
     # download
     try:
       url = url.format(stock_change, self.date)
       print(url)
       request.urlretrieve(url, filename, self.Schedule)
+      print("stored file: ", filename)
     except:
       print('skip this stok: ', stock)
 
@@ -69,10 +70,11 @@ class data_download:
     stock_change = self.change_stock_code(stock)
     # download
     try:
-      filename = os.path.join(stock_path(self.path_data, stock), date + '.csv')
+      filename = os.path.join(common_func.stock_path(self.path_data, stock), date + '.csv')
       url = url.format(date, stock_change)
       print(url)
       request.urlretrieve(url, filename, self.Schedule)
+      print("stored file: ", filename)
     except:
       print('skip this stok: ', stock)
 
@@ -87,10 +89,11 @@ class data_download:
 
     # download
     try:
-      filename = os.path.join(stock_path(self.path_data, stock), filename)
+      filename = os.path.join(common_func.stock_path(self.path_data, stock), filename)
       url = url.format(stock_change, self.date)
       print(url)
       request.urlretrieve(url, filename, self.Schedule)
+      print("stored file: ", filename)
     except:
       print('skip this stok: ', stock)
     

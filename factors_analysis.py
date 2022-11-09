@@ -61,7 +61,7 @@ if __name__ == '__main__':
     elif opt in ("-t", "--tradeflag"):
       trade_flag = True 
 
-  conf = read_config(filename)
+  conf = common_func.read_config(filename)
   
   trade_ratio_k_mean(conf, TYPE_STOCK)
   trade_ratio_k_mean(conf, TYPE_INDEX)

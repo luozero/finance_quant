@@ -24,7 +24,7 @@ class finance_load_store:
     data_file = {}
     min_column = 3000
     for ite in file_list:
-      data = read_csv(stock_path(self.path_finance, stock_code), ite)
+      data = common_func.read_csv(common_func.stock_path(self.path_finance, stock_code), ite)
       # find min_column for non trade data
       if (ite.find('daily_trade') == -1):
         if(data.shape[1]<min_column):
@@ -73,12 +73,12 @@ class finance_load_store:
   
   '''processed finance data'''
   def store_process_financical_data(self, data, stock_code):
-    csv_file_path = os.path.join(stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
+    csv_file_path = os.path.join(common_func.stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
     data.to_csv(csv_file_path, encoding='gbk')
     print("finance factor store to ", csv_file_path)
 
   def load_process_financical_data(self, stock_code):
-    csv_file_path = os.path.join(stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
+    csv_file_path = os.path.join(common_func.stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
     if not os.path.exists(csv_file_path):
       print('load_process_financical_data not exsit this file', stock_code)
       exit(-1)

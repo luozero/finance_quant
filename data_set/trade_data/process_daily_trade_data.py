@@ -53,7 +53,7 @@ class process_daily_trade_data(object):
 
     for stock_code in stock_codes:
 
-      data_main = read_csv(stock_path(self.path_in, stock_code), FILE_MAIN)
+      data_main = common_func.read_csv(common_func.stock_path(self.path_in, stock_code), FILE_MAIN)
 
       if data_main.empty == True:
 
@@ -62,7 +62,7 @@ class process_daily_trade_data(object):
       else:
 
         file_name = self.get_stock_index_file(stock_code)
-        daily_trade_data = read_csv(os.path.join(self.path_in, stock_code), file_name) 
+        daily_trade_data = common_func.read_csv(os.path.join(self.path_in, stock_code), file_name) 
 
         dates = data_main.columns
 
@@ -83,7 +83,7 @@ class process_daily_trade_data(object):
           trade_data_quarter = pd.concat([trade_data_quarter, daily_trade_data[date_in_daily_trade_dates == daily_trade_dates]])
 
         # trade_data_quarter.index = dates
-        file_csv = os.path.join(stock_path(self.path_in, stock_code), FILE_DAILY_TRADE_QUARTER)
+        file_csv = os.path.join(common_func.stock_path(self.path_in, stock_code), FILE_DAILY_TRADE_QUARTER)
         trade_data_quarter.to_csv(file_csv, encoding='gbk', index = False)
         print("store to ", file_csv)
 
@@ -166,7 +166,7 @@ class process_daily_trade_data(object):
     codes_list = []
     for stock_code in stock_codes:
 
-      daily_trade_data = read_csv(self.path_in, stock_code + '.csv')
+      daily_trade_data = common_func.read_csv(self.path_in, stock_code + '.csv')
 
       if daily_trade_data.shape[0] > 400:
 
@@ -174,7 +174,7 @@ class process_daily_trade_data(object):
         pct_change_pd = pd.concat([pct_change_pd, pct_change_series], axis=1)
 
         if self.data_type == TYPE_STOCK:
-          code_change = add_stock_sh_sz_bj(stock_code)
+          code_change = common_func.add_stock_sh_sz_bj(stock_code)
         elif self.data_type == TYPE_INDEX:
           code_change = self.add_index_sh_sz(stock_code)
         codes_list.append(code_change)

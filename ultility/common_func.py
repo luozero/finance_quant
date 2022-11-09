@@ -6,53 +6,60 @@ import datetime
 from ultility.common_def import *
 import efinance as ef
 
-def stock_path(path, stock):
-  path = os.path.join(path, stock)
-  if not os.path.exists(path):
-    os.makedirs(path)
-  return path
+class common_func:
+  def stock_path(path, stock):
+    path = os.path.join(path, stock)
+    if not os.path.exists(path):
+      os.makedirs(path)
+    return path
 
-def get_today_date():
-  date = datetime.date.today()
-  date = str(date).replace('-','')
-  return date
+  def get_today_date():
+    date = datetime.date.today()
+    date = str(date).replace('-','')
+    return date
 
-def read_config(filename):
-  with open(filename, 'r') as f:
-    conf = json.load(f)
-  return conf
+  def read_config(filename):
+    with open(filename, 'r') as f:
+      conf = json.load(f)
+    return conf
 
-def read_csv(path, file):
-  csv_file_path = os.path.join(path, file)
-  if os.path.exists(csv_file_path):
-    print("load file ", csv_file_path)
+  def read_csv(path, file):
+    csv_file_path = os.path.join(path, file)
+    if os.path.exists(csv_file_path):
+      print("load file ", csv_file_path)
 
-    # fetch data according to date align
-    columns_tmp = pd.read_csv(csv_file_path, encoding='gbk', nrows = 0)
-    columns = list(columns_tmp.columns)
-    data = pd.read_csv(csv_file_path, encoding='gbk', usecols=columns)
-    # data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
+      # fetch data according to date align
+      columns_tmp = pd.read_csv(csv_file_path, encoding='gbk', nrows = 0)
+      columns = list(columns_tmp.columns)
+      data = pd.read_csv(csv_file_path, encoding='gbk', usecols=columns)
+      # data = pd.read_csv(csv_file_path, encoding='gbk',error_bad_lines=False)
 
-    data = data.replace('--', 0)
-    data = data.replace('_', 0)
-    data = data.replace('None', 0)
-    data = data.fillna(0)
-  else:
-    print('stock this file is not exist', csv_file_path)
-    data = pd.DataFrame()
-  return data
+      data = data.replace('--', 0)
+      data = data.replace('_', 0)
+      data = data.replace('None', 0)
+      data = data.fillna(0)
+    else:
+      print('stock this file is not exist', csv_file_path)
+      data = pd.DataFrame()
+    return data
 
-def add_stock_sh_sz_bj(stock):
-  if int(stock)<600000:
-    stock = 'SZ' + str(stock)
-  elif int(stock) < 800000:
-    stock = 'SH' + str(stock)
-  else:
-    stock = 'BJ' + str(stock)
-  return stock
+  def add_stock_sh_sz_bj(stock):
+    if int(stock)<600000:
+      stock = 'SZ' + str(stock)
+    elif int(stock) < 800000:
+      stock = 'SH' + str(stock)
+    else:
+      stock = 'BJ' + str(stock)
+    return stock
 
-def get_trading_date():
-  stock_code = '1.000001'
-  df = ef.stock.get_quote_history(stock_code)
-  date = df['日期'].values
-  return date
+  def get_trading_date():
+    stock_code = '1.000001'
+    df = ef.stock.get_quote_history(stock_code)
+    date = df['日期'].values
+    return date
+
+  def get_stock_codes():
+    datacenter = ef.stock.datacenter()
+    north_stock_status = datacenter.get_north_stock_status()
+    stock_codes = sorted(north_stock_status['stock_code'].apply(lambda x: x[:-3]).values)
+    return stock_codes
