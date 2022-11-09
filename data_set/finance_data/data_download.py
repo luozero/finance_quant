@@ -11,6 +11,7 @@ from ultility.common_def import *
 from ultility.common_func import * 
 
 DELAY = 50
+TRY_TIMES = 50
 
 class data_download:
   def __init__(self, path = 'path', path_data='../../../data/', stock_codes=['000001'], type_data = TYPE_FINANCE_STOCK):
@@ -48,24 +49,45 @@ class data_download:
     except:
       print('skip this stok: ', stock)
 
-  @retry(tries=-1, delay=DELAY)
-  def try_download_trade_csv(self, filename, url, stock):
-
+  def change_stock_code(self, stock):
     a = stock[0]
-    if self.type_data == TYPE_INDEX:
-      filename = os.path.join(stock_path(self.path_data, stock), filename)
+    if self.type_data.find('index') > 0:
       if int(a) >= 3:
         stock_change = '1' + stock
       else:
         stock_change = '0' + stock
     else:
-      filename = os.path.join(stock_path(self.path_data, stock), filename)
       if int(a) >= 6:
         stock_change = '0' + stock
       else:
         stock_change = '1' + stock
+    return stock_change
+
+  @retry(tries=-1, delay=100) 
+  def try_download_detailed_csv(self, url, date, stock):
+
+    stock_change = self.change_stock_code(stock)
     # download
     try:
+      filename = os.path.join(stock_path(self.path_data, stock), date + '.csv')
+      url = url.format(date, stock_change)
+      print(url)
+      request.urlretrieve(url, filename, self.Schedule)
+    except:
+      print('skip this stok: ', stock)
+
+  def download_detailed(self, date, stock):
+    url = 'http://quotes.money.163.com/cjmx/' + date[:4] + '/{}/{}.xls'
+    self.try_download_detailed_csv(url, date, stock)
+
+  @retry(tries=-1, delay=DELAY)
+  def try_download_trade_csv(self, filename, url, stock):
+
+    stock_change = self.change_stock_code(stock)
+
+    # download
+    try:
+      filename = os.path.join(stock_path(self.path_data, stock), filename)
       url = url.format(stock_change, self.date)
       print(url)
       request.urlretrieve(url, filename, self.Schedule)
@@ -104,7 +126,7 @@ class data_download:
     # stock daily trade
     self.download_daily_trade(stock)
 
-  def download_data(self, data_type = True):
+  def download_data(self, data_type = True, trade_dates = ['20221108']):
     if data_type == TYPE_FINANCE_STOCK:
       dr = DR(self.path, JSON_FILE_PROCESS_RECORD)
       stock_index = dr.read_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX)
@@ -119,6 +141,10 @@ class data_download:
         dr.write_data(KEY_DOWNLOAD, KEY_DOWNLOAD_FINANCE_DATA_INDEX, stock_index)
       elif data_type == TYPE_STOCK or data_type == TYPE_INDEX:
         self.download_daily_trade(stock)
+      elif data_type == TYPE_DETAILED_STOCK or data_type == TYPE_DETAILED_INDEX:
+          for trade_date in trade_dates:
+            print(trade_date)
+            self.download_detailed(trade_date.replace('-', ''), stock)
       else:
         print('do not support this download type', data_type)
 

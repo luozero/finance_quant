@@ -40,7 +40,8 @@ FILE_SOUTH_SZ = 'south_sz.csv'
 TYPE_FINANCE_STOCK = 'finance_stock_data'
 TYPE_STOCK 				 = 'stock_data'
 TYPE_INDEX 				 = 'index_data'
-
+TYPE_DETAILED_STOCK = 'detailed_stock_data'
+TYPE_DETAILED_INDEX = 'detailed_index_data'
 
 #money flow
 FILE_SHSZ_BIG_DEAL = "shsz_big_deal.csv"

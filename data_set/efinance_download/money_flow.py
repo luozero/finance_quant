@@ -87,12 +87,11 @@ class money_flow:
         print('write update_north_data: ', stock_code)
         data_one.to_csv(file_out, encoding = 'gbk', index = False)
 
-  def update_north_file(self, datacenter_func, folder, file_name, start_date = '2020-01-01', end_date = str(datetime.date.today())[0:10], board_type = 5):
+  def update_north_file(self, datacenter_func, folder, file_name, trade_dates = ['2022-11-08'], board_type = 5):
     temp_path = os.path.join(self.path, folder)
     if not os.path.exists(temp_path):
       os.makedirs(temp_path)
-      date_series = pd.date_range(start = start_date, end = end_date)
-      for date in date_series:
+      for date in trade_dates:
         date_str = str(date)[0:10]
         df = datacenter_func(date = date_str, board_type = board_type)
         print('download north index successfully: ', date_str)
@@ -105,11 +104,10 @@ class money_flow:
         df = pd.read_csv(os.path.join(temp_path, file), encoding = 'gbk')
         self.update_north_data(df, file_name)
     else:
-      date_strs = pd.date_range(end=end_date, periods=4)
-      for date_str in date_strs:
-        df = datacenter_func(date = date_str, board_type = board_type)
+      for date in trade_dates[:2]:
+        df = datacenter_func(date = date, board_type = board_type)
         if (len(df) > 0):
-          print('download north index successfully: ', date_str)
+          print('download north index successfully: ', date)
           self.update_north_data(df, file_name)
       
       # files = os.listdir(temp_path)
@@ -119,13 +117,15 @@ class money_flow:
       #   self.update_north_data(df, file_name)
 
   def get_stock_north_index(self):
+    trade_dates = get_trading_date()[:400]
     # indurstry
-    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, board_type = 5)
+    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 5)
     # concept
-    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_CONCEPT_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, board_type = 4)
+    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_CONCEPT_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 4)
 
   def get_stock_north_new(self):
-    self.update_north_file(self.datacenter.get_north_stock_status, FOLDER_NORTH_STOCK_TEMP, FILE_TRADE_NORTH_NEW, start_date = '2022-07-01')
+    trade_dates = get_trading_date()[:100]
+    self.update_north_file(self.datacenter.get_north_stock_status, FOLDER_NORTH_STOCK_TEMP, FILE_TRADE_NORTH_NEW, trade_dates)
 
   def get_stock_margin_short(self):
 

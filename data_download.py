@@ -26,10 +26,22 @@ def download_163(path, path_in, data_type):
     data_download_1 = data_download(path, path_in, stock_codes, data_type)
     data_download_1.download_data(data_type)
 
-def download_eastmoney_index(path, conf_trade):
+def download_163_detail_trade(path, path_in, data_type):
+    scu = SCU(path, data_type)
+    stock_codes = scu.stock_codes_from_table(data_type)
 
+    date_len = 2 
+    if not os.path.exists(path_in):
+      date_len = 15
+
+    trade_dates = get_trading_date()[:date_len]
+    # stock_codes = ['600000']
+    print(stock_codes)
+    data_download_1 = data_download(path, path_in, stock_codes, data_type)
+    data_download_1.download_data(data_type, trade_dates)
+
+def download_eastmoney_index(path, conf_trade):
   download = money_flow(path)
-  download.get_stock_north_index()
 
   indexs = conf_trade["eastmoney_indexs"]
   blocks = conf_trade["eastmoney_blocks"]
@@ -38,8 +50,8 @@ def download_eastmoney_index(path, conf_trade):
 def download_eastmoney_stock_data_daily(path):
   download = money_flow(path)
   download.get_stock_margin_short_total()
-  download.get_stock_north()
-  download.get_stock_north_new()
+  # download.get_stock_north()
+  # download.get_stock_north_new()
   download.get_stock_bill()
 
   download.get_stock_margin_short()
@@ -47,12 +59,19 @@ def download_eastmoney_stock_data_daily(path):
 
 def download_money_flow(path, folder):
 
-  path_data = os.path.join(path, folder['money_flow'])
+  path_data = os.path.join(path, folder['data_stock'])
   download = money_flow(path_data)
   download.get_shsz_big_bill()
 
 def download_north_south(path, folder):
 
+  path_index = os.path.join(path, folder['data_index'])
+  download = money_flow(path_index)
+  download.get_stock_north_index()
+  download.get_stock_north()
+  download.get_stock_north_new()
+  
+  download = money_flow(path)
   path_data = os.path.join(path, folder['north_south'])
   download = money_flow(path_data)
   download.get_north_south_history()
@@ -66,6 +85,7 @@ def download_data(conf):
   download_163_finance_flag = common_conf['download_163_finance_flag']
   download_163_stock_daily_flag = common_conf['download_163_stock_daily_flag']
   download_163_index_daily_flag = common_conf['download_163_index_daily_flag']
+  download_163_stock_detailed_flag = common_conf['download_163_stock_detailed_flag']
   download_eastmoney_index_daily_flag = common_conf['download_eastmoney_index_daily_flag']
   download_eastmoney_stock_daily_flag = common_conf['download_eastmoney_stock_daily_flag']
   download_north_south_flag = common_conf['download_north_south_flag']
@@ -88,6 +108,15 @@ def download_data(conf):
     path_index = os.path.join(path, folder['data_index'])
     download_163(path, path_index, TYPE_INDEX)
 
+  if download_163_stock_detailed_flag == "yes":
+
+    path_data = os.path.join(path, folder['data_detailed_index'])
+    download_163_detail_trade(path, path_data, TYPE_DETAILED_INDEX)
+
+    path_data = os.path.join(path, folder['data_detailed_stock'])
+    download_163_detail_trade(path, path_data, TYPE_DETAILED_STOCK)
+
+
   if download_eastmoney_index_daily_flag == "yes":
     path_index = os.path.join(path, folder['data_index'])
     download_eastmoney_index(path_index, conf["trade"])
@@ -104,6 +133,7 @@ if __name__ == '__main__':
 
   # default configure file name
   filename = './conf/conf.json'
+  filename = './conf/conf_release.json'
   # default finance analysis
   trade_flag =  False 
   # tradeflag =  True 

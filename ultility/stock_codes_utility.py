@@ -17,7 +17,7 @@ class stock_codes_utility:
     self.DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
     self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
 
-    if type_data == TYPE_INDEX:
+    if type_data.find('index') > 0:
       self.table = pd.read_csv('./table/index_codes.csv', encoding='gbk')
     else:
       self.table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
