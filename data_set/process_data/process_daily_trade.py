@@ -10,7 +10,7 @@ from ultility.common_def import *
 from data_set.finance_data.finance_load_store import finance_load_store as FLD
 from datetime import datetime
 
-class process_daily_trade_data(object):
+class process_daily_trade(object):
 
   def __init__(self, path = "path", path_in = 'path_in', path_out = 'path_out'):
 

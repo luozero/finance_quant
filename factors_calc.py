@@ -11,7 +11,7 @@ from data_set.finance_data.data_download import data_download
 from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
 from data_set.finance_data.stock_basic import *
-from data_set.process_data.process_daily_trade_data import process_daily_trade_data
+from data_set.process_data.process_daily_trade import process_daily_trade
 
 def finance_factor_process(conf):
   
@@ -37,7 +37,7 @@ def finance_factor_process(conf):
   # stock_codes = ['SH600032']
 
   # process quarter trade
-  daily_trade_data = process_daily_trade_data(path, path_stock, path_stock)
+  daily_trade_data = process_daily_trade(path, path_stock, path_stock)
   daily_trade_data.trade_data_quarter(stock_codes)
 
   # need to disable following code when debug
@@ -59,7 +59,7 @@ def daily_stock_trade_process(path, folder_in, folder_out, trade_ouput_file, dat
   # need to disable following code when debug
   # stock_codes = scu.skip_stock_codes(stock_codes)
   #process daily trade data
-  daily_trade_data = process_daily_trade_data(path, path_in, path_out)
+  daily_trade_data = process_daily_trade(path, path_in, path_out)
   daily_trade_data.index_price_volume_ratio(codes_names, trade_ouput_file)
 
 def daily_trade_process(conf):
