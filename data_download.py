@@ -13,7 +13,6 @@ from data_set.finance_data.data_download import data_download
 from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
 from data_set.finance_data.stock_basic import *
-from data_set.process_data.process_daily_trade_data import process_daily_trade_data
 
 #efinance
 from data_set.efinance.money_flow import *

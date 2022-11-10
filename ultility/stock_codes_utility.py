@@ -17,14 +17,22 @@ class stock_codes_utility:
     self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
 
     if type_data.find('index') > -1:
-      self.table = pd.read_csv('./table/index_codes.csv', encoding='gbk')
+      table = pd.read_csv('./table/index_codes.csv', encoding='gbk')
     else:
-      self.table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
+      table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
+    table_tmp = table.loc[:, ['name','code']]
+    table_tmp['code'] = table_tmp['code'].apply(lambda x: "'" + x[2:])
+    self.table = table_tmp
     self.type_data = type_data
     
   def stock_codes_from_table(self, type):
-    codes = sorted(self.table.loc[:,'code'].apply(lambda x: x[2:]).values.squeeze())
+    codes = sorted(self.table.loc[:,'code'].apply(lambda x: x[1:]).values.squeeze())
     return codes
+
+  def stock_codes_names_from_table(self):
+    table = self.table.loc[:, ['code', 'name']]
+    table = table.sort_values(by = ['code'])
+    return table
 
   def stock_codes_get_name(self, code):
     data = self.table

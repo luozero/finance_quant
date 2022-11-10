@@ -99,11 +99,10 @@ class data_download:
     
   def download_daily_trade(self, stock):
     #daily trade
+    file_name = FILE_DAILY_TRADE
     if self.type_data == TYPE_INDEX:
-      file_name = FILE_INDEX_DAILY_TRADE
       link = LINK_INDEX_DAILY_TRADE
     else:
-      file_name = FILE_STOCK_DAILY_TRADE
       link = LINK_STOCK_DAILY_TRADE
     self.try_download_trade_csv(file_name, link, stock)
 

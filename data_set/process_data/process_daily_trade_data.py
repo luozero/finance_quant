@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import os
 
-from ultility.stock_codes_utility import stock_codes_utility as SCU
 from ultility.download_record import download_record as DR
 from ultility.common_func import * 
 from ultility.common_def import * 
@@ -13,7 +12,7 @@ from datetime import datetime
 
 class process_daily_trade_data(object):
 
-  def __init__(self, path = "path", path_in = 'path_in', path_out = 'path_out', data_type = TYPE_STOCK):
+  def __init__(self, path = "path", path_in = 'path_in', path_out = 'path_out'):
 
     self.path = path
     if not os.path.exists(path_in):
@@ -26,17 +25,9 @@ class process_daily_trade_data(object):
 
     print("path stock trade data", path_in)
     self.path_in = path_in
-    self.data_type = data_type
 
   def nearest_date(self, items, pivot):
     return min(items.values, key=lambda x: abs(datetime.strptime(x, '%Y-%m-%d') - datetime.strptime(pivot, '%Y-%m-%d')))
-
-  def get_stock_index_file(self, stock_code):
-    if self.data_type == TYPE_INDEX:
-      file_name = stock_code + '.csv'
-    else:
-      file_name = FILE_STOCK_DAILY_TRADE
-    return file_name
 
   def add_index_sh_sz(self, stock):
     if int(stock[0])<3:
@@ -61,11 +52,10 @@ class process_daily_trade_data(object):
           dr.write_skip_stock(stock_code)
       else:
 
-        file_name = self.get_stock_index_file(stock_code)
+        file_name = FILE_DAILY_TRADE
         daily_trade_data = common_func.read_csv(os.path.join(self.path_in, stock_code), file_name) 
 
         dates = data_main.columns
-
 
         # no trade data skip this stock 
         if (daily_trade_data.shape[0] == 0):
@@ -152,9 +142,7 @@ class process_daily_trade_data(object):
 
       return pct_change_series
 
-  def index_price_volume_ratio(self, stock_codes, outputfile):
-
-    scu = SCU(self.path, self.data_type)
+  def index_price_volume_ratio(self, codes_names, outputfile):
 
     pct_columns_list = ['day1_price', 'day2', 'day3', 'day4', 'day5',\
       '1vs5days_mean', '10days', '20days', '60days', '100days', '200days', '400days',\
@@ -165,14 +153,12 @@ class process_daily_trade_data(object):
     code_names_list = []
     codes_list = []
 
-    if self.data_type == TYPE_INDEX:
-      file_name = FILE_INDEX_DAILY_TRADE
-      link = LINK_INDEX_DAILY_TRADE
-    else:
-      file_name = FILE_STOCK_DAILY_TRADE
+    file_name = FILE_DAILY_TRADE
 
-    for stock_code in stock_codes:
+    # for stock_code in codes_names['code'] :
+    for code_name in codes_names.itertuples():
 
+      stock_code = code_name[1][1:]
       daily_trade_data = common_func.read_csv(os.path.join(self.path_in, stock_code),  file_name)
 
       if daily_trade_data.shape[0] > 400:
@@ -180,13 +166,9 @@ class process_daily_trade_data(object):
         pct_change_series = self.price_volume_ratio_process1(daily_trade_data)
         pct_change_pd = pd.concat([pct_change_pd, pct_change_series], axis=1)
 
-        if self.data_type == TYPE_STOCK:
-          code_change = common_func.add_stock_sh_sz_bj(stock_code)
-        elif self.data_type == TYPE_INDEX:
-          code_change = self.add_index_sh_sz(stock_code)
-        codes_list.append(code_change)
+        codes_list.append(code_name[1])
         
-        code_name = scu.stock_codes_get_name(code_change)
+        code_name = code_name[2]
         code_names_list.append(code_name)
 
     pct_change_pd = pd.DataFrame(pct_change_pd.T.values, columns=pct_columns_list, index=codes_list)

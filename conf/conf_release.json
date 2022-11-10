@@ -36,7 +36,7 @@
     "eastmoney_indexs": [],
     "eastmoney_blocks": ["indurstry", "concept"],
     "finance_163_daily_trade_factor": "no",
-    "stock_163_daily_trade_factor": "yes",
+    "stock_163_daily_trade_factor": "",
     "index_163_daily_trade_factor": "yes",
     "stock_trade_ratio_file": "stock_trade_ratio.csv",
     "index_trade_ratio_file": "index_trade_ratio.csv",

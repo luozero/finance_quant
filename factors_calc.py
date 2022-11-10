@@ -37,7 +37,7 @@ def finance_factor_process(conf):
   # stock_codes = ['SH600032']
 
   # process quarter trade
-  daily_trade_data = process_daily_trade_data(path, path_stock, path_stock, data_type)
+  daily_trade_data = process_daily_trade_data(path, path_stock, path_stock)
   daily_trade_data.trade_data_quarter(stock_codes)
 
   # need to disable following code when debug
@@ -49,6 +49,18 @@ def finance_factor_process(conf):
 
   # rank the factor
   finance_factors_rank(path_stock, path_rank, result_name, stock_codes, dates, factors)
+
+def daily_stock_trade_process(path, folder_in, folder_out, trade_ouput_file, data_type):
+  path_in = os.path.join(path, folder_in)
+  path_out = os.path.join(path, folder_out)
+  scu = SCU(path, data_type)
+  codes_names = scu.stock_codes_names_from_table()
+  # stock_codes = ['600000']
+  # need to disable following code when debug
+  # stock_codes = scu.skip_stock_codes(stock_codes)
+  #process daily trade data
+  daily_trade_data = process_daily_trade_data(path, path_in, path_out)
+  daily_trade_data.index_price_volume_ratio(codes_names, trade_ouput_file)
 
 def daily_trade_process(conf):
 
@@ -65,29 +77,11 @@ def daily_trade_process(conf):
     finance_factor_process(conf)
 
   if stock_163_daily_trade_factor == 'yes':
-    path_in = os.path.join(path, folder['data_stock'])
-    path_out = os.path.join(path, folder['process_trade'])
-    trade_ouput_file = trade_conf['stock_trade_ratio_file']
-    data_type = TYPE_STOCK
-    scu = SCU(path, data_type)
-    stock_codes = scu.stock_codes_from_table(data_type)
-    # stock_codes = ['600000']
-    # need to disable following code when debug
-    stock_codes = scu.skip_stock_codes(stock_codes)
-    #process daily trade data
-    daily_trade_data = process_daily_trade_data(path, path_in, path_out, data_type)
-    daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
+    daily_stock_trade_process(path, folder['data_stock'], folder['process_trade'], trade_conf['stock_trade_ratio_file'], TYPE_STOCK)
 
   if index_163_daily_trade_factor == 'yes':
-    path_in = os.path.join(path, folder['data_index'])
-    path_out = os.path.join(path, folder['process_trade'])
-    trade_ouput_file = trade_conf['index_trade_ratio_file']
-    data_type = TYPE_INDEX
-    scu = SCU(path, data_type)
-    stock_codes = scu.stock_codes_from_table(data_type)
-    #process daily trade data
-    daily_trade_data = process_daily_trade_data(path, path_in, path_out, data_type)
-    daily_trade_data.index_price_volume_ratio(stock_codes, trade_ouput_file)
+    daily_stock_trade_process(path, folder['data_index'], folder['process_trade'], trade_conf['index_trade_ratio_file'], TYPE_INDEX)
+
 
 
 if __name__ == '__main__':

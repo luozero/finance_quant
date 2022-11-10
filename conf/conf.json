@@ -6,10 +6,10 @@
     "data_type": "index_data",
     "?download": "yes, no",
     "download_163_finance_flag": "no",
-    "download_163_stock_daily_flag": "",
-    "download_163_index_daily_flag": "",
+    "download_163_stock_daily_flag": "yes",
+    "download_163_index_daily_flag": "yes",
     "download_163_stock_detailed_flag": "",
-    "download_eastmoney_index_daily_flag": "yes",
+    "download_eastmoney_index_daily_flag": "",
     "download_eastmoney_stock_daily_flag": "",
     "download_north_south_flag": "",
     "folder": {
@@ -41,8 +41,10 @@
     "index_163_daily_trade_factor": "yes",
     "stock_trade_ratio_file": "stock_trade_ratio.csv",
     "index_trade_ratio_file": "index_trade_ratio.csv",
+    "block_trade_ratio_file": "block_trade_ratio.csv",
     "stock_kmean_trade_ratio_file": "stock_kmean_trade_ratio.csv",
     "index_kmean_trade_ratio_file": "index_kmean_trade_ratio.csv",
+    "block_kmean_trade_ratio_file": "block_kmean_trade_ratio.csv",
     "kmnean_stock_num": 500,
     "n_clusters": 50
   }

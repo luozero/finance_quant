@@ -24,7 +24,7 @@ class money_flow:
       print("download code", code)
       data = ef.stock.get_quote_history(code)
       data = data.sort_values(by = ['日期'], ascending=False)
-      file = os.path.join(common_func.stock_path(self.path, code), FILE_INDEX_DAILY_TRADE)
+      file = os.path.join(common_func.stock_path(self.path, code), FILE_DAILY_TRADE)
       data.to_csv(file, encoding='gbk', index = False)
 
   def get_index_block_data(self, indexs = ['sh', 'sz', 'sh_sz', 'cn'], blocks = ['indurstry', 'concept', 'province']):
