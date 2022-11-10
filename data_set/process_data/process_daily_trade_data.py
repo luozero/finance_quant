@@ -157,16 +157,23 @@ class process_daily_trade_data(object):
     scu = SCU(self.path, self.data_type)
 
     pct_columns_list = ['day1_price', 'day2', 'day3', 'day4', 'day5',\
-      '5days', '10days', '20days', '60days', '100days', '200days', '400days',\
+      '1vs5days_mean', '10days', '20days', '60days', '100days', '200days', '400days',\
       'day1_volumn', 'day2', 'day3', 'day4', 'day5', '1vs5days_mean',\
         '5days', '10days', '20days', '200days']
     pct_change_pd = pd.DataFrame()
 
     code_names_list = []
     codes_list = []
+
+    if self.data_type == TYPE_INDEX:
+      file_name = FILE_INDEX_DAILY_TRADE
+      link = LINK_INDEX_DAILY_TRADE
+    else:
+      file_name = FILE_STOCK_DAILY_TRADE
+
     for stock_code in stock_codes:
 
-      daily_trade_data = common_func.read_csv(self.path_in, stock_code + '.csv')
+      daily_trade_data = common_func.read_csv(os.path.join(self.path_in, stock_code),  file_name)
 
       if daily_trade_data.shape[0] > 400:
 

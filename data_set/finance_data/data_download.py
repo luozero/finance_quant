@@ -52,7 +52,7 @@ class data_download:
 
   def change_stock_code(self, stock):
     a = stock[0]
-    if self.type_data.find('index') > 0:
+    if self.type_data.find('index') > -1:
       if int(a) >= 3:
         stock_change = '1' + stock
       else:

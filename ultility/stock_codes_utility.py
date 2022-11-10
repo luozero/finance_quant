@@ -12,32 +12,16 @@ Created on 2018��10��4��
 '''
 class stock_codes_utility:
   def __init__(self,path='../../../data/', type_data = TYPE_STOCK):
-    ts.set_token('ddd82cf225ed602f13bfcde56ef943643d79634125e3449dc9dce182')
-    self.pro = ts.pro_api()
+
     self.DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
     self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
 
-    if type_data.find('index') > 0:
+    if type_data.find('index') > -1:
       self.table = pd.read_csv('./table/index_codes.csv', encoding='gbk')
     else:
       self.table = pd.read_csv('./table/stock_codes.csv', encoding='gbk')
     self.type_data = type_data
-  
-  def stock_codes(self):
-    # basic_data = ts.get_stock_basics()
-    basic_data = self.pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
-    # print(basic_data['ts_code'])
-    stock_codes_tmp = self.rm_allstock_sh_sz(list(basic_data['ts_code']))
-
-    stock_codes = []
-    for i, v in enumerate(stock_codes_tmp):
-      if int(v) < KECHUANG_CODE:
-        stock_codes.append(v)
-
-    stock_codes.sort()
-    print(stock_codes)
-    return stock_codes
-  
+    
   def stock_codes_from_table(self, type):
     codes = sorted(self.table.loc[:,'code'].apply(lambda x: x[2:]).values.squeeze())
     return codes

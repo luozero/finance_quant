@@ -13,10 +13,10 @@ from data_set.finance_data.data_download import data_download
 from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
 from data_set.finance_data.stock_basic import *
-from data_set.trade_data.process_daily_trade_data import process_daily_trade_data
+from data_set.process_data.process_daily_trade_data import process_daily_trade_data
 
 #efinance
-from data_set.efinance_download.money_flow import *
+from data_set.efinance.money_flow import *
 
 # daily trade, finance, index trade
 def download_163(path, folder, data_type):
@@ -59,16 +59,11 @@ def download_eastmoney_stock_data_daily(path, folder):
   download = money_flow(path_data)
   download.get_stock_margin_short_total()
   download.get_stock_bill()
+  
+  download.get_shsz_big_bill()
 
   download.get_stock_margin_short()
   download.get_stock_big_deal()
-
-# big bill
-def download_money_flow(path, folder):
-
-  path_data = os.path.join(path, folder['data_stock'])
-  download = money_flow(path_data)
-  download.get_shsz_big_bill()
 
 # north south download
 def download_north_south(path, folder):
@@ -104,7 +99,6 @@ def download_data(conf):
   # stock_codes = scu.stock_codes()
   # stock_codes = ['SH600032']
 
-  download_money_flow(path, folder)
 
   # download all the data
   if download_163_finance_flag == "yes":

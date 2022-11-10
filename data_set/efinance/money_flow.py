@@ -5,6 +5,7 @@ import datetime
 from ultility.common_func import *
 from ultility.common_def import *
 import efinance as ef
+from .utils import *
 
 class money_flow:
   def __init__(self, path):
@@ -29,12 +30,10 @@ class money_flow:
   def get_index_block_data(self, indexs = ['sh', 'sz', 'sh_sz', 'cn'], blocks = ['indurstry', 'concept', 'province']):
       
     for block in blocks:
-      code_names = self.push2_98_getter.get_block_codes(block)
-      self.get_data_common_index_block(code_names.loc[:, 'stock_code'].values)
+      self.get_data_common_index_block(ef_utils.get_block_codes(block))
 
     for index in indexs:
-      code_names = self.push2_98_getter.get_index_codes(index)
-      self.get_data_common_index_block(code_names.loc[:, 'stock_code'].values)
+      self.get_data_common_index_block(ef_utils.get_block_codes(index))
 
   def get_north_south_history_common(self, filter, file_name):
     north_south = ef.stock.north_south_getter.north_south()
@@ -62,7 +61,7 @@ class money_flow:
 
   def get_stock_north(self):
 
-    stock_codes = common_func.get_stock_codes()
+    stock_codes = ef_utils.get_stock_codes()
 
     for stock_code in stock_codes:
       df = self.datacenter.get_north_stock_daily_trade(stock_code)
