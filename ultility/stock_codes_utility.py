@@ -25,8 +25,12 @@ class stock_codes_utility:
     self.table = table_tmp
     self.type_data = type_data
     
-  def stock_codes_from_table(self, type):
+  def stock_codes_from_table(self):
     codes = sorted(self.table.loc[:,'code'].apply(lambda x: x[1:]).values.squeeze())
+    return codes
+
+  def stock_codes_from_table_prefix(self):
+    codes = sorted(self.table.loc[:,'code'].values.squeeze())
     return codes
 
   def stock_codes_names_from_table(self):

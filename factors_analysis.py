@@ -7,10 +7,11 @@ import datetime
 from stock_ai.trade_ratio_ml import trade_ratio_ml
 from ultility.common_def import *
 from ultility.common_func import *
+from ultility.stock_codes_utility import *
 
 
 
-def trade_ratio_k_mean(conf, data_type):
+def trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file):
 
   common_conf = conf['common']
   path = common_conf['path']
@@ -18,27 +19,37 @@ def trade_ratio_k_mean(conf, data_type):
 
   trade_conf = conf['trade']
 
-  if data_type == TYPE_STOCK:
-    trade_ratio_file = trade_conf['stock_trade_ratio_file']
-    kmean_trade_ratio_file = trade_conf['stock_kmean_trade_ratio_file']
-  elif data_type == TYPE_INDEX:
-    trade_ratio_file = trade_conf['index_trade_ratio_file']
-    kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
-
-  path_finance_rank = os.path.join(path, folder['finance_rank'])
   path_in = os.path.join(path, folder['process_trade'])
   path_out = os.path.join(path, folder['process_analyse'])
 
   n_clusters = trade_conf['n_clusters']
-  kmnean_stock_num =  trade_conf['kmnean_stock_num']
 
-  finance_conf = conf['finance']
-  finance_factor_rank_file = finance_conf['result_name']
 
-  trade_ratio = trade_ratio_ml(path_finance_rank, path_in, path_out, trade_ratio_file, finance_factor_rank_file, data_type, kmnean_stock_num)
+  trade_ratio = trade_ratio_ml(stock_codes, path_in, path_out, trade_ratio_file)
   trade_ratio.kmean(n_clusters, kmean_trade_ratio_file)
 
-# def trade_kmean(conf):
+def trade_kmean(conf):
+  trade_conf = conf['trade']
+  common_conf = conf['common']
+  path = common_conf['path']
+  folder = common_conf["folder"]
+  finance_conf = conf['finance']
+
+  scu = stock_codes_utility(type_data = TYPE_STOCK)
+  stock_codes = scu.stock_codes_from_table()
+  csv_finance_factor = os.path.join(path, folder['finance_rank'], finance_conf['result_name'])
+  pd1 = pd.read_csv(csv_finance_factor, encoding='gbk')
+  kmnean_stock_num =  trade_conf['kmnean_stock_num']
+  stock_codes = pd1.iloc[1:kmnean_stock_num, 0].apply(lambda x: x[1:])
+  trade_ratio_file = trade_conf['stock_trade_ratio_file']
+  kmean_trade_ratio_file = trade_conf['stock_kmean_trade_ratio_file']
+  trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file)
+
+  scu = stock_codes_utility(type_data = TYPE_INDEX)
+  stock_codes = scu.stock_codes_from_table()
+  trade_ratio_file = trade_conf['index_trade_ratio_file']
+  kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
+  trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file)
 
 
 if __name__ == '__main__':
@@ -62,7 +73,6 @@ if __name__ == '__main__':
       trade_flag = True 
 
   conf = common_func.read_config(filename)
-  
-  trade_ratio_k_mean(conf, TYPE_STOCK)
-  trade_ratio_k_mean(conf, TYPE_INDEX)
-  
+
+  trade_kmean(conf)
+

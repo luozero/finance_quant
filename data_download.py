@@ -21,7 +21,7 @@ from data_set.efinance.money_flow import *
 def download_163(path, folder, data_type):
     path_in = os.path.join(path, folder)
     scu = SCU(path, data_type)
-    stock_codes = scu.stock_codes_from_table(data_type)
+    stock_codes = scu.stock_codes_from_table()
     # stock_codes = ['600000']
     print(stock_codes)
     data_download_1 = data_download(path, path_in, stock_codes, data_type)
@@ -31,7 +31,7 @@ def download_163(path, folder, data_type):
 def download_163_detail_trade(path, folder, data_type):
     path_in = os.path.join(path, folder)
     scu = SCU(path, data_type)
-    stock_codes = scu.stock_codes_from_table(data_type)
+    stock_codes = scu.stock_codes_from_table()
 
     date_len = 2 
     if not os.path.exists(path_in):

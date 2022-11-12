@@ -32,7 +32,7 @@ def finance_factor_process(conf):
 
   scu = SCU(path)
   # stock_codes = scu.stock_codes()
-  stock_codes = scu.stock_codes_from_table(data_type)
+  stock_codes = scu.stock_codes_from_table()
   print(stock_codes)
   # stock_codes = ['600032']
 
