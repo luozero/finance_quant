@@ -2,6 +2,7 @@ import json
 import os
 import sys, getopt
 import datetime
+sys.path.append(os.path.abspath('./efinance'))
 # sys.path.append(r'../')
 
 from stock_ai.trade_ratio_ml import trade_ratio_ml
@@ -35,6 +36,7 @@ def trade_kmean(conf):
   folder = common_conf["folder"]
   finance_conf = conf['finance']
 
+  # stock analyse
   scu = stock_codes_utility(type_data = TYPE_STOCK)
   stock_codes = scu.stock_codes_from_table()
   csv_finance_factor = os.path.join(path, folder['finance_rank'], finance_conf['result_name'])
@@ -45,12 +47,19 @@ def trade_kmean(conf):
   kmean_trade_ratio_file = trade_conf['stock_kmean_trade_ratio_file']
   trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file)
 
+  #index analyse
   scu = stock_codes_utility(type_data = TYPE_INDEX)
   stock_codes = scu.stock_codes_from_table()
   trade_ratio_file = trade_conf['index_trade_ratio_file']
   kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
   trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file)
 
+  #block analyse
+  scu = stock_codes_utility()
+  stock_codes = scu.block_codes_from_eastmoney()
+  trade_ratio_file = trade_conf['block_trade_ratio_file']
+  kmean_trade_ratio_file = trade_conf['block_kmean_trade_ratio_file']
+  trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file)
 
 if __name__ == '__main__':
 

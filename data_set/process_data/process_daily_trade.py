@@ -158,7 +158,7 @@ class process_daily_trade(object):
     # for stock_code in codes_names['code'] :
     for code_name in codes_names.itertuples():
 
-      stock_code = code_name[1][1:]
+      stock_code = code_name[1]
       daily_trade_data = common_func.read_csv(os.path.join(self.path_in, stock_code),  file_name)
 
       if daily_trade_data.shape[0] > 400:
@@ -166,7 +166,7 @@ class process_daily_trade(object):
         pct_change_series = self.price_volume_ratio_process1(daily_trade_data)
         pct_change_pd = pd.concat([pct_change_pd, pct_change_series], axis=1)
 
-        codes_list.append(code_name[1])
+        codes_list.append("'" + code_name[1])
         
         code_name = code_name[2]
         code_names_list.append(code_name)

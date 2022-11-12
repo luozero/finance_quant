@@ -12,3 +12,8 @@ class ef_utils:
     push2_98_getter = ef.stock.push2_98_getter.push2_98()
     code_names = push2_98_getter.get_block_codes(block)
     return code_names.loc[:, 'stock_code'].values
+
+  def get_block_codes_names(block):
+    push2_98_getter = ef.stock.push2_98_getter.push2_98()
+    code_names = push2_98_getter.get_block_codes(block)
+    return code_names

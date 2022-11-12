@@ -1,10 +1,11 @@
 import json
-import sys, getopt
+import sys, getopt, os
 import datetime
+sys.path.append(r'../')
+sys.path.append(os.path.abspath('./efinance'))
 
 from ultility.common_def import *
 from ultility.common_func import *
-sys.path.append(r'../')
 
 from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
@@ -17,8 +18,6 @@ def finance_factor_process(conf):
   
   common_conf = conf['common']
   folder = common_conf["folder"]
-
-
   path = common_conf['path']
   path_stock = os.path.join(path, folder['data_stock'])
   path_rank = os.path.join(path, folder["finance_rank"])
@@ -28,9 +27,7 @@ def finance_factor_process(conf):
   dates = finance_conf['dates']
   factors = finance_conf['factors']
 
-  data_type = TYPE_FINANCE_STOCK
-
-  scu = SCU(path)
+  scu = SCU(path, TYPE_STOCK)
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table()
   print(stock_codes)
@@ -50,11 +47,9 @@ def finance_factor_process(conf):
   # rank the factor
   finance_factors_rank(path_stock, path_rank, result_name, stock_codes, dates, factors)
 
-def daily_stock_trade_process(path, folder_in, folder_out, trade_ouput_file, data_type):
+def daily_stock_trade_process(path, folder_in, folder_out, trade_ouput_file, codes_names):
   path_in = os.path.join(path, folder_in)
   path_out = os.path.join(path, folder_out)
-  scu = SCU(path, data_type)
-  codes_names = scu.stock_codes_names_from_table()
   # stock_codes = ['600000']
   # need to disable following code when debug
   # stock_codes = scu.skip_stock_codes(stock_codes)
@@ -72,15 +67,20 @@ def daily_trade_process(conf):
   finance_163_daily_trade_factor = trade_conf['finance_163_daily_trade_factor']
   stock_163_daily_trade_factor = trade_conf['stock_163_daily_trade_factor']
   index_163_daily_trade_factor = trade_conf['index_163_daily_trade_factor']
+  block_daily_trade_factor = trade_conf['block_daily_trade_factor']
 
   if finance_163_daily_trade_factor == 'yes':
     finance_factor_process(conf)
 
   if stock_163_daily_trade_factor == 'yes':
-    daily_stock_trade_process(path, folder['data_stock'], folder['process_trade'], trade_conf['stock_trade_ratio_file'], TYPE_STOCK)
+    scu = SCU(path, TYPE_STOCK)
+    codes_names = scu.stock_codes_names_from_table()
+    daily_stock_trade_process(path, folder['data_stock'], folder['process_trade'], trade_conf['stock_trade_ratio_file'], codes_names)
 
-  if index_163_daily_trade_factor == 'yes':
-    daily_stock_trade_process(path, folder['data_index'], folder['process_trade'], trade_conf['index_trade_ratio_file'], TYPE_INDEX)
+  if block_daily_trade_factor == 'yes':
+    scu = SCU(path, TYPE_INDEX)
+    codes_names = scu.block_codes_names_from_eastmoney('indurstry')
+    daily_stock_trade_process(path, folder['data_index'], folder['process_trade'], trade_conf['block_trade_ratio_file'], codes_names)
 
 
 
