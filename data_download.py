@@ -69,7 +69,7 @@ def download_north_south(path, folder):
   path_stock = os.path.join(path, folder['data_stock'])
   download = money_flow(path_stock)
   download.get_stock_north()
-  download.get_stock_north_new()
+  download.get_stock_north_new(download_days = 2)
 
   path_index = os.path.join(path, folder['data_index'])
   download = money_flow(path_index)

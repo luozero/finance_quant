@@ -68,9 +68,9 @@ class money_flow:
       df = self.datacenter.get_north_stock_daily_trade(stock_code)
       self.combine_two_data(stock_code, CONST_DEF.FILE_TRADE_NORTH, df)
 
-  def get_stock_north_new(self):
+  def get_stock_north_new(self, download_days = 2):
     trade_dates = ef_utils.get_trading_date()[:100]
-    self.update_north_file(self.datacenter.get_north_stock_status, CONST_DEF.FOLDER_NORTH_STOCK_TEMP, CONST_DEF.FILE_TRADE_NORTH_NEW, trade_dates)
+    self.update_north_file(self.datacenter.get_north_stock_status, CONST_DEF.FOLDER_NORTH_STOCK_TEMP, CONST_DEF.FILE_TRADE_NORTH_NEW, trade_dates, download_days = download_days)
 
   def update_north_data(self, df, file_name):
 
@@ -90,7 +90,7 @@ class money_flow:
         print('write update_north_data: ', stock_code)
         data_one.to_csv(file_out, encoding = 'gbk', index = False)
 
-  def update_north_file(self, datacenter_func, folder, file_name, trade_dates = ['2022-11-08'], board_type = 5):
+  def update_north_file(self, datacenter_func, folder, file_name, trade_dates = ['2022-11-08'], board_type = 5, download_days = 2):
     temp_path = os.path.join(self.path, folder)
     if not os.path.exists(temp_path):
       os.makedirs(temp_path)
@@ -107,7 +107,7 @@ class money_flow:
         df = pd.read_csv(os.path.join(temp_path, file), encoding = 'gbk')
         self.update_north_data(df, file_name)
     else:
-      for date in trade_dates[:2]:
+      for date in trade_dates[:download_days]:
         df = datacenter_func(date = date, board_type = board_type)
         if (len(df) > 0):
           print('download north index successfully: ', date)
