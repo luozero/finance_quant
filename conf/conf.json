@@ -26,7 +26,7 @@
   },
   "finance":
   {
-    "result_name": "0925_rank.csv",
+    "result_name": "1112_rank.csv",
     "?dates": ["2022-06-30", "2022-03-31", "2021-12-31", "2021-09-30", "2021-06-30", "2021-03-31", "2020-12-31", "2020-09-30", "2020-06-30", "2020-03-31", "2019-12-31", "2019-09-30", "2019-06-30", "2019-03-31"],
     "dates": ["2022-06-30", "2022-03-31", "2021-12-31", "2021-09-30", "2021-06-30", "2021-03-31"],
     "factors": ["roe", "roa", "profit_revenue", "cash_incr_rate", "profit_cost", "equlity_incr_rate", "revenue_incr_rate", "profit_incr_rate"]
@@ -36,9 +36,9 @@
     "?eastmoney index block": "indexs = ['sh', 'sz', 'sh_sz', 'cn'], blocks = ['indurstry', 'concept', 'province']",
     "eastmoney_indexs": [],
     "eastmoney_blocks": ["indurstry", "concept"],
-    "finance_163_daily_trade_factor": "",
+    "finance_163_daily_trade_factor": "yes",
     "stock_163_daily_trade_factor": "",
-    "index_163_daily_trade_factor": "yes",
+    "index_163_daily_trade_factor": "",
     "stock_trade_ratio_file": "stock_trade_ratio.csv",
     "index_trade_ratio_file": "index_trade_ratio.csv",
     "block_trade_ratio_file": "block_trade_ratio.csv",

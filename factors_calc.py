@@ -34,7 +34,7 @@ def finance_factor_process(conf):
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table(data_type)
   print(stock_codes)
-  # stock_codes = ['SH600032']
+  # stock_codes = ['600032']
 
   # process quarter trade
   daily_trade_data = process_daily_trade(path, path_stock, path_stock)
