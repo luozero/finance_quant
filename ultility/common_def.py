@@ -45,6 +45,7 @@ class CONST_DEF:
 
   #money flow
   FILE_SHSZ_BIG_DEAL = "shsz_big_deal.csv"
+  FILE_SHSZ_BIG_BILL = "shsz_big_bill.csv"
 
   # factor folder
   FOLDER_NORTH_INDEX_TEMP      = 'north_index_temp'

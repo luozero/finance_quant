@@ -51,15 +51,3 @@ class common_func:
     else:
       stock = 'BJ' + str(stock)
     return stock
-
-  def get_trading_date():
-    stock_code = '1.000001'
-    df = ef.stock.get_quote_history(stock_code)
-    date = df['日期'].values
-    return date
-
-  def get_stock_codes():
-    datacenter = ef.stock.datacenter()
-    north_stock_status = datacenter.get_north_stock_status()
-    stock_codes = sorted(north_stock_status['stock_code'].apply(lambda x: x[:-3]).values)
-    return stock_codes

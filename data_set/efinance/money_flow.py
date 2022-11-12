@@ -56,8 +56,9 @@ class money_flow:
       df = pd.concat([df, df_old], axis = 0)
     df = df.drop_duplicates()
 
-    df.to_csv(filename, encoding = 'gbk', index = False)
-    print('stored file: ', filename)
+    if len(df) > 0:
+      df.to_csv(filename, encoding = 'gbk', index = False)
+      print('stored file: ', filename)
 
   def get_stock_north(self):
 
@@ -68,7 +69,7 @@ class money_flow:
       self.combine_two_data(stock_code, CONST_DEF.FILE_TRADE_NORTH, df)
 
   def get_stock_north_new(self):
-    trade_dates = common_func.get_trading_date()[:100]
+    trade_dates = ef_utils.get_trading_date()[:100]
     self.update_north_file(self.datacenter.get_north_stock_status, CONST_DEF.FOLDER_NORTH_STOCK_TEMP, CONST_DEF.FILE_TRADE_NORTH_NEW, trade_dates)
 
   def update_north_data(self, df, file_name):
@@ -119,7 +120,7 @@ class money_flow:
       #   self.update_north_data(df, file_name)
 
   def get_stock_north_index(self):
-    trade_dates = common_func.get_trading_date()[:400]
+    trade_dates = ef_utils.get_trading_date()[:400]
     # indurstry
     self.update_north_file(self.datacenter.get_north_stock_index, CONST_DEF.FOLDER_NORTH_INDEX_TEMP, CONST_DEF.FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 5)
     # concept
@@ -128,7 +129,8 @@ class money_flow:
 
   def get_stock_margin_short(self):
 
-    margin_short_stock_status = self.datacenter.get_margin_short_stock_status()
+    date = ef_utils.get_trading_date()[0]
+    margin_short_stock_status = self.datacenter.get_margin_short_stock_status(date)
     stock_codes = margin_short_stock_status['stock_code'].apply(lambda x: x[:-3]).values
     for stock_code in stock_codes:
       df = self.datacenter.get_margin_short_stock(stock_code)
@@ -164,7 +166,7 @@ class money_flow:
 
     data_download = ef.stock.money_flow_getter.money_flow()
     data = data_download.get_shsz_big_bill()
-    self.combine_two_data('', CONST_DEF.FILE_SHSZ_BIG_DEAL, data)
+    self.combine_two_data('', CONST_DEF.FILE_SHSZ_BIG_BILL, data)
 
   def get_stock_big_deal(self):
 

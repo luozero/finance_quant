@@ -48,7 +48,7 @@ def trade_kmean(conf):
   trade_ratio_k_mean(conf, stock_codes, trade_ratio_file, kmean_trade_ratio_file)
 
   #index analyse
-  scu = stock_codes_utility(type_data = TYPE_INDEX)
+  scu = stock_codes_utility(type_data = CONST_DEF.TYPE_INDEX)
   stock_codes = scu.stock_codes_from_table()
   trade_ratio_file = trade_conf['index_trade_ratio_file']
   kmean_trade_ratio_file = trade_conf['index_kmean_trade_ratio_file']
