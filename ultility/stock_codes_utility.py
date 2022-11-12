@@ -12,10 +12,10 @@ Created on 2018��10��4��
 @author: intel
 '''
 class stock_codes_utility:
-  def __init__(self,path='../../../data/', type_data = TYPE_STOCK):
+  def __init__(self,path='../../../data/', type_data = CONST_DEF.TYPE_STOCK):
 
-    self.DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
-    self.processing_DR = DR(path=path, record = 'rec.json', skip = CSV_SKIP_STOCK)
+    self.DR = DR(path=path, record = 'rec.json', skip = CONST_DEF.CSV_SKIP_STOCK)
+    self.processing_DR = DR(path=path, record = 'rec.json', skip = CONST_DEF.CSV_SKIP_STOCK)
 
     if type_data.find('index') > -1:
       table = pd.read_csv('./table/index_codes.csv', encoding='gbk')

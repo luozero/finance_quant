@@ -12,7 +12,6 @@ from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
 from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
-from data_set.finance_data.stock_basic import *
 
 #efinance
 from data_set.efinance.money_flow import *
@@ -101,18 +100,18 @@ def download_data(conf):
 
   # download all the data
   if download_163_finance_flag == "yes":
-    download_163(path, folder['data_stock'], TYPE_FINANCE_STOCK)
+    download_163(path, folder['data_stock'], CONST_DEF.TYPE_FINANCE_STOCK)
 
   if download_163_stock_daily_flag == "yes":
-    download_163(path, folder['data_stock'], TYPE_STOCK)
+    download_163(path, folder['data_stock'], CONST_DEF.TYPE_STOCK)
 
   if download_163_index_daily_flag == "yes":
-    download_163(path, folder['data_index'], TYPE_INDEX)
+    download_163(path, folder['data_index'], CONST_DEF.TYPE_INDEX)
 
   if download_163_stock_detailed_flag == "yes":
 
-    download_163_detail_trade(path, folder['data_detailed_index'], TYPE_DETAILED_INDEX)
-    download_163_detail_trade(path, folder['data_detailed_stock'], TYPE_DETAILED_STOCK)
+    download_163_detail_trade(path, folder['data_detailed_index'], CONST_DEF.TYPE_DETAILED_INDEX)
+    download_163_detail_trade(path, folder['data_detailed_stock'], CONST_DEF.TYPE_DETAILED_STOCK)
 
   if download_eastmoney_index_daily_flag == "yes":
     download_eastmoney_index(path, folder, conf["trade"])

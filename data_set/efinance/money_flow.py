@@ -24,7 +24,7 @@ class money_flow:
       print("download code", code)
       data = ef.stock.get_quote_history(code)
       data = data.sort_values(by = ['日期'], ascending=False)
-      file = os.path.join(common_func.stock_path(self.path, code), FILE_DAILY_TRADE)
+      file = os.path.join(common_func.stock_path(self.path, code), CONST_DEF.FILE_DAILY_TRADE)
       data.to_csv(file, encoding='gbk', index = False)
 
   def get_index_block_data(self, indexs = ['sh', 'sz', 'sh_sz', 'cn'], blocks = ['indurstry', 'concept', 'province']):
@@ -43,10 +43,10 @@ class money_flow:
     print('stored ', file)
 
   def get_north_south_history(self):
-    self.get_north_south_history_common('001', FILE_NORTH_SH)
-    self.get_north_south_history_common('002', FILE_SOUTH_SH)
-    self.get_north_south_history_common('003', FILE_NORTH_SZ)
-    self.get_north_south_history_common('004', FILE_SOUTH_SZ)
+    self.get_north_south_history_common('001', CONST_DEF.FILE_NORTH_SH)
+    self.get_north_south_history_common('002', CONST_DEF.FILE_SOUTH_SH)
+    self.get_north_south_history_common('003', CONST_DEF.FILE_NORTH_SZ)
+    self.get_north_south_history_common('004', CONST_DEF.FILE_SOUTH_SZ)
 
   def combine_two_data(self, stock_code, file_name, df):
 
@@ -65,11 +65,11 @@ class money_flow:
 
     for stock_code in stock_codes:
       df = self.datacenter.get_north_stock_daily_trade(stock_code)
-      self.combine_two_data(stock_code, FILE_TRADE_NORTH, df)
+      self.combine_two_data(stock_code, CONST_DEF.FILE_TRADE_NORTH, df)
 
   def get_stock_north_new(self):
     trade_dates = common_func.get_trading_date()[:100]
-    self.update_north_file(self.datacenter.get_north_stock_status, FOLDER_NORTH_STOCK_TEMP, FILE_TRADE_NORTH_NEW, trade_dates)
+    self.update_north_file(self.datacenter.get_north_stock_status, CONST_DEF.FOLDER_NORTH_STOCK_TEMP, CONST_DEF.FILE_TRADE_NORTH_NEW, trade_dates)
 
   def update_north_data(self, df, file_name):
 
@@ -121,9 +121,9 @@ class money_flow:
   def get_stock_north_index(self):
     trade_dates = common_func.get_trading_date()[:400]
     # indurstry
-    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 5)
+    self.update_north_file(self.datacenter.get_north_stock_index, CONST_DEF.FOLDER_NORTH_INDEX_TEMP, CONST_DEF.FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 5)
     # concept
-    self.update_north_file(self.datacenter.get_north_stock_index, FOLDER_NORTH_INDEX_CONCEPT_TEMP, FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 4)
+    self.update_north_file(self.datacenter.get_north_stock_index, CONST_DEF.FOLDER_NORTH_INDEX_CONCEPT_TEMP, CONST_DEF.FILE_INDEX_NORTH_DAILY_TRADE, trade_dates, board_type = 4)
 
 
   def get_stock_margin_short(self):
@@ -132,7 +132,7 @@ class money_flow:
     stock_codes = margin_short_stock_status['stock_code'].apply(lambda x: x[:-3]).values
     for stock_code in stock_codes:
       df = self.datacenter.get_margin_short_stock(stock_code)
-      filename = os.path.join(common_func.stock_path(self.path, stock_code), FILE_TRADE_MAEGIN_SHORT)
+      filename = os.path.join(common_func.stock_path(self.path, stock_code), CONST_DEF.FILE_TRADE_MAEGIN_SHORT)
       df.to_csv(filename, encoding = 'gbk', index = False)
       print('stored north', filename)
 
@@ -140,7 +140,7 @@ class money_flow:
   def get_stock_margin_short_total(self):
 
     df = self.datacenter.get_margin_short_total()
-    filename = os.path.join(self.path, FILE_TRADE_MAEGIN_SHORT_TOTAL)
+    filename = os.path.join(self.path, CONST_DEF.FILE_TRADE_MAEGIN_SHORT_TOTAL)
     df.to_csv(filename, encoding = 'gbk', index = False)
     print('stored margin_short total', filename)
 
@@ -158,13 +158,13 @@ class money_flow:
       # print(df)
       df["股票代码"] = df["股票代码"].apply(lambda x: common_func.add_stock_sh_sz_bj(x))
       df = df.sort_values(by = ['日期'], ascending=False)
-      self.combine_two_data(stock_code, FILE_STOCK_BILL, df)
+      self.combine_two_data(stock_code, CONST_DEF.FILE_STOCK_BILL, df)
 
   def get_shsz_big_bill(self):
 
     data_download = ef.stock.money_flow_getter.money_flow()
     data = data_download.get_shsz_big_bill()
-    self.combine_two_data('', FILE_SHSZ_BIG_DEAL, data)
+    self.combine_two_data('', CONST_DEF.FILE_SHSZ_BIG_DEAL, data)
 
   def get_stock_big_deal(self):
 
@@ -177,7 +177,7 @@ class money_flow:
       print('download bigdeal stock_code', change_stock_code)
       df = self.datacenter.get_stock_big_deal(change_stock_code)
       if len(df) > 0:
-        path = os.path.join(common_func.stock_path(self.path, change_stock_code), FILE_STOCK_BIG_DEAL)
+        path = os.path.join(common_func.stock_path(self.path, change_stock_code), CONST_DEF.FILE_STOCK_BIG_DEAL)
         df.to_csv(path, encoding = 'gbk', index = False)
         print('store ', path)
 

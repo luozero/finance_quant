@@ -37,7 +37,7 @@ def trade_kmean(conf):
   finance_conf = conf['finance']
 
   # stock analyse
-  scu = stock_codes_utility(type_data = TYPE_STOCK)
+  scu = stock_codes_utility(type_data = CONST_DEF.TYPE_STOCK)
   stock_codes = scu.stock_codes_from_table()
   csv_finance_factor = os.path.join(path, folder['finance_rank'], finance_conf['result_name'])
   pd1 = pd.read_csv(csv_finance_factor, encoding='gbk')

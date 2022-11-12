@@ -38,13 +38,13 @@ class process_daily_trade(object):
 
   def trade_data_quarter(self, stock_codes):
 
-    dr = DR(self.path, JSON_FILE_PROCESS_RECORD, CSV_SKIP_STOCK)
-    proc_id = dr.read_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX)
+    dr = DR(self.path, CONST_DEF.JSON_FILE_PROCESS_RECORD, CONST_DEF.CSV_SKIP_STOCK)
+    proc_id = dr.read_data(CONST_DEF.KEY_PROCESS, CONST_DEF.KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX)
     stock_codes = stock_codes[proc_id:]
 
     for stock_code in stock_codes:
 
-      data_main = common_func.read_csv(common_func.stock_path(self.path_in, stock_code), FILE_MAIN)
+      data_main = common_func.read_csv(common_func.stock_path(self.path_in, stock_code), CONST_DEF.FILE_MAIN)
 
       if data_main.empty == True:
 
@@ -52,7 +52,7 @@ class process_daily_trade(object):
           dr.write_skip_stock(stock_code)
       else:
 
-        file_name = FILE_DAILY_TRADE
+        file_name = CONST_DEF.FILE_DAILY_TRADE
         daily_trade_data = common_func.read_csv(os.path.join(self.path_in, stock_code), file_name) 
 
         dates = data_main.columns
@@ -73,11 +73,11 @@ class process_daily_trade(object):
           trade_data_quarter = pd.concat([trade_data_quarter, daily_trade_data[date_in_daily_trade_dates == daily_trade_dates]])
 
         # trade_data_quarter.index = dates
-        file_csv = os.path.join(common_func.stock_path(self.path_in, stock_code), FILE_DAILY_TRADE_QUARTER)
+        file_csv = os.path.join(common_func.stock_path(self.path_in, stock_code), CONST_DEF.FILE_DAILY_TRADE_QUARTER)
         trade_data_quarter.to_csv(file_csv, encoding='gbk', index = False)
         print("store to ", file_csv)
 
-        dr.write_data(KEY_PROCESS, KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, proc_id)
+        dr.write_data(CONST_DEF.KEY_PROCESS, CONST_DEF.KEY_PROCESS_DAILY_TRADE_QUARTER_INDEX, proc_id)
         proc_id = proc_id + 1
 
   def price_volume_ratio_process1(self, daily_trade_data):
@@ -153,7 +153,7 @@ class process_daily_trade(object):
     code_names_list = []
     codes_list = []
 
-    file_name = FILE_DAILY_TRADE
+    file_name = CONST_DEF.FILE_DAILY_TRADE
 
     # for stock_code in codes_names['code'] :
     for code_name in codes_names.itertuples():

@@ -43,7 +43,7 @@ class download_record:
 
   def write_data(self, key1, key2, value):
 
-    process_record_dict_temp = process_record_dict
+    process_record_dict_temp = CONST_DEF.process_record_dict
     if os.path.exists(self.path_file):
       with open(self.path_file) as f:
           process_record_dict_temp = json.load(f)

@@ -11,7 +11,6 @@ from ultility.stock_codes_utility import stock_codes_utility as SCU
 from data_set.finance_data.data_download import data_download
 from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
-from data_set.finance_data.stock_basic import *
 from data_set.process_data.process_daily_trade import process_daily_trade
 
 def finance_factor_process(conf):
@@ -27,7 +26,7 @@ def finance_factor_process(conf):
   dates = finance_conf['dates']
   factors = finance_conf['factors']
 
-  scu = SCU(path, TYPE_STOCK)
+  scu = SCU(path, CONST_DEF.TYPE_STOCK)
   # stock_codes = scu.stock_codes()
   stock_codes = scu.stock_codes_from_table()
   print(stock_codes)
@@ -73,12 +72,12 @@ def daily_trade_process(conf):
     finance_factor_process(conf)
 
   if stock_163_daily_trade_factor == 'yes':
-    scu = SCU(path, TYPE_STOCK)
+    scu = SCU(path, CONST_DEF.TYPE_STOCK)
     codes_names = scu.stock_codes_names_from_table()
     daily_stock_trade_process(path, folder['data_stock'], folder['process_trade'], trade_conf['stock_trade_ratio_file'], codes_names)
 
   if block_daily_trade_factor == 'yes':
-    scu = SCU(path, TYPE_INDEX)
+    scu = SCU(path, CONST_DEF.TYPE_INDEX)
     codes_names = scu.block_codes_names_from_eastmoney('indurstry')
     daily_stock_trade_process(path, folder['data_index'], folder['process_trade'], trade_conf['block_trade_ratio_file'], codes_names)
 

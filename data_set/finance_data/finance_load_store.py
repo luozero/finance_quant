@@ -5,7 +5,7 @@ import os
 from ultility.common_def import * 
 from ultility.common_func import *
 
-FILE_LIST = {'main': FILE_MAIN, 'abstract': FILE_ABSTRACT,'profit': FILE_PROFIT, 'cash': FILE_CASH, 'loans': FILE_LOANS, 'daily_trade_quarter': FILE_DAILY_TRADE_QUARTER}
+FILE_LIST = {'main': CONST_DEF.FILE_MAIN, 'abstract': CONST_DEF.FILE_ABSTRACT,'profit': CONST_DEF.FILE_PROFIT, 'cash': CONST_DEF.FILE_CASH, 'loans': CONST_DEF.FILE_LOANS, 'daily_trade_quarter':CONST_DEF.FILE_DAILY_TRADE_QUARTER}
 TAIL_MARGIN = 1
 class finance_load_store:
   def __init__(self, path_finance = 'finance', path_factor = 'path_factor', stock_codes='000001'):
@@ -73,12 +73,12 @@ class finance_load_store:
   
   '''processed finance data'''
   def store_process_financical_data(self, data, stock_code):
-    csv_file_path = os.path.join(common_func.stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
+    csv_file_path = os.path.join(common_func.stock_path(self.factor_folder, stock_code), CONST_DEF.FILE_FINANCE_FACTOR)
     data.to_csv(csv_file_path, encoding='gbk')
     print("finance factor store to ", csv_file_path)
 
   def load_process_financical_data(self, stock_code):
-    csv_file_path = os.path.join(common_func.stock_path(self.factor_folder, stock_code), FILE_FINANCE_FACTOR)
+    csv_file_path = os.path.join(common_func.stock_path(self.factor_folder, stock_code), CONST_DEF.FILE_FINANCE_FACTOR)
     if not os.path.exists(csv_file_path):
       print('load_process_financical_data not exsit this file', stock_code)
       exit(-1)
