@@ -25,6 +25,7 @@ class CONST_DEF:
   FILE_DAILY_TRADE = 'daily_trade.csv'
   FILE_FINANCE_FACTOR     = 'finance_factors.csv'
   FILE_STOCK_BILL         = 'trade_bill.csv'
+  FILE_STOCK_BILL_CALC         = 'trade_bill_calc.csv'
   FILE_STOCK_BIG_DEAL         = 'trade_big_deal.csv'
   FILE_TRADE_NORTH       = 'trade_north.csv'
   FILE_TRADE_NORTH_NEW       = 'trade_north_new.csv'
