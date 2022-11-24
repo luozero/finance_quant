@@ -15,6 +15,7 @@ from data_set.finance_data.finance_factor_rank import *
 
 #efinance
 from data_set.efinance.money_flow import *
+from data_set.efinance.utils import *
 
 # daily trade, finance, index trade
 def download_163(path, folder, data_type):
@@ -32,11 +33,11 @@ def download_163_detail_trade(path, folder, data_type):
     scu = SCU(path, data_type)
     stock_codes = scu.stock_codes_from_table()
 
-    date_len = 2 
+    date_len = 3 
     if not os.path.exists(path_in):
       date_len = 15
 
-    trade_dates = common_func.get_trading_date()[:date_len]
+    trade_dates = ef_utils.get_trading_date()[:date_len]
     # stock_codes = ['600000']
     print(stock_codes)
     data_download_1 = data_download(path, path_in, stock_codes, data_type)
@@ -110,8 +111,8 @@ def download_data(conf):
 
   if download_163_stock_detailed_flag == "yes":
 
-    download_163_detail_trade(path, folder['data_detailed_index'], CONST_DEF.TYPE_DETAILED_INDEX)
     download_163_detail_trade(path, folder['data_detailed_stock'], CONST_DEF.TYPE_DETAILED_STOCK)
+    download_163_detail_trade(path, folder['data_detailed_index'], CONST_DEF.TYPE_DETAILED_INDEX)
 
   if download_eastmoney_index_daily_flag == "yes":
     download_eastmoney_index(path, folder, conf["trade"])

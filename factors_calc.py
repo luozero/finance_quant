@@ -12,6 +12,7 @@ from data_set.finance_data.data_download import data_download
 from data_set.finance_data.finance_factor_calc import *
 from data_set.finance_data.finance_factor_rank import *
 from data_set.process_data.process_daily_trade import process_daily_trade
+from data_set.process_data.process_detailed_trade import *
 
 def finance_factor_process(conf):
   
@@ -56,6 +57,17 @@ def daily_stock_trade_process(path, folder_in, folder_out, trade_ouput_file, cod
   daily_trade_data = process_daily_trade(path, path_in, path_out)
   daily_trade_data.index_price_volume_ratio(codes_names, trade_ouput_file)
 
+def detailed_trade_process(path, folder_in, folder_out, data_type):
+
+  path_in = os.path.join(path, folder_in)
+  path_out = os.path.join(path, folder_out)
+  scu = SCU(path, data_type)
+  stock_codes = scu.stock_codes_from_table()
+  # stock_codes = ['000001']
+
+  detailed_trade_process = detailed_trade(path, path_in, path_out)
+  detailed_trade_process.statistic_detailed_bills(stock_codes)
+
 def daily_trade_process(conf):
 
   common_conf = conf['common']
@@ -65,6 +77,7 @@ def daily_trade_process(conf):
 
   finance_163_daily_trade_factor = trade_conf['finance_163_daily_trade_factor']
   stock_163_daily_trade_factor = trade_conf['stock_163_daily_trade_factor']
+  stock_163_detailed_trade_factor = trade_conf['stock_163_detailed_trade_factor']
   index_163_daily_trade_factor = trade_conf['index_163_daily_trade_factor']
   block_daily_trade_factor = trade_conf['block_daily_trade_factor']
 
@@ -81,6 +94,10 @@ def daily_trade_process(conf):
     codes_names = scu.block_codes_names_from_eastmoney('indurstry')
     daily_stock_trade_process(path, folder['data_index'], folder['process_trade'], trade_conf['block_trade_ratio_file'], codes_names)
 
+  if stock_163_detailed_trade_factor == "yes":
+    folder_in = folder['data_detailed_stock']
+    folder_out = folder['data_stock']
+    detailed_trade_process(path, folder_in, folder_out, CONST_DEF.TYPE_DETAILED_STOCK)
 
 
 if __name__ == '__main__':
