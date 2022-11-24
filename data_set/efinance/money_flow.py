@@ -62,7 +62,7 @@ class money_flow:
 
   def get_stock_north(self):
 
-    stock_codes = ef_utils.get_stock_codes()
+    stock_codes = ef_utils.get_north_stock_codes()
 
     for stock_code in stock_codes:
       df = self.datacenter.get_north_stock_daily_trade(stock_code)
@@ -129,14 +129,16 @@ class money_flow:
 
   def get_stock_margin_short(self):
 
-    date = ef_utils.get_trading_date()[0]
-    margin_short_stock_status = self.datacenter.get_margin_short_stock_status(date)
-    stock_codes = margin_short_stock_status['stock_code'].apply(lambda x: x[:-3]).values
-    for stock_code in stock_codes:
-      df = self.datacenter.get_margin_short_stock(stock_code)
-      filename = os.path.join(common_func.stock_path(self.path, stock_code), CONST_DEF.FILE_TRADE_MAEGIN_SHORT)
-      df.to_csv(filename, encoding = 'gbk', index = False)
-      print('stored north', filename)
+    dates = ef_utils.get_trading_date()[:2]
+    for date in dates:
+      margin_short_stock_status = self.datacenter.get_margin_short_stock_status(date)
+      if len(margin_short_stock_status):
+        stock_codes = margin_short_stock_status['stock_code'].apply(lambda x: x[:-3]).values
+        for stock_code in stock_codes:
+          df = self.datacenter.get_margin_short_stock(stock_code)
+          filename = os.path.join(common_func.stock_path(self.path, stock_code), CONST_DEF.FILE_TRADE_MAEGIN_SHORT)
+          df.to_csv(filename, encoding = 'gbk', index = False)
+          print('stored north', filename)
 
 
   def get_stock_margin_short_total(self):
@@ -148,9 +150,7 @@ class money_flow:
 
   def get_stock_bill(self):
 
-    push2_98 = ef.stock.push2_98_getter.push2_98()
-    all_stock_status = push2_98.get_all_stock_status()
-    stock_codes = sorted(all_stock_status['stock_code'].apply(lambda x: x[2:]))
+    stock_codes = ef_utils.get_stock_codes()
 
     for stock_code in stock_codes:
       if stock_code[0] == '4':
@@ -170,16 +170,12 @@ class money_flow:
 
   def get_stock_big_deal(self):
 
-    push2_98 = ef.stock.push2_98_getter.push2_98()
-    all_stock_status = push2_98.get_all_stock_status()
-    stock_codes = sorted(all_stock_status['stock_code'], reverse=True)
+    stock_codes = ef_utils.get_stock_codes()
 
     for stock_code in stock_codes:
-      change_stock_code = stock_code[2:]
-      print('download bigdeal stock_code', change_stock_code)
-      df = self.datacenter.get_stock_big_deal(change_stock_code)
+      df = self.datacenter.get_stock_big_deal(stock_code)
       if len(df) > 0:
-        path = os.path.join(common_func.stock_path(self.path, change_stock_code), CONST_DEF.FILE_STOCK_BIG_DEAL)
+        path = os.path.join(common_func.stock_path(self.path, stock_code), CONST_DEF.FILE_STOCK_BIG_DEAL)
         df.to_csv(path, encoding = 'gbk', index = False)
         print('store ', path)
 
