@@ -86,10 +86,10 @@ class detailed_trade(object):
       if os.path.exists(stored_bill_file):
         df_data_stat_hist = pd.read_csv(stored_bill_file, encoding = 'gbk')
         df_data_new = pd.concat([df_data_stat, df_data_stat_hist])
-        df_data_new = df_data_new.drop_duplicates()
         df_data_out = df_data_new.sort_values(by = ['date'], ascending=False)
       else:
         df_data_out = df_data_stat.sort_values(by = ['date'], ascending=False)
 
-      # print(df_data_out)
+      df_data_out.drop_duplicates(subset=['date'], inplace=True)
+      print(stored_bill_file)
       df_data_out.to_csv(stored_bill_file, encoding='gbk', index=False)
