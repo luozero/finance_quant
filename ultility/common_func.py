@@ -42,12 +42,3 @@ class common_func:
       print('stock this file is not exist', csv_file_path)
       data = pd.DataFrame()
     return data
-
-  def add_stock_sh_sz_bj(stock):
-    if int(stock)<600000:
-      stock = 'SZ' + str(stock)
-    elif int(stock) < 800000:
-      stock = 'SH' + str(stock)
-    else:
-      stock = 'BJ' + str(stock)
-    return stock

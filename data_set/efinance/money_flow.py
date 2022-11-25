@@ -158,7 +158,7 @@ class money_flow:
       print('download bill stock_code', stock_code)
       df = ef.stock.get_history_bill(stock_code)
       # print(df)
-      df["股票代码"] = df["股票代码"].apply(lambda x: common_func.add_stock_sh_sz_bj(x))
+      df["股票代码"] = df["股票代码"].apply(lambda x: "'" + x)
       df = df.sort_values(by = ['日期'], ascending=False)
       self.combine_two_data(stock_code, CONST_DEF.FILE_STOCK_BILL, df)
 

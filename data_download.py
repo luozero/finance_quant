@@ -56,7 +56,7 @@ def download_eastmoney_index(path, folder, conf_trade):
 def download_eastmoney_stock_data_daily(path, folder):
   path_data = os.path.join(path, folder['data_stock'])
   download = money_flow(path_data)
-  download.get_stock_margin_short_total()
+  # download.get_stock_margin_short_total()
   download.get_stock_bill()
   
   download.get_shsz_big_bill()

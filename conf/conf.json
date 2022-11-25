@@ -8,9 +8,9 @@
     "download_163_finance_flag": "no",
     "download_163_stock_daily_flag": "",
     "download_163_index_daily_flag": "",
-    "download_163_stock_detailed_flag": "yes",
+    "download_163_stock_detailed_flag": "",
     "download_eastmoney_index_daily_flag": "",
-    "download_eastmoney_stock_daily_flag": "",
+    "download_eastmoney_stock_daily_flag": "yes",
     "download_north_south_flag": "",
     "folder": {
       "data_stock": "data/stock",
