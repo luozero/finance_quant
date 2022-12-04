@@ -50,7 +50,7 @@ def finance_factor_process(conf):
 def daily_stock_trade_process(path, folder_in, folder_out, trade_ouput_file, codes_names):
   path_in = os.path.join(path, folder_in)
   path_out = os.path.join(path, folder_out)
-  # stock_codes = ['600000']
+  # stock_codes = ['002830']
   # need to disable following code when debug
   # stock_codes = scu.skip_stock_codes(stock_codes)
   #process daily trade data
@@ -64,6 +64,7 @@ def detailed_trade_process(path, folder_in, folder_out, data_type):
   scu = SCU(path, data_type)
   stock_codes = scu.stock_codes_from_table()
   # stock_codes = ['000001']
+  # stock_codes = ['002830']
 
   detailed_trade_process = detailed_trade(path, path_in, path_out)
   detailed_trade_process.statistic_detailed_bills(stock_codes)

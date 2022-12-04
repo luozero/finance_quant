@@ -4,21 +4,16 @@ the aim is to quantative all kinds of finance data, including stock, future, bon
 
 now it's only can download china A stock finance data and daily trade data, and also calculate some factors.
 
-
 # how to use this repo.
-
 ## git submodule
-git submodule init update
-
+git submodule update --init
 ## configure
 configure your data store folder
  open ./conf/con_release.json
   "path": "../finance_data", 
-
 ## run
 download all the A stock's finance data and trade data. and generate some factors.
 sh run.sh
-
 ## result folder
 ### stock:
 finance_data/data/stock/000001

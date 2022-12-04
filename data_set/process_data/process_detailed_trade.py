@@ -51,7 +51,7 @@ class detailed_trade(object):
     amount_col = '成交额（元）'
     buy_amount = buy_data[amount_col]
     sell_amount = sell_data[amount_col]
-    data = [
+    datas = [
     buy_data[buy_amount >= 100E4][amount_col].sum(),
     buy_data[(buy_amount < 100E4) & (buy_amount >= 20E4)][amount_col].sum(),
     buy_data[(buy_amount < 20E4) & (buy_amount >= 4E4)][amount_col].sum(),
@@ -61,7 +61,9 @@ class detailed_trade(object):
     sell_data[(sell_amount < 200E4) & (sell_amount >= 4E4)][amount_col].sum(),
     sell_data[sell_amount < 4E4][amount_col].sum(),
     ]
-    return data
+
+    datas = [data/1E4 for data in datas]
+    return datas
 
   def statistic_detailed_bills(self, stock_codes):
 
@@ -80,7 +82,7 @@ class detailed_trade(object):
           data_stat = self.statistic_detailed(df)
           data_set += [[date] + data_stat]
 
-      columns = ['date', 'super_b', 'big_b', 'middle_b', 'small_b', 'super_s', 'big_s', 'middle_s', 'small_s']
+      columns = ['date', 'super_b(万)', 'big_b(万)', 'middle_b(万)', 'small_b(万)', 'super_s(万)', 'big_s(万)', 'middle_s(万)', 'small_s(万)']
       df_data_stat = pd.DataFrame(data = data_set, columns=columns)
 
       if os.path.exists(stored_bill_file):
