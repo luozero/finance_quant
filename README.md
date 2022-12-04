@@ -16,26 +16,29 @@ download all the A stock's finance data and trade data. and generate some factor
 sh run.sh
 ## result folder
 ### stock:
-finance_data/data/stock/000001
-abstract.csv
-cash.csv
-daily_trade.csv
-daily_trade_quarter.csv
-earning.csv
-finance_factors.csv
-growth.csv
-loans.csv
-main.csv
-operation.csv
-profit.csv
-return_debit.csv
-trade_big_deal.csv
-trade_bill.csv
-trade_bill_calc.csv
-trade_margin_short.csv
-trade_north.csv
-trade_north_new.csv
+  finance_data/data/stock/000001
+  this folder used to store finance, trade and factor data for each stock, following is a example
+  abstract.csv
+  cash.csv
+  daily_trade.csv
+  daily_trade_quarter.csv
+  earning.csv
+  finance_factors.csv
+  growth.csv
+  loans.csv
+  main.csv
+  operation.csv
+  profit.csv
+  return_debit.csv
+  trade_big_deal.csv
+  trade_bill.csv
+  trade_bill_calc.csv
+  trade_margin_short.csv
+  trade_north.csv
+  trade_north_new.csv
 ### index:
-finance_data/data/index/000001
-daily_trade.csv
-trade_bill.csv
+  finance_data/data/index/000001
+  this folder used to store index trade data, following is a example
+  daily_trade.csv
+  trade_bill.csv
+### other foler (is building)
