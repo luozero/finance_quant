@@ -20,7 +20,7 @@ download all the A stock's finance data and trade data. and generate some factor
 sh run.sh
 
 ## result folder
-stock:
+### stock:
 finance_data/data/stock/000001
 abstract.csv
 cash.csv
@@ -40,7 +40,7 @@ trade_bill_calc.csv
 trade_margin_short.csv
 trade_north.csv
 trade_north_new.csv
-index:
+### index:
 finance_data/data/index/000001
 daily_trade.csv
 trade_bill.csv
