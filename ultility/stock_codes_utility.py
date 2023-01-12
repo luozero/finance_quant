@@ -9,7 +9,6 @@ KECHUANG_CODE = 688000
 '''
 Created on 2018��10��4��
 
-@author: intel
 '''
 class stock_codes_utility:
   def __init__(self,path='../../../data/', type_data = CONST_DEF.TYPE_STOCK):

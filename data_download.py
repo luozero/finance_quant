@@ -33,9 +33,9 @@ def download_163_detail_trade(path, folder, data_type):
     scu = SCU(path, data_type)
     stock_codes = scu.stock_codes_from_table()
 
-    date_len = 3 
-    if not os.path.exists(path_in):
-      date_len = 15
+    date_len = 2 
+    # if not os.path.exists(path_in):
+    #   date_len = 15
 
     trade_dates = ef_utils.get_trading_date()[:date_len]
     # stock_codes = ['600000']
